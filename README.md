@@ -16,6 +16,7 @@ For local development install the dependencies and devDependencies and start the
 ```sh
 cd tender-document-back
 composer install
+php artisan migrate:fresh --seed
 php -S localhost:8000 -t public
 ```
 
