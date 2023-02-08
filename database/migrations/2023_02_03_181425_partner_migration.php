@@ -16,7 +16,7 @@ return new class extends Migration
         Schema::create('partners', function (Blueprint $table) {
             $table->id();
             $table->string('name');
-            $table->string('lotNumberId');
+            $table->string('twoDigitId');
             $table->timestamps();
         });
     }

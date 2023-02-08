@@ -3,8 +3,7 @@
 namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
-use App\Models\Partner;
-use App\Models\Subpartner;
+use App\Models\{Partner, Subpartner, PartnerID};
 
 class PartnerSeeder extends Seeder
 {
@@ -16,7 +15,11 @@ class PartnerSeeder extends Seeder
     public function run()
     {
         Partner::factory()
-            ->has(Subpartner::factory()->count(3))
+            ->has(
+                Subpartner::factory()
+                ->has(PartnerID::factory()->count(5))
+                ->count(3)
+                )
             ->count(10)
             ->create();
     }

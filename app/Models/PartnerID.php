@@ -5,17 +5,13 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
-class LotNumber extends Model
+class PartnerID extends Model
 {
     use HasFactory;
+    
     protected $fillable = [
-        'lotNumber', 'procurementNumber', 'partner_id', 'subpartner_id', 'orderId', 'comments',
+        'lotNumber', 'procurementNumber', 'threeDigitId', 'comments',
     ];
-
-    public function partner()
-    {
-        return $this->belongsTo(Partner::class);
-    }
 
     public function subpartner()
     {

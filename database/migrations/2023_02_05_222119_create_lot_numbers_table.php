@@ -13,13 +13,12 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('lot_numbers', function (Blueprint $table) {
+        Schema::create('partner_i_d_s', function (Blueprint $table) {
             $table->id();
             $table->string('lotNumber');
             $table->string('procurementNumber');
-            $table->bigInteger('partner_id');
             $table->bigInteger('subpartner_id');
-            $table->string('orderId');
+            $table->string('threeDigitId');
             $table->string('comments');
             $table->timestamps();
         });
@@ -32,6 +31,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('lot_numbers');
+        Schema::dropIfExists('partner_i_d_s');
     }
 };
