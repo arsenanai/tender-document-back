@@ -16,12 +16,12 @@ class AuthenticationTest extends TestCase
     {
         $response = $this->withHeaders([
             'Accept' => 'application/json',
-        ])->post('/api/login', [
+        ])->json('post', '/api/login', [
             'email' => env('ADMIN_EMAIL'),
             'password' => env('ADMIN_INITIAL_PASSWORD')
         ]);
  
-        $response->assertStatus(Response::HTTP_OK);
+        $response->assertOk();
         $response->assertJsonStructure(
             [
                 'success',

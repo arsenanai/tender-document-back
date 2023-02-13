@@ -12,7 +12,7 @@ class UserTest extends TestCase
     {
         $object = User::where('name', 'Admin')
             ->where('email', env('ADMIN_EMAIL'))
-            ->firstOrFail();
+            ->first();
         $this->assertTrue($object !== null);
     }
 
@@ -20,7 +20,7 @@ class UserTest extends TestCase
     {
         $object = User::where('name', 'Admin')
             ->where('email', env('ADMIN_EMAIL'))
-            ->firstOrFail();
+            ->first();
         $this->assertTrue(Hash::check(env('ADMIN_INITIAL_PASSWORD'), $object->password));
     }
 }

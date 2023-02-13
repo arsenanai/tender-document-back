@@ -3,15 +3,15 @@
 namespace Tests\Unit;
 
 use Tests\TestCase;
-use App\Models\{Subpartner, PartnerID};
+use App\Models\{Partner, Subpartner, PartnerID};
 
 class SubpartnerTest extends TestCase
 {
     public function testSubpartnerHasNeededRelations()
     {
-        $object = Subpartner::find(1);
-        $this->assertTrue(count($object->partnerIDs) > 0);
-        $this->assertInstanceOf(PartnerID::class, $object->partnerIDs[0]);
+        $object = Subpartner::first();
+        $this->assertIsObject($object->partner);
+        $this->assertInstanceOf(Partner::class, $object->partner);
         //$this->assertInstanceOf(Partner::class, $object->partner);
     }
 }

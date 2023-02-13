@@ -3,6 +3,7 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\API\RegisterController;
+use App\Http\Controllers\PartnerIDController;
 // use App\Http\Controllers\API\PartnerController;
 
 /*
@@ -21,6 +22,9 @@ Route::controller(RegisterController::class)->group(function(){
     Route::post('login', 'login');
 });
         
-// Route::middleware('auth:sanctum')->group( function () {
-//     Route::resource('partners', PartnerController::class);
-// });
+Route::middleware('auth:sanctum')->group( function () {
+    Route::post('partner-ids/check', [PartnerIDController::class, 'check']);
+    Route::apiResources([
+        'partner-ids' => PartnerIDController::class
+    ]);
+});

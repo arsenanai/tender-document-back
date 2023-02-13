@@ -18,7 +18,7 @@ return new class extends Migration
             $table->string('lotNumber');
             $table->string('procurementNumber');
             $table->bigInteger('subpartner_id');
-            $table->string('threeDigitId');
+            $table->string('threeDigitId')->unique();
             $table->string('comments');
             $table->timestamps();
         });
