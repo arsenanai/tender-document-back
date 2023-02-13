@@ -17,7 +17,6 @@ return new class extends Migration
             $table->id();
             $table->bigInteger('partner_id');
             $table->string('name');
-            $table->string('twoDigitId')->unique();
             $table->timestamps();
         });
     }

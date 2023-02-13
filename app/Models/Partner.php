@@ -14,7 +14,7 @@ class Partner extends Model
      * @var string[]
      */
     protected $fillable = [
-        'name', 'twoDigitId',
+        'name',
     ];
 
     public function subpartners()

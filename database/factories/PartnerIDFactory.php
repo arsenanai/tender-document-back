@@ -3,6 +3,7 @@
 namespace Database\Factories;
 
 use App\Models\PartnerID;
+use App\Models\Subpartner;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -17,7 +18,6 @@ class PartnerIDFactory extends Factory
     	return [
             'lotNumber' => $this->faker->randomNumber(),
             'procurementNumber' => $this->faker->randomNumber(),
-            'threeDigitId' => $this->faker->unique()->numberBetween(100,990),
             'comments' => $this->faker->text(50),
     	];
     }

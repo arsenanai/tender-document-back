@@ -13,7 +13,6 @@ class SubpartnerFactory extends Factory
     {
     	return [
     	    'name' => $this->faker->name,
-            'twoDigitId' => $this->faker->unique()->numberBetween(10,99), // sprintf("%02d", mt_rand(1,99)),
     	];
     }
 }

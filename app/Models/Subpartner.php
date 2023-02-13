@@ -10,7 +10,7 @@ class Subpartner extends Model
     use HasFactory;
     
     protected $fillable = [
-        'name', 'twoDigitId',
+        'name', 'partner_id'
     ];
 
     public function partner()

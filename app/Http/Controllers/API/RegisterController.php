@@ -46,13 +46,18 @@ class RegisterController extends BaseController
     {
         if(Auth::attempt(['email' => $request->email, 'password' => $request->password])){ 
             $user = Auth::user(); 
-            $success['token'] =  $user->createToken('MyApp')->plainTextToken; 
+            $success['token'] =  $user->createToken(env('BRAND_TITLE', 'Steam'))->plainTextToken; 
             $success['name'] =  $user->name;
-   
-            return $this->sendResponse($success, 'User login successfully.');
+            return $this->sendResponse($success, 'login.successfully');
         } 
         else{ 
-            return $this->sendError('Unauthorised1.', ['error'=>'Unauthorised1']);
+            return $this->sendError('unauthorised', ['error'=>'unauthorised']);
         } 
+    }
+
+    public function logout(Request $request) {
+        $request->user()->currentAccessToken()->delete();
+        $response = 'logout.successfully';
+	    return response($response, 200);
     }
 }

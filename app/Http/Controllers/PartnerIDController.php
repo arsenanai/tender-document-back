@@ -7,6 +7,8 @@ use Illuminate\Http\Request;
 use Illuminate\Validation\ValidationException;
 use App\Models\{Partner, Subpartner, PartnerID};
 use App\Rules\PartnerIDRule;
+use Illuminate\Http\Response;
+use Illuminate\Validation\Validator;
 
 class PartnerIDController extends Controller
 {
@@ -20,52 +22,62 @@ class PartnerIDController extends Controller
         return new AnyResource(PartnerID::paginate(env('PAGINATION_SIZE', 20)));
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
     public function store(Request $request)
     {
-        $posts = PartnerID::create($request->all());
-        
-        return $posts;
+        $request->validate([
+            'lotNumber' => 'required',
+            'procurementNumber' => 'required',
+            'comments' => 'string|nullable',
+            'subpartner_id' => 'required|exists:subpartners,id',
+        ]);
+        $object = PartnerID::create($request->all());
+        return response()->json([
+            "success" => true,
+            "message" => "item.created.successfully",
+            "data" => $object->toArray()
+        ], Response::HTTP_CREATED);
     }
 
-
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
     public function show($id)
     {
-        //
+        $object = PartnerID::find($id);
+        if (is_null($object)) {
+            return $this->sendError('item.not.found');
+        }
+        return response()->json([
+            "success" => true,
+            "message" => "item.retrieved.successfully",
+            "data" => $object
+        ]);
     }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, $id)
+    public function update(Request $request, PartnerID $partnerId)
     {
-        //
+    $input = $request->all();
+    $validator = Validator::make($input, [
+    'name' => 'required',
+    'detail' => 'required'
+    ]);
+    if($validator->fails()){
+    return $this->sendError('Validation Error.', $validator->errors());       
     }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy($id)
+    $partnerId->name = $input['name'];
+    $partnerId->detail = $input['detail'];
+    $partnerId->save();
+    return response()->json([
+    "success" => true,
+    "message" => "PartnerID updated successfully.",
+    "data" => $partnerId
+    ]);
+    }
+    public function destroy(PartnerID $partnerId)
     {
-        //
+    $partnerId->delete();
+    return response()->json([
+    "success" => true,
+    "message" => "PartnerID deleted successfully.",
+    "data" => $partnerId
+    ]);
     }
 
     public function check(Request $request) {
@@ -75,9 +87,9 @@ class PartnerIDController extends Controller
         try {
             $parts = explode('-', $request->input('entry'));
             $date = $parts[0];
-            $partner = Partner::where('twoDigitId', $parts[1])->firstOrFail();
-            $subpartner = Subpartner::where('twoDigitId', $parts[2])->firstOrFail();
-            $partnerID = PartnerID::where('threeDigitId', $parts[3])->firstOrFail();
+            $partner = Partner::find($parts[1])->firstOrFail();
+            $subpartner = Subpartner::find($parts[2])->firstOrFail();
+            $partnerID = PartnerID::find($parts[3])->firstOrFail();
             if (
                 $subpartner->is($partnerID->subpartner)
                 && $partner->is($subpartner->partner)

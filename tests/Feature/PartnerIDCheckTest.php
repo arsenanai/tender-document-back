@@ -68,19 +68,11 @@ class PartnerIDCheckTest extends TestCase
         $response = $this->json('post', '/api/partner-ids/check', [
             'entry' => '991212-12-12-123', // no entries so far
         ]);
-        //var_dump($response); exit;
         $response->assertStatus(200) //ok
-            ->assertJsonStructure(
-                [
-                    'answer',
-                    'reason',
-                    'details'
-                ]
-            )
             ->assertJsonFragment(
                 [
                     'answer' => 'incorrect', 
-                    'reason' => 'exception'
+                    'reason' => 'mismatch'
                 ]
             );
     }
@@ -96,9 +88,9 @@ class PartnerIDCheckTest extends TestCase
         $partner = Subpartner::find($partnerID->subpartner->id)->partner;
         $response = $this->json('post', '/api/partner-ids/check', [
             'entry' => $partnerID->created_at->format('yymmdd') 
-            . '-' . $partner->twoDigitId 
-            . '-' . $partnerID->subpartner->twoDigitId
-            . '-' . $partnerID->threeDigitId, 
+            . '-' . str_pad($partner->id, env('PAD_PARTNER_ID', 2), '0', STR_PAD_LEFT)
+            . '-' . str_pad($partnerID->subpartner->id, env('PAD_SUBPARTNER_ID', 2), '0', STR_PAD_LEFT)
+            . '-' . str_pad($partnerID->id, env('ID_PAD', 3), '0', STR_PAD_LEFT)
         ]);
         // var_dump($response); exit;
         $response->assertStatus(200) //ok
@@ -127,21 +119,14 @@ class PartnerIDCheckTest extends TestCase
         $response
             ->assertJson(fn (AssertableJson $json) => 
                 $json->has('data', env('PAGINATION_SIZE', 20))
-                    ->has('data.0', fn ($json) =>
-                        $json->where('id', $first['id'])
-                            ->where('lotNumber', $first['lotNumber'])
-                            ->where('procurementNumber', $first['procurementNumber'])
-                            ->where('comments', $first['comments'])
-                            ->where('threeDigitId', $first['threeDigitId'])
-                            ->etc()
-                    )
+                    ->where('data.0', $first)
                     ->etc()
             );
 	}
     
-    public function test_partner_id_create()
-    {
-        Sanctum::actingAs( User::where('email', env('ADMIN_EMAIL'))->first(), ['*']);
+    // public function test_partner_id_create()
+    // {
+    //     Sanctum::actingAs( User::where('email', env('ADMIN_EMAIL'))->first(), ['*']);
         
-    }
+    // }
 }

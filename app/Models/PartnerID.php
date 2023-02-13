@@ -10,11 +10,11 @@ class PartnerID extends Model
     use HasFactory;
     
     protected $fillable = [
-        'lotNumber', 'procurementNumber', 'threeDigitId', 'comments',
+        'lotNumber', 'procurementNumber', 'comments', 'subpartner_id'
     ];
 
     public function subpartner()
     {
-        return $this->belongsTo(Subpartner::class);
+        return $this->belongsTo(Subpartner::class, 'subpartner_id');
     }
 }
