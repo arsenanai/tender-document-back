@@ -24,14 +24,14 @@ Route::controller(RegisterController::class)->group(function(){
     // Route::post('register', 'register');
     Route::post('login', 'login');
 });
+
+Route::post('partner-ids/check', [PartnerIDController::class, 'check']);
         
 Route::middleware('auth:sanctum')->group( function () {
-    Route::post('partner-ids/check', [PartnerIDController::class, 'check']);
     Route::apiResources([
         'partner-ids' => PartnerIDController::class,
         'subpartners' => SubpartnerController::class,
         'partners' => PartnerController::class,
     ]);
-    
     Route::post('logout', [RegisterController::class, 'logout']);
 });

@@ -24,11 +24,6 @@ class PartnerIDCheckTest extends TestCase
      */
     public function test_partner_ids_route_exists()
     {
-        $admin = User::where('email', env('ADMIN_EMAIL'))->first();
-        Sanctum::actingAs(
-            $admin,
-            ['*']
-        );
         $response = $this->json('post', '/api/partner-ids/check', [
             'entry' => '211212-12-12-123',
         ]);
@@ -36,22 +31,17 @@ class PartnerIDCheckTest extends TestCase
         $response->assertStatus(200);
     }
 
-    public function test_partner_id_checking_is_guarded()
+    public function test_partner_id_checking_is_unguarded()
     {
         $response = $this->json('post', '/api/partner-ids/check', [
             'entry' => '211212-12-12-123',
         ]);
 
-        $response->assertStatus(401); //unathorised
+        $response->assertStatus(200); //unathorised
     }
 
     public function test_partner_id_checking_entry_validation()
     {
-        $admin = User::where('email', env('ADMIN_EMAIL'))->first();
-        Sanctum::actingAs(
-            $admin,
-            ['*']
-        );
         $response = $this->json('post', '/api/partner-ids/check', [
             'entry' => '123',
         ]);
@@ -60,45 +50,44 @@ class PartnerIDCheckTest extends TestCase
     }
 
     public function test_partner_incorrect_id_checking_works() {
-        $admin = User::where('email', env('ADMIN_EMAIL'))->first();
-        Sanctum::actingAs(
-            $admin,
-            ['*']
-        );
         $response = $this->json('post', '/api/partner-ids/check', [
             'entry' => '991212-12-12-123', // no entries so far
         ]);
         $response->assertStatus(200) //ok
+            ->assertJsonStructure(
+                [
+                    'answer',
+                    'reason'
+                ]
+            )
             ->assertJsonFragment(
                 [
-                    'answer' => 'incorrect', 
-                    'reason' => 'mismatch'
+                    'answer' => 'incorrect'
                 ]
             );
     }
 
     public function test_partner_correct_id_checking_works() {
-        $admin = User::where('email', env('ADMIN_EMAIL'))->first();
-        Sanctum::actingAs(
-            $admin,
-            ['*']
-        );
         //this factory creates all other records
         $partnerID = PartnerID::inRandomOrder()->first();
-        $partner = Subpartner::find($partnerID->subpartner->id)->partner;
+        $partner = $partnerID->subpartner()->first()->partner()->first();
+        $id = $partnerID->created_at->format('ymd') 
+        . '-' . str_pad($partner->id, env('PAD_PARTNER_ID', 2), '0', STR_PAD_LEFT)
+        . '-' . str_pad($partnerID->subpartner->id, env('PAD_SUBPARTNER_ID', 2), '0', STR_PAD_LEFT)
+        . '-' . str_pad($partnerID->id, env('ID_PAD', 3), '0', STR_PAD_LEFT);
         $response = $this->json('post', '/api/partner-ids/check', [
-            'entry' => $partnerID->created_at->format('yymmdd') 
-            . '-' . str_pad($partner->id, env('PAD_PARTNER_ID', 2), '0', STR_PAD_LEFT)
-            . '-' . str_pad($partnerID->subpartner->id, env('PAD_SUBPARTNER_ID', 2), '0', STR_PAD_LEFT)
-            . '-' . str_pad($partnerID->id, env('ID_PAD', 3), '0', STR_PAD_LEFT)
+            'entry' => $id
         ]);
-        // var_dump($response); exit;
+        //echo 'checking id: ' . $id . PHP_EOL;
+        //echo 'response: ' . json_encode($response, JSON_PRETTY_PRINT) . PHP_EOL;
         $response->assertStatus(200) //ok
             ->assertJsonStructure(
                 [
                     'answer',
-                    'partner',
-                    'subpartner'
+                    'details' => [
+                        'partner',
+                        'subpartner'
+                    ]
                 ]
             )
             ->assertJsonFragment(
@@ -107,26 +96,4 @@ class PartnerIDCheckTest extends TestCase
                 ]
             );
     }
-
-    // CRUD checking
-
-    /** @test */
-	public function test_partner_ids_index()
-	{
-        Sanctum::actingAs( User::where('email', env('ADMIN_EMAIL'))->first(), ['*']);
-        $first = PartnerID::first();
-        $response = $this->getJson('/api/partner-ids');
-        $response
-            ->assertJson(fn (AssertableJson $json) => 
-                $json->has('data', env('PAGINATION_SIZE', 20))
-                    ->where('data.0', $first)
-                    ->etc()
-            );
-	}
-    
-    // public function test_partner_id_create()
-    // {
-    //     Sanctum::actingAs( User::where('email', env('ADMIN_EMAIL'))->first(), ['*']);
-        
-    // }
 }

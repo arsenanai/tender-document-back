@@ -12,6 +12,12 @@ use Illuminate\Validation\Validator;
 
 class PartnerIDController extends Controller
 {
+    private $byRules = [
+        'lotNumber' => 'required',
+        'procurementNumber' => 'required',
+        'comments' => 'string|nullable',
+        'subpartner_id' => 'required|exists:subpartners,id',
+    ];
     /**
      * Display a listing of the resource.
      *
@@ -24,12 +30,7 @@ class PartnerIDController extends Controller
 
     public function store(Request $request)
     {
-        $request->validate([
-            'lotNumber' => 'required',
-            'procurementNumber' => 'required',
-            'comments' => 'string|nullable',
-            'subpartner_id' => 'required|exists:subpartners,id',
-        ]);
+        $request->validate($this->byRules);
         $object = PartnerID::create($request->all());
         return response()->json([
             "success" => true,
@@ -53,31 +54,23 @@ class PartnerIDController extends Controller
 
     public function update(Request $request, PartnerID $partnerId)
     {
-    $input = $request->all();
-    $validator = Validator::make($input, [
-    'name' => 'required',
-    'detail' => 'required'
-    ]);
-    if($validator->fails()){
-    return $this->sendError('Validation Error.', $validator->errors());       
+        $request->validate($this->byRules);
+        $partnerId->update($request->all());
+        return response()->json([
+            "success" => true,
+            "message" => "item.updated.successfully",
+            "data" => $partnerId->toArray()
+        ], Response::HTTP_ACCEPTED);
     }
-    $partnerId->name = $input['name'];
-    $partnerId->detail = $input['detail'];
-    $partnerId->save();
-    return response()->json([
-    "success" => true,
-    "message" => "PartnerID updated successfully.",
-    "data" => $partnerId
-    ]);
-    }
+
     public function destroy(PartnerID $partnerId)
     {
-    $partnerId->delete();
-    return response()->json([
-    "success" => true,
-    "message" => "PartnerID deleted successfully.",
-    "data" => $partnerId
-    ]);
+        $partnerId->delete();
+        return response()->json([
+            "success" => true,
+            "message" => "item.deleted.successfully",
+            "data" => $partnerId
+        ], Response::HTTP_ACCEPTED);
     }
 
     public function check(Request $request) {
@@ -87,26 +80,31 @@ class PartnerIDController extends Controller
         try {
             $parts = explode('-', $request->input('entry'));
             $date = $parts[0];
-            $partner = Partner::find($parts[1])->firstOrFail();
-            $subpartner = Subpartner::find($parts[2])->firstOrFail();
-            $partnerID = PartnerID::find($parts[3])->firstOrFail();
+            $partner = Partner::findOrFail((int)$parts[1]);
+            $subpartner = Subpartner::with('partner')->findOrFail((int)$parts[2]);
+            $partnerID = PartnerID::with('subpartner')->findOrFail((int)$parts[3]);
             if (
                 $subpartner->is($partnerID->subpartner)
                 && $partner->is($subpartner->partner)
-                && $partnerID->created_at->format('yymmdd') === $date
+                && $partnerID->created_at->format('ymd') === $date
             ) {
                 return response()->json(
                     [
                         'answer' => 'correct',
-                        'partner' => $partner,
-                        'subpartner' => $subpartner,
+                        'details' => [
+                            'partner' => $partner,
+                            'subpartner' => $subpartner,
+                        ],
                     ]
                 );
             } else {
                 return response()->json(
                     [
                         'answer' => 'incorrect',
-                        'reason' => 'mismatch'
+                        'reason' => 'mismatch',
+                        // 'details' => 'p: ' . $partner->id . ' vs ' . $subpartner->partner->id
+                        //     . ', sp: ' . $subpartner->id . ' vs ' . $partnerID->subpartner->id
+                        //     . ', id: ' . $partnerID->created_at->format('ymd') . ' vs ' . $date
                     ]
                 );
             }

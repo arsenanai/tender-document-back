@@ -62,4 +62,45 @@ class PartnerIDTest extends TestCase
         }
         $object->delete();
     }
+
+    public function testPartnerIDCanBeUpdated()
+    {
+        Sanctum::actingAs( User::where('email', env('ADMIN_EMAIL'))->first(), ['*']);
+        $object = PartnerID::inRandomOrder()->first();
+        $changed = PartnerID::factory()
+            ->for(Subpartner::inRandomOrder()->first())
+            ->make();
+        foreach($object->getFillable() as $fillable) {
+            $object[$fillable] = $changed[$fillable];
+        }
+        $response = $this->putJson('api/partner-ids/' . $object->id, $object->toArray())
+            ->assertStatus(Response::HTTP_ACCEPTED);
+        foreach($object->getFillable() as $fillable) {
+            $response->assertJsonPath('data.'.$fillable, fn ($data) => $data == $object[$fillable]);
+        }
+    }
+
+    public function testPartnerIDsIndex()
+	{
+        Sanctum::actingAs( User::where('email', env('ADMIN_EMAIL'))->first(), ['*']);
+        $first = PartnerID::first();
+        $response = $this->getJson('/api/partner-ids');
+        $response
+            ->assertJson(fn (AssertableJson $json) => 
+                $json->has('data', env('PAGINATION_SIZE', 20))
+                    ->where('data.0', $first)
+                    ->etc()
+            );
+	}
+
+    public function testPartnerIDDelete()
+    {
+        Sanctum::actingAs( User::where('email', env('ADMIN_EMAIL'))->first(), ['*']);
+        $object = PartnerID::inRandomOrder()->first();
+        $response = $this->deleteJson('/api/partner-ids/' . $object->id);
+        $response
+            ->assertStatus(Response::HTTP_ACCEPTED);
+        $this->assertDatabaseMissing('partner_i_d_s', $object->toArray());
+        $object->save();
+    }
 }

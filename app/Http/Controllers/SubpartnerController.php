@@ -2,38 +2,27 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Resources\AnyResource;
 use App\Models\Subpartner;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 
 class SubpartnerController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
+
+    private $byRules = [
+        'name' => 'string|required',
+        'partner_id' => 'required|exists:partners,id',
+    ];
+    
     public function index()
     {
-        //
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
+        return new AnyResource(Subpartner::paginate(env('PAGINATION_SIZE', 20)));
     }
 
     public function store(Request $request)
     {
-        $request->validate([
-            'name' => 'string|required',
-            'partner_id' => 'required|exists:partners,id',
-        ]);
+        $request->validate($this->byRules);
         $object = Subpartner::create($request->all());
         return response()->json([
             "success" => true,
@@ -55,37 +44,24 @@ class SubpartnerController extends Controller
         ]);
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
+    public function update(Request $request, Subpartner $subpartner)
     {
-        //
+        $request->validate($this->byRules);
+        $subpartner->update($request->all());
+        return response()->json([
+            "success" => true,
+            "message" => "item.updated.successfully",
+            "data" => $subpartner->toArray()
+        ], Response::HTTP_ACCEPTED);
     }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, $id)
+    public function destroy(Subpartner $subpartner)
     {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy($id)
-    {
-        //
+        $subpartner->delete();
+        return response()->json([
+            "success" => true,
+            "message" => "item.deleted.successfully",
+            "data" => $subpartner
+        ], Response::HTTP_ACCEPTED);
     }
 }
