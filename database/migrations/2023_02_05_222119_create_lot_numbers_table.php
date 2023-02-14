@@ -17,7 +17,7 @@ return new class extends Migration
             $table->id();
             $table->string('lotNumber');
             $table->string('procurementNumber');
-            $table->bigInteger('subpartner_id');
+            $table->unsignedBigInteger('subpartner_id');
             $table->string('comments');
             $table->timestamps();
         });
@@ -30,6 +30,7 @@ return new class extends Migration
      */
     public function down()
     {
+        
         Schema::dropIfExists('partner_i_d_s');
     }
 };

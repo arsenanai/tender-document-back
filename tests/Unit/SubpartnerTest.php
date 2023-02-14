@@ -80,13 +80,15 @@ class SubpartnerTest extends TestCase
     {
         Sanctum::actingAs( User::where('email', env('ADMIN_EMAIL'))->first(), ['*']);
         $object = Subpartner::inRandomOrder()->first();
+        $children = $object->partnerIDs()->get();
         $response = $this->deleteJson('/api/subpartners/' . $object->id);
         $response
             ->assertStatus(Response::HTTP_ACCEPTED);
         $this->assertDatabaseMissing('subpartners', $object->toArray());
-        foreach($object->partnerIDs() as $child) {
+        foreach($children as $child) {
             $this->assertDatabaseMissing('partner_i_d_s', $child->toArray());
         }
-        $object->save();
+        // $object->save();
+        // $object->partnerIDs()->createMany($children->toArray());
     }
 }

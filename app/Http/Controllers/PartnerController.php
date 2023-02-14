@@ -53,8 +53,13 @@ class PartnerController extends Controller
         ], Response::HTTP_ACCEPTED);
     }
 
-    public function destroy($id)
+    public function destroy(Partner $partner)
     {
-        //
+        $partner->delete();
+        return response()->json([
+            'success' => true,
+            'message' => 'item.deleted.successfully',
+            'data' => $partner
+        ], Response::HTTP_ACCEPTED);
     }
 }

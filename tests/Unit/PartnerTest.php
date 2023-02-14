@@ -83,4 +83,20 @@ class PartnerTest extends TestCase
             $response->assertJsonPath('data.'.$fillable, fn ($data) => $data == $object[$fillable]);
         }
     }
+
+    public function testPartnerDelete()
+    {
+        Sanctum::actingAs( User::where('email', env('ADMIN_EMAIL'))->first(), ['*']);
+        $object = Partner::inRandomOrder()->first();
+        $children = $object->subpartners()->get();
+        $response = $this->deleteJson('/api/partners/' . $object->id);
+        $response
+            ->assertStatus(Response::HTTP_ACCEPTED);
+        $this->assertDatabaseMissing('partners', $object->toArray());
+        foreach($children as $child) {
+            $this->assertDatabaseMissing('subpartners', $child->toArray());
+        }
+        // $object->save();
+        // $object->subpartners()->createMany($children->toArray());
+    }
 }
