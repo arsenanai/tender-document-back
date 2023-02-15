@@ -1,4 +1,4 @@
-# Entries checking server project
+# Entries checking project
 ## Server requirements
 - Everything that is required by Laravel v9
 
