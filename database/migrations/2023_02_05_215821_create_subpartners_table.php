@@ -15,9 +15,12 @@ return new class extends Migration
     {
         Schema::create('subpartners', function (Blueprint $table) {
             $table->id();
-            $table->bigInteger('partner_id');
+            // $table->bigInteger('partner_id');
             $table->string('name');
             $table->timestamps();
+            $table->foreignId('partner_id')
+                ->constrained('partners')
+                ->onDelete('cascade');
         });
     }
 
@@ -28,6 +31,9 @@ return new class extends Migration
      */
     public function down()
     {
+        Schema::table('subpartners', function (Blueprint $table) {
+            $table->dropForeign(['partner_id']);
+        });
         Schema::dropIfExists('subpartners');
     }
 };

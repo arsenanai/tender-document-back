@@ -4,36 +4,59 @@ namespace Tests\Unit;
 use App\Models\Partner;
 use App\Models\Subpartner;
 use App\Models\User;
+use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Http\Response;
 use Illuminate\Testing\Fluent\AssertableJson;
 use Laravel\Sanctum\Sanctum;
 use Tests\TestCase;
 
-class PartnerTest extends TestCase
+class BasePartnerTest extends TestCase
 {
+    use RefreshDatabase;
+    private $admin;
+    public function setUp() :void
+    {
+        parent::setUp();
+        $this->admin = User::factory()->create();
+    }
+
+    public function tearDown(): void
+    {
+        parent::tearDown();
+        $this->admin->tokens()->delete();
+        $this->admin->delete();
+    }
     public function testPartnerExists()
     {
-        $object = Partner::first();
+        $object = Partner::factory()->make();
         $this->assertTrue($object !== null);
     }
 
     public function testPartnerHasTwoDigitIdParam()
     {
-        $object = Partner::first();
+        $object = Partner::factory()->make();
         $this->assertTrue(in_array('name', $object->getFillable()));
     }
 
     public function testPartnerHasPartnerRelation()
     {
-        $object = Partner::first();
+        $object = Partner::factory()
+            ->has(
+                Subpartner::factory()->count(3)
+                )
+            ->create();
         $this->assertTrue(count($object->subpartners) > 0);
         $this->assertInstanceOf(Subpartner::class, $object->subpartners[0]);
+        $object->delete();
     }
 
     public function testPartnersIndex()
 	{
-        Sanctum::actingAs( User::where('email', env('ADMIN_EMAIL'))->first(), ['*']);
-        $first = Partner::first();
+        Sanctum::actingAs( $this->admin, ['*']);
+        $partners = Partner::factory()
+            ->count((int)env('PAGINATION_SIZE', 20) + 10)
+            ->create();
+        $first = $partners[0];
         $response = $this->getJson('/api/partners');
         $response
             ->assertJson(fn (AssertableJson $json) => 
@@ -41,11 +64,15 @@ class PartnerTest extends TestCase
                     ->where('data.0', $first)
                     ->etc()
             );
+        foreach($partners as $partner)
+        {
+            $partner->delete();
+        }
 	}
 
     public function testPartnerCanBeStored()
     {
-        Sanctum::actingAs( User::where('email', env('ADMIN_EMAIL'))->first(), ['*']);
+        Sanctum::actingAs( $this->admin, ['*']);
         $object = Partner::factory()
             ->make();
         $response = $this->postJson('api/partners', $object->toArray())
@@ -53,12 +80,12 @@ class PartnerTest extends TestCase
         foreach($object->getFillable() as $fillable) {
             $response->assertJsonPath('data.'.$fillable, $object[$fillable]);
         }
-        $object->delete();
+        Partner::where('name', 'like', '%testing')->delete();
     }
 
     public function testPartnerIsShownCorrectly()
     {
-        Sanctum::actingAs( User::where('email', env('ADMIN_EMAIL'))->first(), ['*']);
+        Sanctum::actingAs( $this->admin, ['*']);
         $object = Partner::factory()
             ->create();
         $response = $this->getJson('api/partners/' . $object->id)
@@ -71,8 +98,8 @@ class PartnerTest extends TestCase
 
     public function testPartnerCanBeUpdated()
     {
-        Sanctum::actingAs( User::where('email', env('ADMIN_EMAIL'))->first(), ['*']);
-        $object = Partner::inRandomOrder()->first();
+        Sanctum::actingAs( $this->admin, ['*']);
+        $object = Partner::factory()->create();
         $changed = Partner::factory()->make();
         foreach($object->getFillable() as $fillable) {
             $object[$fillable] = $changed[$fillable];
@@ -82,12 +109,15 @@ class PartnerTest extends TestCase
         foreach($object->getFillable() as $fillable) {
             $response->assertJsonPath('data.'.$fillable, fn ($data) => $data == $object[$fillable]);
         }
+        $object->delete();
     }
 
     public function testPartnerDelete()
     {
-        Sanctum::actingAs( User::where('email', env('ADMIN_EMAIL'))->first(), ['*']);
-        $object = Partner::inRandomOrder()->first();
+        Sanctum::actingAs( $this->admin, ['*']);
+        $object = Partner::factory()
+            ->has(Subpartner::factory()->count(3))
+            ->create();
         $children = $object->subpartners()->get();
         $response = $this->deleteJson('/api/partners/' . $object->id);
         $response
@@ -96,7 +126,5 @@ class PartnerTest extends TestCase
         foreach($children as $child) {
             $this->assertDatabaseMissing('subpartners', $child->toArray());
         }
-        // $object->save();
-        // $object->subpartners()->createMany($children->toArray());
     }
 }

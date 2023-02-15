@@ -16,9 +16,9 @@ class PartnerIDFactory extends Factory
     public function definition(): array
     {
     	return [
-            'lotNumber' => $this->faker->randomNumber(),
-            'procurementNumber' => $this->faker->randomNumber(),
-            'comments' => $this->faker->text(50),
+            'lotNumber' => $this->faker->randomNumber() . '',
+            'procurementNumber' => $this->faker->randomNumber() . '',
+            'comments' => $this->faker->text(42) . ' testing',
     	];
     }
 }

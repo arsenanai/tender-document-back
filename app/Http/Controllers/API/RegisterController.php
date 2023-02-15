@@ -45,10 +45,15 @@ class RegisterController extends BaseController
     public function login(Request $request)
     {
         if(Auth::attempt(['email' => $request->email, 'password' => $request->password])){ 
-            $user = Auth::user(); 
-            $success['token'] =  $user->createToken(env('BRAND_TITLE', 'Steam'))->plainTextToken; 
-            $success['name'] =  $user->name;
-            return $this->sendResponse($success, 'login.successfully');
+            $user = Auth::user();
+            return response()->json([
+                'success' => true,
+                'message' => 'login.successfully',
+                'data' => [
+                    'token' => $user->createToken(env('BRAND_TITLE', 'Steam'))->plainTextToken,
+                    'user' => $user->email,
+                ]
+            ]);
         } 
         else{ 
             return $this->sendError('unauthorised', ['error'=>'unauthorised']);
@@ -57,7 +62,9 @@ class RegisterController extends BaseController
 
     public function logout(Request $request) {
         $request->user()->currentAccessToken()->delete();
-        $response = 'logout.successfully';
-	    return response($response, 200);
+        return response()->json([
+            'success' => true,
+            'message' => 'logout.successfully',
+        ]);
     }
 }

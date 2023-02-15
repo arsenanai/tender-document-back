@@ -45,6 +45,7 @@ class PartnerIDController extends Controller
         if (is_null($object)) {
             return $this->sendError('item.not.found');
         }
+        $object->fullEntry = $object->getFullEntry();
         return response()->json([
             "success" => true,
             "message" => "item.retrieved.successfully",
@@ -56,6 +57,7 @@ class PartnerIDController extends Controller
     {
         $request->validate($this->byRules);
         $partnerId->update($request->all());
+        $partnerId->fullEntry = $partnerId->getFullEntry();
         return response()->json([
             "success" => true,
             "message" => "item.updated.successfully",
@@ -98,15 +100,16 @@ class PartnerIDController extends Controller
                     ]
                 );
             } else {
-                return response()->json(
-                    [
-                        'answer' => 'incorrect',
-                        'reason' => 'mismatch',
-                        // 'details' => 'p: ' . $partner->id . ' vs ' . $subpartner->partner->id
-                        //     . ', sp: ' . $subpartner->id . ' vs ' . $partnerID->subpartner->id
-                        //     . ', id: ' . $partnerID->created_at->format('ymd') . ' vs ' . $date
-                    ]
-                );
+                $r = [
+                    'answer' => 'incorrect',
+                    'reason' => 'mismatch',
+                ];
+                if (env('APP_DEBUG') == 'true') {
+                    $r['details'] = 'p: ' . $partner->id . ' vs ' . $subpartner->partner->id
+                        . ', sp: ' . $subpartner->id . ' vs ' . $partnerID->subpartner->id
+                        . ', id: ' . $partnerID->created_at->format('ymd') . ' vs ' . $date;
+                }
+                return response()->json($r);
             }
         } catch (\Throwable $t) {
             return response()->json([

@@ -12,16 +12,13 @@ use Laravel\Sanctum\Sanctum;
 use App\Models\User;
 use Illuminate\Http\Response;
 use App\Http\Resources\PartnerIDResource;
+use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Http\Request;
 use Illuminate\Testing\Fluent\AssertableJson;
 
 class PartnerIDCheckTest extends TestCase
 {
-    /**
-     * A basic feature test example.
-     *
-     * @return void
-     */
+    use RefreshDatabase;
     public function test_partner_ids_route_exists()
     {
         $response = $this->json('post', '/api/partner-ids/check', [
@@ -29,15 +26,6 @@ class PartnerIDCheckTest extends TestCase
         ]);
 
         $response->assertStatus(200);
-    }
-
-    public function test_partner_id_checking_is_unguarded()
-    {
-        $response = $this->json('post', '/api/partner-ids/check', [
-            'entry' => '211212-12-12-123',
-        ]);
-
-        $response->assertStatus(200); //unathorised
     }
 
     public function test_partner_id_checking_entry_validation()
@@ -53,13 +41,15 @@ class PartnerIDCheckTest extends TestCase
         $response = $this->json('post', '/api/partner-ids/check', [
             'entry' => '991212-12-12-123', // no entries so far
         ]);
-        $response->assertStatus(200) //ok
-            ->assertJsonStructure(
-                [
-                    'answer',
-                    'reason'
-                ]
-            )
+        $response->assertStatus(200); //ok
+        $r = [
+            'answer',
+            'reason'
+        ];
+        if (env('APP_DEBUG') == 'true') {
+            array_push($r, 'details');
+        }
+        $response->assertJsonStructure($r)
             ->assertJsonFragment(
                 [
                     'answer' => 'incorrect'
@@ -69,17 +59,16 @@ class PartnerIDCheckTest extends TestCase
 
     public function test_partner_correct_id_checking_works() {
         //this factory creates all other records
-        $partnerID = PartnerID::inRandomOrder()->first();
-        $partner = $partnerID->subpartner()->first()->partner()->first();
-        $id = $partnerID->created_at->format('ymd') 
-        . '-' . str_pad($partner->id, env('PAD_PARTNER_ID', 2), '0', STR_PAD_LEFT)
-        . '-' . str_pad($partnerID->subpartner->id, env('PAD_SUBPARTNER_ID', 2), '0', STR_PAD_LEFT)
-        . '-' . str_pad($partnerID->id, env('ID_PAD', 3), '0', STR_PAD_LEFT);
+        $partner = Partner::factory()->create();
+        $subpartner = Subpartner::factory()->for($partner)->create();
+        $partnerID = PartnerID::factory()->for($subpartner)->create();
+        $this->assertTrue(
+            method_exists(PartnerID::class, 'getFullEntry'), 
+            'PartnerID does not have method getFullEntry'
+        );
         $response = $this->json('post', '/api/partner-ids/check', [
-            'entry' => $id
+            'entry' => $partnerID->getFullEntry()
         ]);
-        //echo 'checking id: ' . $id . PHP_EOL;
-        //echo 'response: ' . json_encode($response, JSON_PRETTY_PRINT) . PHP_EOL;
         $response->assertStatus(200) //ok
             ->assertJsonStructure(
                 [
@@ -95,5 +84,10 @@ class PartnerIDCheckTest extends TestCase
                     'answer' => 'correct'
                 ]
             );
+        $partner->delete();
+        //rest stuff should be removed via cascade delete
+        $this->assertDatabaseMissing('partners', $partner->toArray());
+        $this->assertDatabaseMissing('subpartners', $subpartner->toArray());
+        $this->assertTrue(PartnerID::where('comments', 'like', '%testing')->count() === 0);
     }
 }

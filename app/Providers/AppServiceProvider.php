@@ -27,7 +27,6 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        Partner::observe(PartnerObserver::class);
-        Subpartner::observe(SubpartnerObserver::class);
+        //
     }
 }

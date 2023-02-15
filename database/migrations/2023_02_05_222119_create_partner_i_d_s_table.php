@@ -17,9 +17,12 @@ return new class extends Migration
             $table->id();
             $table->string('lotNumber');
             $table->string('procurementNumber');
-            $table->unsignedBigInteger('subpartner_id');
+            // $table->unsignedBigInteger('subpartner_id');
             $table->string('comments');
             $table->timestamps();
+            $table->foreignId('subpartner_id')
+                ->constrained('subpartners')
+                ->onDelete('cascade');
         });
     }
 
@@ -30,7 +33,9 @@ return new class extends Migration
      */
     public function down()
     {
-        
+        Schema::table('partner_i_d_s', function (Blueprint $table) {
+            $table->dropForeign(['subpartner_id']);
+        });
         Schema::dropIfExists('partner_i_d_s');
     }
 };

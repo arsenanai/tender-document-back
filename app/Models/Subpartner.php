@@ -22,4 +22,11 @@ class Subpartner extends Model
     {
         return $this->hasMany(PartnerID::class);
     }
+
+    // public static function boot() {
+    //     parent::boot();
+    //     static::deleting(function(Subpartner $subpartner) {
+    //         $subpartner->partnerIDs()->delete();
+    //     });
+    // }
 }

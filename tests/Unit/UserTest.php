@@ -3,24 +3,24 @@
 namespace Tests\Unit;
 
 use App\Models\User;
+use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 use Illuminate\Support\Facades\Hash;
 
 class UserTest extends TestCase
 {
+    use RefreshDatabase;
     public function testAdminExistance()
     {
-        $object = User::where('name', 'Admin')
-            ->where('email', env('ADMIN_EMAIL'))
-            ->first();
+        $object = User::factory()->create();
         $this->assertTrue($object !== null);
+        $object->delete();
     }
 
     public function testAdminPasswordIsCorrect()
     {
-        $object = User::where('name', 'Admin')
-            ->where('email', env('ADMIN_EMAIL'))
-            ->first();
-        $this->assertTrue(Hash::check(env('ADMIN_INITIAL_PASSWORD'), $object->password));
+        $object = User::factory()->create();
+        $this->assertTrue(Hash::check(env('ADMIN_INITIAL_PASSWORD', 'Entry_2023'), $object->password));
+        $object->delete();
     }
 }

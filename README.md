@@ -1,34 +1,20 @@
-# Tender document checking server project
+# Entries checking server project
 ## Server requirements
-- MySQL database
-- PHP v8
-- OpenSSL PHP Extension
-- PDO PHP Extension
-- Mbstring PHP Extension
-- Nginx
-- ✨DevOPS engineer ✨
+- Everything that is required by Laravel v9
 
 ## Installation guide
-Guide was documented while using Ubuntu 22.04.1 LTS
+Guide was documented while using Laravel v9
 
-For local development install the dependencies and devDependencies and start the server.
-
+- create an `.env` file and fullfill it
+- Run commands 
 ```sh
-cd tender-document-back
 composer install
-php artisan migrate:fresh --seed
+php artisan key:generate
+php artisan migrate:fresh --seed --seeder=UserSeeder
+php artisan test
+```
+
+For local development server:
+```sh
 php -S localhost:8000 -t public
-```
-
-For production environments...
-
-```sh
-cd tender-document-back
-composer install
-```
-
-Configure nginx
-```sh
-cd /etc/nginx/sites-enabled
-nano tender
 ```
