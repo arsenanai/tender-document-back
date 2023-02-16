@@ -20,7 +20,7 @@ class UserTest extends TestCase
     public function testAdminPasswordIsCorrect()
     {
         $object = User::factory()->create();
-        $this->assertTrue(Hash::check(env('ADMIN_INITIAL_PASSWORD', 'Entry_2023'), $object->password));
+        $this->assertTrue(Hash::check(config('cnf.ADMIN_INITIAL_PASSWORD'), $object->password));
         $object->delete();
     }
 }

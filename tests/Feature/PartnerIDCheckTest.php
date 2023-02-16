@@ -46,7 +46,7 @@ class PartnerIDCheckTest extends TestCase
             'answer',
             'reason'
         ];
-        if (env('APP_DEBUG') == 'true') {
+        if (config('cnf.APP_DEBUG') == 'true') {
             array_push($r, 'details');
         }
         $response->assertJsonStructure($r)

@@ -17,7 +17,7 @@ class SubpartnerController extends Controller
     
     public function index()
     {
-        return new AnyResource(Subpartner::paginate(env('PAGINATION_SIZE', 20)));
+        return new AnyResource(Subpartner::paginate(config('cnf.PAGINATION_SIZE')));
     }
 
     public function store(Request $request)

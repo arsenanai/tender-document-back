@@ -50,7 +50,7 @@ class RegisterController extends BaseController
                 'success' => true,
                 'message' => 'login.successfully',
                 'data' => [
-                    'token' => $user->createToken(env('BRAND_TITLE', 'Steam'))->plainTextToken,
+                    'token' => $user->createToken(config('cnf.BRAND_TITLE'))->plainTextToken,
                     'user' => $user->email,
                 ]
             ]);

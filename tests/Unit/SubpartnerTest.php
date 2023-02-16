@@ -42,13 +42,13 @@ class SubpartnerTest extends TestCase
         Sanctum::actingAs( $this->admin, ['*']);
         $subpartners = Subpartner::factory()
             ->for($this->partner)
-            ->count((int)env('PAGINATION_SIZE', 20) + 10)
+            ->count((int)config('cnf.PAGINATION_SIZE') + 10)
             ->create();
         $first = $subpartners[0];
         $response = $this->getJson('/api/subpartners');
         $response
             ->assertJson(fn (AssertableJson $json) => 
-                $json->has('data', env('PAGINATION_SIZE', 20))
+                $json->has('data', config('cnf.PAGINATION_SIZE'))
                     ->where('data.0', $first)
                     ->etc()
             );

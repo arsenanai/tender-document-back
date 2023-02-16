@@ -15,7 +15,7 @@ class PartnerController extends Controller
 
     public function index()
     {
-        return new AnyResource(Partner::paginate(env('PAGINATION_SIZE', 20)));
+        return new AnyResource(Partner::paginate(config('cnf.PAGINATION_SIZE')));
     }
 
     public function store(Request $request)

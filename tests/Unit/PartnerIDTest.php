@@ -116,13 +116,13 @@ class PartnerIDTest extends TestCase
         Sanctum::actingAs( $this->admin, ['*']);
         $ids = PartnerID::factory()
             ->for($this->subpartner)
-            ->count((int)env('PAGINATION_SIZE', 20) + 10)
+            ->count((int)config('cnf.PAGINATION_SIZE') + 10)
             ->create();
         $first = $ids[0];
         $response = $this->getJson('/api/partner-ids');
         $response
             ->assertJson(fn (AssertableJson $json) => 
-                $json->has('data', env('PAGINATION_SIZE', 20))
+                $json->has('data', config('cnf.PAGINATION_SIZE'))
                     ->where('data.0', $first)
                     ->etc()
             );

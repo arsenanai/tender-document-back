@@ -54,13 +54,13 @@ class BasePartnerTest extends TestCase
 	{
         Sanctum::actingAs( $this->admin, ['*']);
         $partners = Partner::factory()
-            ->count((int)env('PAGINATION_SIZE', 20) + 10)
+            ->count((int)config('cnf.PAGINATION_SIZE') + 10)
             ->create();
         $first = $partners[0];
         $response = $this->getJson('/api/partners');
         $response
             ->assertJson(fn (AssertableJson $json) => 
-                $json->has('data', env('PAGINATION_SIZE', 20))
+                $json->has('data', config('cnf.PAGINATION_SIZE'))
                     ->where('data.0', $first)
                     ->etc()
             );

@@ -18,10 +18,10 @@ class UserFactory extends Factory
     public function definition()
     {
         return [
-            'name' => env('ADMIN_NAME', 'Admin') . ' testing',
-            'email' => 'admin@entry.com',
+            'name' => config('cnf.ADMIN_NAME') . ' testing',
+            'email' => config('cnf.ADMIN_EMAIL'),
             'email_verified_at' => now(),
-            'password' => Hash::make(env('ADMIN_INITIAL_PASSWORD', 'Entry_2023')),
+            'password' => Hash::make(config('cnf.ADMIN_INITIAL_PASSWORD')),
         ];
     }
 }

@@ -21,8 +21,8 @@ class PartnerID extends Model
     public function getFullEntry(): String
     {
         return $this->created_at->format('ymd') 
-        . '-' . str_pad($this->subpartner->partner()->first()->id, env('PAD_PARTNER_ID', 2), '0', STR_PAD_LEFT)
-        . '-' . str_pad($this->subpartner->id, env('PAD_SUBPARTNER_ID', 2), '0', STR_PAD_LEFT)
-        . '-' . str_pad($this->id, env('ID_PAD', 3), '0', STR_PAD_LEFT);
+        . '-' . str_pad($this->subpartner->partner()->first()->id, config('cnf.PAD_PARTNER_ID'), '0', STR_PAD_LEFT)
+        . '-' . str_pad($this->subpartner->id, config('cnf.PAD_SUBPARTNER_ID'), '0', STR_PAD_LEFT)
+        . '-' . str_pad($this->id, config('cnf.ID_PAD'), '0', STR_PAD_LEFT);
     }
 }

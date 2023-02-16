@@ -23,7 +23,7 @@ class AuthenticationTest extends TestCase
             'Accept' => 'application/json',
         ])->json('post', '/api/login', [
             'email' => 'admin@entry.com',
-            'password' => env('ADMIN_INITIAL_PASSWORD', 'Entry_2023')
+            'password' => config('cnf.ADMIN_INITIAL_PASSWORD')
         ]);
  
         $response->assertOk();

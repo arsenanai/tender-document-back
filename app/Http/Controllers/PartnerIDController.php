@@ -25,7 +25,7 @@ class PartnerIDController extends Controller
      */
     public function index()
     {
-        return new AnyResource(PartnerID::paginate(env('PAGINATION_SIZE', 20)));
+        return new AnyResource(PartnerID::paginate(config('cnf.PAGINATION_SIZE')));
     }
 
     public function store(Request $request)
@@ -104,7 +104,7 @@ class PartnerIDController extends Controller
                     'answer' => 'incorrect',
                     'reason' => 'mismatch',
                 ];
-                if (env('APP_DEBUG') == 'true') {
+                if (config('cnf.APP_DEBUG') == 'true') {
                     $r['details'] = 'p: ' . $partner->id . ' vs ' . $subpartner->partner->id
                         . ', sp: ' . $subpartner->id . ' vs ' . $partnerID->subpartner->id
                         . ', id: ' . $partnerID->created_at->format('ymd') . ' vs ' . $date;
