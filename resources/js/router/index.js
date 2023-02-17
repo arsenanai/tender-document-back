@@ -1,8 +1,10 @@
 import {createRouter, createWebHistory } from "vue-router";
 import Home from "../views/Home.vue";
-import Partners from "../views/Partners.vue"
-import Subpartners from "../views/Subpartners.vue"
-import Entries from "../views/Entries.vue"
+import Partners from "../views/Partners.vue";
+import Subpartners from "../views/Subpartners.vue";
+import Entries from "../views/Entries.vue";
+import Login from "../views/Login.vue";
+import Logout from "../views/Logout.vue";
 
 const routes = [
     {
@@ -25,6 +27,16 @@ const routes = [
         name: "entries",
         component: Entries,
     },
+    {
+        path: '/login',
+        name: 'login',
+        component: Login,
+    },
+    {
+        path: '/logout',
+        name: 'logout',
+        component: Logout,
+    }
 ];
 
 const router = createRouter({
