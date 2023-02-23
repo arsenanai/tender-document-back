@@ -4,6 +4,6 @@ import router from "./router/index";
 import './bootstrap';
 import '../sass/app.scss'
 
-createApp(App)
+const vueApp = createApp(App)
     .use(router)
     .mount("#entries-app");

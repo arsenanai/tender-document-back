@@ -1,7 +1,9 @@
-export const common = {
+export default {
 	data(){
 		return {
 			user: null,
+			appToken: null,
+			eventCounter: 0,
 		}
 	},
 	methods:{
@@ -27,9 +29,6 @@ export const common = {
 		    	result = result.substring(0,75)+' ... '+result.substring(result.length-25,result.length)
 		   	return result
 	    },*/
-	    logout(){
-	    	this.$router.push({name:'auth.logout'})
-	    },
 	    basicErrorHandling(e){
 	    	console.log(e.stack)
 	    	if(e.response)
@@ -71,8 +70,23 @@ export const common = {
             		return true
            	return false
         },*/
+		authenticate(userData) {
+			localStorage.setItem('entries_user', JSON.stringify(userData));
+			this.user = userData;
+		},
         authenticated() {
             return this.user !== null;
-        }
+        },
+		getAuthenticatedUser() {
+			return JSON.parse(localStorage.getItem('entries_user'));
+		},
+		eraseUserData() {
+			localStorage.removeItem('entries_user');
+			this.user = null;
+		},
+		goTo(router, routeObject) {
+			router.push(routeObject);
+			this.eventCounter+=1;
+		},
 	}
 }
