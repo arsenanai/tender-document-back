@@ -1,9 +1,9 @@
+import {store} from './store';
+
 export default {
 	data(){
 		return {
-			user: null,
-			appToken: null,
-			eventCounter: 0,
+			store,
 		}
 	},
 	methods:{
@@ -72,21 +72,32 @@ export default {
         },*/
 		authenticate(userData) {
 			localStorage.setItem('entries_user', JSON.stringify(userData));
-			this.user = userData;
+			this.store.user = userData;
 		},
         authenticated() {
-            return this.user !== null;
+            return this.store.user !== null;
         },
 		getAuthenticatedUser() {
-			return JSON.parse(localStorage.getItem('entries_user'));
+			this.store.user = JSON.parse(localStorage.getItem('entries_user'));
+			return this.store.user;
+			// return JSON.parse(localStorage.getItem('entries_user'));
 		},
 		eraseUserData() {
 			localStorage.removeItem('entries_user');
-			this.user = null;
+			this.store.user = null;
 		},
 		goTo(router, routeObject) {
 			router.push(routeObject);
 			this.eventCounter+=1;
 		},
+		fetchUser() {
+			var userData = this.getAuthenticatedUser();
+			if(userData !== null) {
+			  this.store.user = userData;
+			}
+		},
+		getUserToken() {
+			return this.store.user.token;
+		}
 	}
 }

@@ -1,5 +1,5 @@
 <template>
-  <Header />
+  <Header/>
   <div class="container mt-4">
     <router-view v-slot="{ Component, route }">
       <transition :name="route.meta.transition || 'fade'">
@@ -12,19 +12,24 @@
 <script>
 import Header from './components/Header.vue';
 import common from './common';
+import { store } from './store.js'
 
 export default {
-    name: 'App',
-    mixins:[common],
-    components: {
-      Header,
-    },
-    created() {
-      var userData = this.getAuthenticatedUser();
-      if(userData !== null) {
-        this.user = userData;
-      }
+  name: 'App',
+  mixins:[common],
+  components: {
+    Header,
+  },
+  data() {
+    return {
+      store,
     }
+  },
+  created() {
+    this.fetchUser();
+  },
+  methods: {
+  }
 }
 </script>
 

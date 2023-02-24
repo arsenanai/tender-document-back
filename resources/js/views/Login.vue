@@ -58,6 +58,7 @@ export default {
     data() {
       return {
         data: null,
+        store,
       }
     },
     async onSubmit(entity) {
@@ -117,8 +118,7 @@ export default {
       return r;
     },
     created() {
-      var userData = this.getAuthenticatedUser();
-      if(userData !== null) {
+      if(this.authenticated()) {
         this.goTo(this.$router, {name:"partners.index"});
       }
     },

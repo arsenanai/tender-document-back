@@ -11,7 +11,6 @@ export default {
     mixins: [common],
     data() {
         return {
-            token: null,
             loading: false,
         };
     },
@@ -24,7 +23,7 @@ export default {
                     url: '/api/logout',
                     withCredentials: true,
                     headers: {
-                        'Authorization': `Bearer ${this.token}`,
+                        'Authorization': `Bearer ${this.getUserToken()}`,
                     }
                 })
                 .then((response) => {
@@ -40,7 +39,6 @@ export default {
         },
     },
     created() {
-        this.token = this.getAuthenticatedUser().token;
         this.sendLogoutRequest()
     }
 }

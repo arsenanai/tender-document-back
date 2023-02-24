@@ -1,5 +1,5 @@
 <template>
-<nav class="navbar navbar-expand-lg navbar-light bg-light" :key="'nav' + eventCounter">
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
   <div class="container">
     <router-link class="navbar-brand" to="/">
       <img :src="logo" alt="Logo" width="24" height="24" class="d-inline-block align-text-top">
@@ -10,7 +10,7 @@
     </button>
     <div class="collapse navbar-collapse d-lg-flex justify-content-lg-end" id="navbarNav">
       <ul class="navbar-nav my-2 my-lg-0">
-        <li class="nav-item" v-if="userr!==null">
+        <li class="nav-item" v-if="authenticated()">
           <!--v-if="authenticated()==true"-->
           <router-link
             class="nav-link" active-class="active"
@@ -18,7 +18,7 @@
             Partners
           </router-link>
         </li>
-        <li class="nav-item" v-if="userr!==null">
+        <li class="nav-item" v-if="authenticated()">
           <!--v-if="authenticated()==true"-->
           <router-link
             class="nav-link" active-class="active"
@@ -27,7 +27,7 @@
             Subpartners
           </router-link>
         </li>
-        <li class="nav-item" v-if="userr!==null">
+        <li class="nav-item" v-if="authenticated()">
           <!--v-if="authenticated()==true"-->
           <router-link
             class="nav-link" active-class="active"
@@ -36,7 +36,7 @@
             Entries
           </router-link>
         </li>
-        <li class="nav-item" v-if="userr===null">
+        <li class="nav-item" v-if="!authenticated()">
           <!--v-if="authenticated()==true"-->
           <router-link
             class="nav-link" active-class="active"
@@ -45,7 +45,7 @@
             Login
           </router-link>
         </li>
-        <li class="nav-item" v-if="userr!==null">
+        <li class="nav-item" v-if="authenticated()">
           <!--v-if="authenticated()==true"-->
           <router-link
             class="nav-link" active-class="active"
@@ -72,11 +72,6 @@ export default {
       toggleMenu: false,
     }
   },
-  computed: {
-    userr() {
-      return this.user;
-    }
-  }
 }
 </script>
 
