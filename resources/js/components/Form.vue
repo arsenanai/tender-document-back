@@ -24,21 +24,28 @@
             v-model="entity[fillable.codename]"
             :pattern="fillable.regex"
             :required="{'true': fillable.hasOwnProperty('required')}"
-            :class="{'invalid': fillable.hasOwnProperty('error')}">
+            :class="{'invalid': fillable.hasOwnProperty('error')}"
+            :disabled="loading">
           <div class="invalid-feedback" v-show="fillable.hasOwnProperty('error')">
             {{ fillable.error }}
           </div>
         </div>
       </div>
       <div class="">
-        <button type="submit" class="btn btn-light">{{ submit.buttonName }}</button>
+        <button type="submit" class="btn btn-light" :disabled="loading">
+          <span v-if="loading">
+            Loading...
+          </span>
+          <span v-else>
+            {{ submit.buttonName }}
+          </span>
+        </button>
       </div>
     </form>
   </div>
 </template>
 
 <script>
-import common from '../common';
 export default {
     props:{
         entity: {
@@ -52,15 +59,13 @@ export default {
         alert: {
             type: Object,
             required: true,
-        }
+        },
+        loading: Boolean,
     },
     methods:{
         onSubmit() {
           this.$emit('onSubmit', this.entity);
         },
-        // getRegexP(regex) {
-        //   return new RegExp(regex);
-        // }
     }
 }
 </script>

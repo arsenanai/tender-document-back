@@ -2,7 +2,7 @@ import {createRouter, createWebHistory } from "vue-router";
 import Home from "../views/Home.vue";
 import Partners from "../views/Partners.vue";
 import Subpartners from "../views/Subpartners.vue";
-import Entries from "../views/Entries.vue";
+import Entries from "../views/PartnerIDs.vue";
 import Login from "../views/Login.vue";
 import Logout from "../views/Logout.vue";
 import NotFound from '../views/NotFound.vue';
@@ -17,8 +17,7 @@ const routes = [
         } 
     },
     {
-        path: "/partners",
-        name: 'partners.index',
+        path: '/partners',
         component: Partners,
     },
     {
@@ -26,7 +25,7 @@ const routes = [
         component: Subpartners,
     },
     {
-        path: "/entries",
+        path: "/partner-ids",
         component: Entries,
     },
     {

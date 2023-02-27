@@ -6,7 +6,7 @@
     </div>
 </template>
 <script>
-import common from '../common';
+import common from '@/mixins/common';
 export default {
     mixins: [common],
     data() {
@@ -33,7 +33,7 @@ export default {
                 }).then(_ => {
                     this.loading = false
                     this.eraseUserData()
-                    this.goTo(this.$router, {name: "auth.login"});
+                    this.goTo("/login");
                 })
             //}
         },

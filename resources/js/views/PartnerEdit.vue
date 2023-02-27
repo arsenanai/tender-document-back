@@ -1,26 +1,19 @@
-<!-- eslint-disable quotes -->
 <template>
-  <MyForm
-    :entity="entity"
-    :submit="submit"
-    :alert="alert"
-    :loading="loading"
-    @onSubmit="onSubmit"
-  />
+  
 </template>
 
 <script>
-import MyForm from '../components/Form.vue';
 import common from '@/mixins/common';
-// import router from '../router/index';
+import Form from '../components/Form.vue';
 export default {
   components: {
-    MyForm,
+    Form,
   },
   mixins: [common],
   data() {
     return {
       entity: {
+        name: 'partners',
         fillables: [
           {
             codename: 'email',
@@ -47,7 +40,7 @@ export default {
       },
       submit: {
         type: 'POST',
-        link: '/api/login',
+        link: `/api/${this.entity.name}/`,
         buttonName: 'Login',
       },
       loading: false,
@@ -118,9 +111,10 @@ export default {
     },
   },
   created() {
-    if (this.authenticated()) {
-      this.goTo('/partners');
+    if( this.$route.params.hasOwnProperty('data') ) {
+      this.currentPage = this.$route.params.page;
     }
+    this.getPage(this.currentPage);
   },
-}
+};
 </script>

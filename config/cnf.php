@@ -1,6 +1,6 @@
 <?php
 return [
-    'PAGINATION_SIZE' => env('PAGINATION_SIZE', 20),
+    'PAGINATION_SIZE' => env('VITE_PAGINATION_SIZE', 20),
     'APP_DEBUG' => env('APP_DEBUG', false),
     'BRAND_TITLE' => env('BRAND_TITLE', 'Entries Checking App'),
     'PAD_PARTNER_ID' => env('PAD_PARTNER_ID', 2),

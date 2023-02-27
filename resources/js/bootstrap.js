@@ -1,13 +1,10 @@
-import lodash from 'lodash'
-window._ = lodash
+/* eslint-disable import/no-extraneous-dependencies */
+import lodash from 'lodash';
+import * as Popper from '@popperjs/core';
+import 'bootstrap';
+import axios from 'axios';
 
-import * as Popper from '@popperjs/core'
-window.Popper = Popper
-
-import 'bootstrap'
-
-import axios from 'axios'
-window.axios = axios
-
-//window.axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
+window._ = lodash;
+window.Popper = Popper;
+window.axios = axios;
 window.axios.defaults.withCredentials = true;

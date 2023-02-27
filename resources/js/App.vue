@@ -11,19 +11,13 @@
 
 <script>
 import Header from './components/Header.vue';
-import common from './common';
-import { store } from './store.js'
+import common from '@/mixins/common';
 
 export default {
   name: 'App',
   mixins:[common],
   components: {
     Header,
-  },
-  data() {
-    return {
-      store,
-    }
   },
   created() {
     this.fetchUser();

@@ -15,7 +15,7 @@ import common from '@/mixins/common';
 import pagination from '@/mixins/pagination';
 import Table from '../components/Table.vue';
 export default {
-    name: 'Subpartners',
+    name: 'Partner IDs',
     components: {
         Table,
     },
@@ -23,16 +23,28 @@ export default {
     data() {
         return {
             entity: {
-                label: 'Subpartners',
-                name: 'subpartners',
+                label: 'Partner IDs',
+                name: 'partner-ids',
                 pad: import.meta.env.VITE_PAD_SUBPARTNER_ID,
                 fillables:[
                     {
-                        label: 'Name',
-                        name: 'name',
-                        classes: 'col-4 col-sm-6 col-lg-8',
+                        label: 'Lot number',
+                        name: 'lotNumber',
+                        classes: 'col-12 col-md-2',
                         dataClasses: 'py-1 text-truncate',
-                    }
+                    },
+                    {
+                        label: 'Procurement number',
+                        name: 'procurementNumber',
+                        classes: 'col-12 col-md-2',
+                        dataClasses: 'py-1 text-truncate',
+                    },
+                    {
+                        label: 'Comments',
+                        name: 'comments',
+                        classes: 'col-12 col-md',
+                        dataClasses: 'py-1 text-truncate',
+                    },
                 ],
                 page: null,
             },
