@@ -7,61 +7,58 @@
       </button>
       <div class="d-flex flex-row gap-2 align-items-center" v-if="entity.page !== null && entity.page.to > 0">
         <span>
-          <span v-if="entity.page.last_page > entity.page.current_page">
+          <span>
             {{ entity.page.from }} - {{ entity.page.to }} &#47;
           </span>
           <span>{{ entity.page.total }}</span>
         </span>
-        <button class="btn btn-sm btn-light fw-bold" v-if="hasPrevPage()" @click="prevPage()">
+        <button class="btn btn-sm btn-light fw-bold" :disabled="!hasPrevPage()" @click="$emit('on-prev')">
           &lt;
         </button>
-        <button class="btn btn-sm btn-light fw-bold " v-if="hasNextPage()" @click="nextPage()">
+        <button class="btn btn-sm btn-light fw-bold " :disabled="!hasNextPage()" @click="$emit('on-next')">
           >
         </button>
       </div>
     </div>
     <div class="table-responsive mb-2">
-      <div class="container px-0 px-md-2 border-md rounded-md" v-if="entity.page !== null && entity.page.to > 0">
-          <div class="border-bottom py-2 d-none d-md-block">
-              <div class="row fw-bold">
-                <div class="col-md-auto">
-                    ID
-                </div>
-                <div v-for="(fillable,i) in entity.fillables" :key="i"
-                  :class="fillable.classes">
-                  {{ fillable.label }}
-                </div>
-                <div class="col-md-auto">
-                    Actions
-                </div>
-              </div>
-          </div>
-          <div class="py-1" 
-            v-for="(data,i) in entity.page.data" 
-            :key="i" 
-            :class="{'border-bottom': i < getPagination() - 1}">
-              <div class="row">
-                  <div class="col-12 col-md-auto py-1 font-monospace">
-                    <span class="d-block d-md-none fw-bold">ID: </span> {{getId(data.id)}}
-                  </div>
-                  <div v-for="(fillable,j) in entity.fillables" :key="j"
-                    :class="fillable.classes+' '+fillable.dataClasses">
-                    <a v-if="data.hasOwnProperty('link')"
-                    :href="data.link">
-                      <span class="d-block d-md-none fw-bold">{{ fillable.label }}: </span> {{ data[fillable.name] }}
-                    </a>
-                    <span v-else>
-                      <span class="d-block d-md-none fw-bold">{{ fillable.label }}: </span> {{ data[fillable.name] }}
-                    </span>
-                  </div>
-                  <div class="col-12 col-md-auto">
-                    <span class="d-block d-md-none fw-bold">Actions: </span> 
-                      <a class="btn btn-light btn-sm" @click="onEdit(data)">Edit</a>
-                      <a class="btn btn-light btn-sm mx-2 text-danger" @click="onDelete(data)">Delete</a>
-                  </div>    
-              </div>
-          </div>
-      </div>
+      <table class="table table-hover text-nowrap table-sm align-middle" v-if="entity.page !== null && entity.page.to > 0">
+        <thead>
+          <tr>
+            <th scope="col" v-if="entity.withIndex">
+              &#x2116;
+            </th>
+            <th scope="col" v-else>
+                ID
+            </th>
+            <th scope="col" v-for="(fillable,i) in entity.fillables" :key="i">
+              {{ fillable.label }}
+            </th>
+            <th scope="col">
+              Actions
+            </th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr v-for="(data,i) in entity.page.data" 
+          :key="i">
+            <td class="fw-bold font-monospace">
+              {{ getId(data, i) }}
+            </td>
+            <td v-for="(fillable,j) in entity.fillables" :key="j">
+              <span v-if="fillable.hasOwnProperty('raw') && fillable.data === 'raw'" :class="fillable.class(data)"
+                v-html="fillable.raw(data, i)">  
+              </span>
+              <template v-else>
+                {{ data[fillable.name] }}
+              </template>
+            </td>
+            <td>
+              <a class="btn btn-light btn-sm" @click="$emit('on-edit', data)">Edit</a>
+              <a class="btn btn-light btn-sm mx-2 text-danger" @click="onDelete(data)">Delete</a>
+            </td>
+          </tr>
+        </tbody>
+      </table>
       <p v-else-if="loading">Loading data...</p>
       <h6 v-else><i>No entries</i></h6>
     </div>
@@ -80,23 +77,15 @@ export default{
     loading: Boolean,
   },
   methods: {
-    getId(id) {
+    getId(data, i) {
+      const id = this.entity.withIndex ? (i + this.entity.page.from) : data.id;
       return id.toString().padStart(this.entity.pad, '0');
-    },
-    nextPage() {
-      this.$emit('on-next', this.entity.page.next_page_url);
-    },
-    prevPage() {
-      this.$emit('on-prev', this.entity.page.prev_page_url);
     },
     hasPrevPage() {
       return this.entity.page.prev_page_url !== null;
     },
     hasNextPage() {
       return this.entity.page.next_page_url !== null;
-    },
-    onEdit(data) {
-      this.$emit('on-edit', data);
     },
     onDelete(data) {
       if( confirm(`You are deleting an item from ${this.entity.name}. Are you sure?`) ) {

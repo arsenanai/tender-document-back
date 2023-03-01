@@ -1,4 +1,3 @@
-<!-- eslint-disable quotes -->
 <template>
   <MyForm
     :entity="entity"
@@ -12,12 +11,13 @@
 <script>
 import MyForm from '../components/Form.vue';
 import common from '@/mixins/common';
+import forms from '@/mixins/forms';
 // import router from '../router/index';
 export default {
   components: {
     MyForm,
   },
-  mixins: [common],
+  mixins: [common, forms],
   data() {
     return {
       entity: {
@@ -28,7 +28,7 @@ export default {
             title: 'Email',
             required: true,
             // eslint-disable-next-line no-useless-escape
-            regex: '[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$',
+            regex: /^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$/,
             validationMessage: 'Invalid email address',
           },
           {
@@ -36,8 +36,8 @@ export default {
             type: 'password',
             title: 'Password',
             required: true,
-            regex: '.{8,}',
-            validationMessage: 'Password must has length of 8',
+            regex: /^.{8,}/,
+            validationMessage: 'Password must have a length of 8',
           },
         ],
         // fillables here
@@ -45,29 +45,26 @@ export default {
         password: null,
         // fillables end
       },
-      submit: {
-        type: 'POST',
-        link: '/api/login',
-        buttonName: 'Login',
-      },
+      submit: 'Login',
       loading: false,
       alert: {
         type: null,
         message: null,
       },
-      data: null,
     };
   },
   methods: {
-    async onSubmit(entity) {
+    onSubmit() {
       this.alert.type = null;
       this.alert.message = null;
-      if (this.validated(entity)) {
+      // from forms mixin
+      if (this.validated()) {
         this.loading = true;
         axios.get('/sanctum/csrf-cookie').then(r => {
           axios({
-            method: this.submit.type,
-            url: this.submit.link,
+            method: 'POST',
+            url: '/api/login',
+            // from forms mixin
             data: this.data,
             withCredentials: true,
           })
@@ -94,27 +91,6 @@ export default {
           });
         });
       }
-    },
-    validated(entity) {
-      let r = true;
-      this.data = {};
-      for (let i = 0; i < entity.fillables.length; i++) {
-        entity.fillables[i].error = null;
-        this.data[entity.fillables[i].codename] = entity[entity.fillables[i].codename];
-        if (
-          entity.fillables[i].hasOwnProperty('required')
-          && entity.fillables[i].required === true
-          && entity[entity.fillables[i].codename] === null) {
-          entity.fillables[i].error = "This field is required";
-          r = false;
-        }
-        const regex = new RegExp(entity.fillables[i].regex);
-        if (!regex.test(entity[entity.fillables[i].codename])) {
-          entity.fillables[i].error = entity.fillables[i].validationMessage;
-          r = false;
-        }
-      }
-      return r;
     },
   },
   created() {

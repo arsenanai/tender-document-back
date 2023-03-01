@@ -1,12 +1,11 @@
 <template>
   <div class="row justify-content-center">
-    <form class="col-12 col-md-6 col-lg-4 align-self-center needs-validation" novalidate
+    <form class="col-12 col-md-6 col-lg-4 align-self-center" novalidate
     @submit.prevent="onSubmit"
     :class="{'was-validated': entity.fillables.some(fillable => { return fillable.hasOwnProperty('error') } ) }">
       <div v-show="alert.message!=null" 
       class="alert" role="alert"
-      :class="alert.type">
-        {{ alert.message }}
+      :class="alert.type" v-html="alert.message">
       </div>
       <div
         v-for="(fillable, i) in entity.fillables" :key="i"
@@ -37,7 +36,7 @@
             Loading...
           </span>
           <span v-else>
-            {{ submit.buttonName }}
+            {{ submit }}
           </span>
         </button>
       </div>
@@ -53,7 +52,7 @@ export default {
             required: true,
         },
         submit: {
-            type: Object,
+            type: String,
             required: true,
         },
         alert: {
@@ -64,7 +63,7 @@ export default {
     },
     methods:{
         onSubmit() {
-          this.$emit('onSubmit', this.entity);
+          this.$emit('onSubmit');
         },
     }
 }
