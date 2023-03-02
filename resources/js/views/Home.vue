@@ -20,14 +20,18 @@ export default {
   mixins: [forms],
   data() {
     return {
+      pad: parseInt(import.meta.env.VITE_PAD_ID),
+      pPad: parseInt(import.meta.env.VITE_PAD_PARTNER_ID),
+      sPad: parseInt(import.meta.env.VITE_PAD_SUBPARTNER_ID),
       entity: {
+        label: 'Entry checking form',
         fillables: [
           {
             codename: 'entry',
             type: 'text',
             title: 'Entry Code',
             required: true,
-            regex: /^\d{6}-\d{2}-\d{2}-\d{3}$/,
+            regex: null,
             validationMessage: 'Invalid entry code format',
           },
         ],
@@ -48,7 +52,7 @@ export default {
       this.alert.type = null;
       this.alert.message = null;
       // from forms mixin
-      if (this.validated()) {
+      if (this.validated(this.entity)) {
         this.loading = true;
         //axios.get('/sanctum/csrf-cookie').then(r => {
           axios({
@@ -81,6 +85,9 @@ export default {
         //});
       }
     },
+  },
+  created() {
+    this.entity.fillables[0].regex = new RegExp(`^([0-9]{6})?[-]?([0-9]{${this.pPad}})?[-]?([0-9]{${this.sPad}})?[-]?([0-9]{${this.pad}})?$`);
   },
 }
 </script>

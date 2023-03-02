@@ -6,6 +6,8 @@ import Entries from "../views/PartnerIDs.vue";
 import Login from "../views/Login.vue";
 import Logout from "../views/Logout.vue";
 import NotFound from '../views/NotFound.vue';
+import PartnerIDEdit from '@/views/PartnerIDEdit.vue';
+//import  from '@/views/.vue';
 
 const routes = [
     {
@@ -27,6 +29,10 @@ const routes = [
     {
         path: "/partner-ids",
         component: Entries,
+    },
+    {
+        path: "/partner-ids/edit/:id",
+        component: PartnerIDEdit,
     },
     {
         path: '/login',

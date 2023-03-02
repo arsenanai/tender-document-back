@@ -37,17 +37,19 @@ export default {
                     },
                     {
                         label: 'Partner',
-                        name: 'partner_name',
+                        raw: data => data.subpartner.partner.name,
+                        data: 'raw',
                     },
                     {
                         label: 'Subpartner',
-                        name: 'subpartner_name',
+                        raw: data => data.subpartner.name,
+                        data: 'raw',
                     },
                     {
                         label: 'ID',
                         raw: (data) => {
-                            return data.date.replace(/-/g, '').substring(2,8)
-                                +'-'+this.iD(data.partner_id,this.pPad)
+                            return data.created_at.replace(/-/g, '').substring(2,8)
+                                +'-'+this.iD(data.subpartner.partner_id,this.pPad)
                                 +'-'+this.iD(data.subpartner_id,this.sPad)
                                 +'-'+this.iD(data.id,this.pad);
                         },
@@ -55,7 +57,7 @@ export default {
                         class: (data) => {
                             const td = new Date();
                             const pd = new Date(new Date().setDate(td.getDate() - 30));
-                            const dd = new Date(data.date);
+                            const dd = new Date(data.created_at.substring(0,10));
                             let r = 'text-success';
                             if (dd < pd) {
                                 r = 'text-danger';

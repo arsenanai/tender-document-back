@@ -16,26 +16,24 @@ export default {
     },
     methods: {
         sendLogoutRequest(){
-            //if(this.token!=null){
-                this.loading = true
-                axios({
-                    method: 'POST',
-                    url: '/api/logout',
-                    withCredentials: true,
-                    headers: {
-                        'Authorization': `Bearer ${this.getUserToken()}`,
-                    }
-                })
-                .then((response) => {
-                    console.log(response)
-                }).catch(error => {
-                    console.log(error)
-                }).then(_ => {
-                    this.loading = false
-                    this.eraseUserData()
-                    this.goTo("/login");
-                })
-            //}
+            this.loading = true
+            axios({
+                method: 'POST',
+                url: '/api/logout',
+                withCredentials: true,
+                headers: {
+                    'Authorization': `Bearer ${this.getUserToken()}`,
+                }
+            })
+            .then((response) => {
+                console.log(response)
+            }).catch(error => {
+                console.log(error)
+            }).then(_ => {
+                this.loading = false
+                this.eraseUserData()
+                this.goTo("/login");
+            })
         },
     },
     created() {

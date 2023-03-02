@@ -5,19 +5,17 @@
       <button class="btn btn-sm btn-light" @click="$emit('new-entity', entity.name)">
         Add New
       </button>
-      <div class="d-flex flex-row gap-2 align-items-center" v-if="entity.page !== null && entity.page.to > 0">
-        <span>
-          <span>
-            {{ entity.page.from }} - {{ entity.page.to }} &#47;
-          </span>
-          <span>{{ entity.page.total }}</span>
-        </span>
-        <button class="btn btn-sm btn-light fw-bold" :disabled="!hasPrevPage()" @click="$emit('on-prev')">
-          &lt;
-        </button>
-        <button class="btn btn-sm btn-light fw-bold " :disabled="!hasNextPage()" @click="$emit('on-next')">
-          >
-        </button>
+      <div class="d-flex flex-row align-items-center gap-2" aria-label="Page navigation"
+        v-if="entity.page !== null && entity.page.to > 0">
+        <span>{{ entity.page.from }} - {{ entity.page.to }} &#47; {{ entity.page.total }}</span>
+        <ul class="pagination my-0">
+          <li class="page-item" :class="{'disabled': !hasPrevPage()}">
+            <a class="page-link fw-bold" :class="{'text-dark': hasPrevPage()}" @click="$emit('on-prev')">&lt;</a>
+          </li>
+          <li class="page-item" :class="{'disabled': !hasNextPage()}">
+            <a class="page-link fw-bold" :class="{'text-dark': hasNextPage()}" @click="$emit('on-next')">></a>
+          </li>
+        </ul>
       </div>
     </div>
     <div class="table-responsive mb-2">
@@ -45,7 +43,7 @@
               {{ getId(data, i) }}
             </td>
             <td v-for="(fillable,j) in entity.fillables" :key="j">
-              <span v-if="fillable.hasOwnProperty('raw') && fillable.data === 'raw'" :class="fillable.class(data)"
+              <span v-if="fillable.hasOwnProperty('raw') && fillable.data === 'raw'" :class="callFunction('class', fillable, data)"
                 v-html="fillable.raw(data, i)">  
               </span>
               <template v-else>
@@ -94,6 +92,12 @@ export default{
     },
     getPagination() {
       return parseInt(import.meta.env.VITE_PAGINATION_SIZE);
+    },
+    callFunction(fn, object, input) {
+      if (typeof object[fn] === 'function') {
+        return object[fn](input);
+      }
+      return null;
     }
   }
 }

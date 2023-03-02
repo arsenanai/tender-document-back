@@ -1,70 +1,104 @@
 <template>
-  <div class="row justify-content-center">
-    <form class="col-12 col-md-6 col-lg-4 align-self-center" novalidate
-    @submit.prevent="onSubmit"
-    :class="{'was-validated': entity.fillables.some(fillable => { return fillable.hasOwnProperty('error') } ) }">
-      <div v-show="alert.message!=null" 
-      class="alert" role="alert"
-      :class="alert.type" v-html="alert.message">
-      </div>
-      <div
-        v-for="(fillable, i) in entity.fillables" :key="i"
-        :class="{'mb-3' : i < entity.fillables.length}"
-      >
-        <label class="form-label w-100 text-capitalize"
-          :for="fillable.codename">
-          {{ fillable.title }}
-        </label>
-        <div class="input-group has-validation">
-          <input 
-            class="form-control"
-            :type="fillable.type"
-            :id="fillable.codename"
-            v-model="entity[fillable.codename]"
-            :pattern="fillable.regex"
-            :required="{'true': fillable.hasOwnProperty('required')}"
-            :class="{'invalid': fillable.hasOwnProperty('error')}"
-            :disabled="loading">
-          <div class="invalid-feedback" v-show="fillable.hasOwnProperty('error')">
-            {{ fillable.error }}
+  <div>
+    <h1 class="fs-3 text-capitalize text-center mb-3">{{ entity.label }}</h1>
+    <div class="row justify-content-center">
+      <form class="col-12 col-md-6 col-lg-4 align-self-center" novalidate
+      autocomplete="off"
+      @submit.prevent="onSubmit"
+      :class="{'was-validated': entity.fillables.some(fillable => { return fillable.hasOwnProperty('error') } ) }">
+        <div v-show="alert.message!=null" 
+        class="alert" role="alert"
+        :class="alert.type" v-html="alert.message">
+        </div>
+        <div
+          v-for="(fillable, i) in entity.fillables" :key="i"
+          :class="{'mb-3' : i < entity.fillables.length && fillable.type !== 'hidden'}"
+          :style="{'display: none': fillable.type === 'hidden'}"
+        >
+          <label class="form-label w-100 text-capitalize"
+            :for="fillable.codename" v-if="fillable.type !== 'hidden'">
+            {{ fillable.title }}
+          </label>
+          <Autocomplete
+            v-if="'autocomplete' === fillable.type"
+            :entity="entity"
+            :fillable="fillable"
+            :loading="loading"
+          />
+          <input type="hidden"
+          :name="fillable.codename"
+          v-model="entity[fillable.codename]"
+          v-if="'hidden' === fillable.type"
+          />
+          <div class="input-group has-validation" v-else>
+            <input
+              v-if="['text', 'email', 'password', 'number', 'date', 'tel', 'search', 'url', 'time', 'range',
+              'color'].includes(fillable.type)"
+              class="form-control"
+              :type="fillable.type"
+              :name="fillable.codename"
+              :id="fillable.codename"
+              v-model="entity[fillable.codename]"
+              :pattern="fillable.regex"
+              :required="{'true': fillable.hasOwnProperty('required')}"
+              :class="{'invalid': fillable.error !== null}"
+              :disabled="loading"/>
+            <textarea
+              v-if="'textarea' === fillable.type"
+              class="form-control"
+              :id="fillable.codename"
+              v-model="entity[fillable.codename]"
+              :pattern="fillable.regex"
+              :required="{'true': fillable.hasOwnProperty('required')}"
+              :class="{'invalid': fillable.error !== null}"
+              :disabled="loading"
+            ></textarea>
+            <div class="invalid-feedback" v-show="fillable.hasOwnProperty('error')">
+              {{ fillable.error }}
+            </div>
           </div>
         </div>
-      </div>
-      <div class="">
-        <button type="submit" class="btn btn-light" :disabled="loading">
-          <span v-if="loading">
-            Loading...
-          </span>
-          <span v-else>
-            {{ submit }}
-          </span>
-        </button>
-      </div>
-    </form>
+        <div class="">
+          <button type="submit" class="btn btn-light" :disabled="loading">
+            <span v-if="loading">
+              Loading...
+            </span>
+            <span v-else>
+              {{ submit }}
+            </span>
+          </button>
+        </div>
+      </form>
+    </div>
   </div>
 </template>
 
 <script>
+import Autocomplete from '@/components/Autocomplete.vue';
 export default {
-    props:{
-        entity: {
-            type: Object,
-            required: true,
-        },
-        submit: {
-            type: String,
-            required: true,
-        },
-        alert: {
-            type: Object,
-            required: true,
-        },
-        loading: Boolean,
+  name: 'Form',
+  components: {
+    Autocomplete,
+  },
+  props:{
+    entity: {
+      type: Object,
+      required: true,
     },
-    methods:{
-        onSubmit() {
-          this.$emit('onSubmit');
-        },
-    }
+    submit: {
+      type: String,
+      required: true,
+    },
+    alert: {
+      type: Object,
+      required: true,
+    },
+    loading: Boolean,
+  },
+  methods:{
+    onSubmit() {
+      this.$emit('onSubmit');
+    },
+  }
 }
 </script>

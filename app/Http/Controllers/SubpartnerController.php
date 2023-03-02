@@ -15,9 +15,15 @@ class SubpartnerController extends Controller
         'partner_id' => 'required|exists:partners,id',
     ];
     
-    public function index()
+    public function index(Request $request)
     {
-        return new AnyResource(Subpartner::paginate(config('cnf.PAGINATION_SIZE')));
+        $r = Subpartner::with('partner');
+        // $by = '';
+        if ($request->has('search')){
+            $r = $r->where('name', 'like', '%'.$request->input('search').'%');
+        }
+        $r = $r->paginate(config('cnf.PAGINATION_SIZE'));
+        return new AnyResource($r);
     }
 
     public function store(Request $request)

@@ -32,7 +32,12 @@ export default {
                         name: 'name',
                         classes: 'col-4 col-sm-6 col-lg-8',
                         dataClasses: 'py-1 text-truncate',
-                    }
+                    },
+                    {
+                        label: 'Partner',
+                        raw: data => data.partner.name,
+                        data: 'raw',
+                    },
                 ],
                 page: null,
             },

@@ -21,6 +21,7 @@ export default {
   data() {
     return {
       entity: {
+        label: 'Login Form',
         fillables: [
           {
             codename: 'email',
@@ -58,7 +59,7 @@ export default {
       this.alert.type = null;
       this.alert.message = null;
       // from forms mixin
-      if (this.validated()) {
+      if (this.validated(this.entity)) {
         this.loading = true;
         axios.get('/sanctum/csrf-cookie').then(r => {
           axios({

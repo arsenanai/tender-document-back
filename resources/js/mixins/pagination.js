@@ -16,13 +16,16 @@ export default {
         this.goTo(`/${this.entity.name}/create`);
     },
     onNext() {
+        this.currentPage = (this.currentPage >= this.entity.page.last_page) ? this.entity.page.last_page-1 : this.currentPage;
         this.goTo({path:`/${this.entity.name}`, query:{page: this.currentPage+=1}});
     },
     onPrev() {
+        this.currentPage = (this.currentPage <= 0) ? 2 : this.currentPage;
         this.goTo({path:`/${this.entity.name}`, query:{page: this.currentPage-=1}});
     },
     onEdit(data) {
-        this.goTo({path:`/${this.entity.name}/edit/${data.id}`, data});
+        localStorage.setItem(`${this.entity.name}-to-edit`, JSON.stringify(data));
+        this.goTo({path:`/${this.entity.name}/edit/${data.id}`});
     },
     onDelete(data) {
         this.sendDeleteRequest(data);
@@ -58,7 +61,7 @@ export default {
             }
         })
         .then((response) => {
-            console.log(response.data);
+            //console.log(response.data);
             this.entity.page = response.data;
             this.currentPage = response.data.current_page;
         }).catch(error => {

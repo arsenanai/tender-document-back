@@ -24,19 +24,15 @@ class PartnerIDController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        return new AnyResource(
-            PartnerID::select('partner_i_d_s.id', 'partner_i_d_s.lotNumber', 'partner_i_d_s.procurementNumber', 'partner_i_d_s.comments',
-                    'partner_i_d_s.subpartner_id', 'partners.id as partner_id',  
-                    'subpartners.name as subpartner_name', 'partners.name as partner_name',
-                    DB::raw('DATE_FORMAT(partner_i_d_s.created_at, "%Y-%m-%d") as date'),
-                    //DB::raw('"2023-01-01" as date'),
-                )
-                ->leftJoin('subpartners', 'partner_i_d_s.subpartner_id', '=', 'subpartners.id')
-                ->leftJoin('partners', 'subpartners.partner_id', '=', 'partners.id')
-                ->paginate(config('cnf.PAGINATION_SIZE'))
-        );
+        $r = PartnerID::with('subpartner.partner');
+        $by = '';
+        if ($request->has('search')){
+
+        }
+        $r = $r->paginate(config('cnf.PAGINATION_SIZE'));
+        return new AnyResource($r);
     }
 
     public function store(Request $request)
@@ -52,7 +48,7 @@ class PartnerIDController extends Controller
 
     public function show($id)
     {
-        $object = PartnerID::find($id);
+        $object = PartnerID::with('subpartner')->find($id);
         if (is_null($object)) {
             return $this->sendError('item.not.found');
         }

@@ -5,25 +5,65 @@ export default {
     };
   },
   methods : {
-    validated() {
+    validated(entity) {
       let r = true;
       this.data = {};
-      for (let i = 0; i < this.entity.fillables.length; i++) {
-        this.entity.fillables[i].error = null;
-        this.data[this.entity.fillables[i].codename] = this.entity[this.entity.fillables[i].codename];
+      for (let i = 0; i < entity.fillables.length; i++) {
+        entity.fillables[i].error = null;
+        this.data[entity.fillables[i].codename] = entity[entity.fillables[i].codename];
         if (
-          this.entity.fillables[i].hasOwnProperty('required')
-          && this.entity.fillables[i].required === true
-          && this.entity[this.entity.fillables[i].codename] === null) {
-          this.entity.fillables[i].error = "This field is required";
+          entity.fillables[i].hasOwnProperty('required')
+          && entity.fillables[i].required === true
+          && (entity[entity.fillables[i].codename] === null
+            || entity[entity.fillables[i].codename].length === 0
+            )) {
+          entity.fillables[i].error = "This field is required";
           r = false;
         }
-        if (!this.entity.fillables[i].regex.test(this.entity[this.entity.fillables[i].codename])) {
-          this.entity.fillables[i].error = this.entity.fillables[i].validationMessage;
+        if (entity.fillables[i].hasOwnProperty('regex') &&
+          !entity.fillables[i].regex.test(entity[entity.fillables[i].codename])) {
+          entity.fillables[i].error = entity.fillables[i].validationMessage;
           r = false;
         }
       }
       return r;
     },
+    populateData(route, entity, data) {
+      if (localStorage.getItem(`${entity.name}-to-edit`) !== null) {
+        data = JSON.parse(
+          localStorage.getItem(`${entity.name}-to-edit`)
+        );
+        console.log('data', data);
+        localStorage.removeItem(`${entity.name}-to-edit`);
+        this.syncEntity(entity, data);
+      } else {
+        //fetching data from back end in case of direct url access
+        this.loading = true
+        axios({
+          method: 'GET',
+          url: `/api/${entity.name}/${route.params.id}`,
+          withCredentials: true,
+          headers: {
+            'Authorization': `Bearer ${this.getUserToken()}`,
+          }
+        })
+        .then((response) => {
+          data = response.data.data;
+          data.id = route.params.id;
+          this.syncEntity(entity, data);
+        }).catch(error => {
+          console.log(error);
+        }).then(_ => {
+          this.loading = false;
+        })
+      }
+    },
+    syncEntity(entity, data) {
+      for (const prop in data) {
+        if (Object.prototype.hasOwnProperty.call(data, prop)) {
+          entity[prop] = data[prop];
+        }
+      }
+    }
   }
 }
