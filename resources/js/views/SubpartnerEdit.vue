@@ -14,17 +14,17 @@ import common from '@/mixins/common';
 import forms from '@/mixins/forms';
 
 export default {
+  name: 'SubpartnerEdit',
   components: {
     Form,
   },
-  name: 'PartnerIDEdit',
   mixins: [common, forms],
   data() {
     return {
       entity: {
-        label: 'Partner ID Edit Form',
-        route: 'partner-ids',
-        pad: parseInt(import.meta.env.VITE_PAD_SUBPARTNER_ID),
+        label: 'Subpartner Edit Form',
+        route: 'subpartners',
+        pad: parseInt(import.meta.env.VITE_PAD_PARTNER_ID),
         fillables: [
           {
             codename: 'id',
@@ -32,46 +32,32 @@ export default {
             required: true,
           },
           {
-            codename: 'lotNumber',
+            codename: 'name',
             type: 'text',
-            title: 'Lot Number',
+            title: 'Name',
             required: true,
             validationMessage: 'This field is required',
           },
           {
-            codename: 'procurementNumber',
-            type: 'text',
-            title: 'Procurement Number',
-            required: true,
-            validationMessage: 'This field is required',
-          },
-          {
-            codename: 'subpartner_id',
+            codename: 'partner_id',
             type: 'autocomplete',
             autocomplete: {
-              for: 'subpartner',
+              for: 'partner',
               selectionField: 'id',
               displayField: 'name',
               minChars: 3,
-              link: '/api/subpartners',
+              link: '/api/partners',
               method: 'GET',
             },
-            title: 'Subpartner',
+            title: 'Partner',
             required: true,
             validationMessage: 'This field is required',
           },
-          {
-            codename: 'comments',
-            type: 'textarea',
-            title: 'Comments',
-          },
         ],
         // fillables here
-        lotNumber: null, // must match the codename
-        procurementNumber: null,
-        comments: null,
-        subpartner_id: null,
-        subpartner: {
+        name: null, // must match the codename
+        partner_id: null,
+        partner: {
           name: null,
         }
         // fillables end

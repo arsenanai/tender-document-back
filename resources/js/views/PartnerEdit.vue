@@ -14,17 +14,16 @@ import common from '@/mixins/common';
 import forms from '@/mixins/forms';
 
 export default {
+  name: 'PartnerEdit',
   components: {
     Form,
   },
-  name: 'PartnerIDEdit',
   mixins: [common, forms],
   data() {
     return {
       entity: {
-        label: 'Partner ID Edit Form',
-        route: 'partner-ids',
-        pad: parseInt(import.meta.env.VITE_PAD_SUBPARTNER_ID),
+        label: 'Partner Edit Form',
+        route: 'partners',
         fillables: [
           {
             codename: 'id',
@@ -32,48 +31,15 @@ export default {
             required: true,
           },
           {
-            codename: 'lotNumber',
+            codename: 'name',
             type: 'text',
-            title: 'Lot Number',
+            title: 'Name',
             required: true,
             validationMessage: 'This field is required',
-          },
-          {
-            codename: 'procurementNumber',
-            type: 'text',
-            title: 'Procurement Number',
-            required: true,
-            validationMessage: 'This field is required',
-          },
-          {
-            codename: 'subpartner_id',
-            type: 'autocomplete',
-            autocomplete: {
-              for: 'subpartner',
-              selectionField: 'id',
-              displayField: 'name',
-              minChars: 3,
-              link: '/api/subpartners',
-              method: 'GET',
-            },
-            title: 'Subpartner',
-            required: true,
-            validationMessage: 'This field is required',
-          },
-          {
-            codename: 'comments',
-            type: 'textarea',
-            title: 'Comments',
           },
         ],
         // fillables here
-        lotNumber: null, // must match the codename
-        procurementNumber: null,
-        comments: null,
-        subpartner_id: null,
-        subpartner: {
-          name: null,
-        }
+        name: null, // must match the codename
         // fillables end
       },
       submit: 'Update',

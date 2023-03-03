@@ -15,7 +15,8 @@ export default {
           entity.fillables[i].hasOwnProperty('required')
           && entity.fillables[i].required === true
           && (entity[entity.fillables[i].codename] === null
-            || entity[entity.fillables[i].codename].length === 0
+            || (entity[entity.fillables[i].codename] !== null 
+              && entity[entity.fillables[i].codename].length === 0)
             )) {
           entity.fillables[i].error = "This field is required";
           r = false;
@@ -29,25 +30,27 @@ export default {
       return r;
     },
     populateData(route, entity, data) {
-      if (localStorage.getItem(`${entity.name}-to-edit`) !== null) {
+      console.log('entity', entity);
+      if (localStorage.getItem(`${entity.route}-to-edit`) !== null) {
         data = JSON.parse(
-          localStorage.getItem(`${entity.name}-to-edit`)
+          localStorage.getItem(`${entity.route}-to-edit`)
         );
         console.log('data', data);
-        localStorage.removeItem(`${entity.name}-to-edit`);
+        localStorage.removeItem(`${entity.route}-to-edit`);
         this.syncEntity(entity, data);
       } else {
         //fetching data from back end in case of direct url access
         this.loading = true
         axios({
           method: 'GET',
-          url: `/api/${entity.name}/${route.params.id}`,
+          url: `/api/${entity.route}/${route.params.id}`,
           withCredentials: true,
           headers: {
             'Authorization': `Bearer ${this.getUserToken()}`,
           }
         })
         .then((response) => {
+          console.log('response', response.data);
           data = response.data.data;
           data.id = route.params.id;
           this.syncEntity(entity, data);

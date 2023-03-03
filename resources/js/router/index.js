@@ -7,7 +7,11 @@ import Login from "../views/Login.vue";
 import Logout from "../views/Logout.vue";
 import NotFound from '../views/NotFound.vue';
 import PartnerIDEdit from '@/views/PartnerIDEdit.vue';
-//import  from '@/views/.vue';
+import PartnerIDCreate from '@/views/PartnerIDCreate.vue';
+import PartnerEdit from '@/views/PartnerEdit.vue';
+import PartnerCreate from '@/views/PartnerCreate.vue';
+import SubpartnerEdit from '@/views/SubpartnerEdit.vue';
+import SubpartnerCreate from '@/views/SubpartnerCreate.vue';
 
 const routes = [
     {
@@ -23,8 +27,24 @@ const routes = [
         component: Partners,
     },
     {
+        path: "/partners/edit/:id",
+        component: PartnerEdit,
+    },
+    {
+        path: "/partners/create",
+        component: PartnerCreate,
+    },
+    {
         path: "/subpartners",
         component: Subpartners,
+    },
+    {
+        path: "/subpartners/edit/:id",
+        component: SubpartnerEdit,
+    },
+    {
+        path: "/subpartners/create",
+        component: SubpartnerCreate,
     },
     {
         path: "/partner-ids",
@@ -33,6 +53,10 @@ const routes = [
     {
         path: "/partner-ids/edit/:id",
         component: PartnerIDEdit,
+    },
+    {
+        path: "/partner-ids/create",
+        component: PartnerIDCreate,
     },
     {
         path: '/login',

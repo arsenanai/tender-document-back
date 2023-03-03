@@ -24,7 +24,7 @@ export default {
         return {
             entity: {
                 label: 'Subpartners',
-                name: 'subpartners',
+                route: 'subpartners',
                 pad: import.meta.env.VITE_PAD_SUBPARTNER_ID,
                 fillables:[
                     {
@@ -38,6 +38,11 @@ export default {
                         raw: data => data.partner.name,
                         data: 'raw',
                     },
+                    {
+                        label: 'Created at',
+                        raw: data => data.created_at.replaceAll('T', ' ').substring(0,16),
+                        data: 'raw',
+                    }
                 ],
                 page: null,
             },

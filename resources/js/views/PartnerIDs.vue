@@ -15,7 +15,7 @@ import common from '@/mixins/common';
 import pagination from '@/mixins/pagination';
 import Table from '../components/Table.vue';
 export default {
-    name: 'Partner IDs',
+    name: 'PartnerIDs',
     components: {
         Table,
     },
@@ -24,7 +24,7 @@ export default {
         return {
             entity: {
                 label: 'Partner IDs',
-                name: 'partner-ids',
+                route: 'partner-ids',
                 withIndex: true,
                 fillables:[
                     {

@@ -24,7 +24,7 @@ export default {
         return {
             entity: {
                 label: 'Partners',
-                name: 'partners',
+                route: 'partners',
                 pad: parseInt(import.meta.env.VITE_PAD_PARTNER_ID),
                 fillables:[
                     {
@@ -32,6 +32,11 @@ export default {
                         name: 'name',
                         classes: 'col-4 col-sm-6 col-lg-8',
                         dataClasses: 'py-1 text-truncate',
+                    },
+                    {
+                        label: 'Created at',
+                        data: 'raw',
+                        raw: data => data.created_at.replaceAll('T', ' ').substring(0,16),
                     }
                 ],
                 page: null,

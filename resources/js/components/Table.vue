@@ -2,7 +2,7 @@
   <div>
     <h1 class="fs-2 text-capitalize">{{ entity.label }}</h1>
     <div class="d-flex flex-row align-items-center justify-content-between mb-2">
-      <button class="btn btn-sm btn-light" @click="$emit('new-entity', entity.name)">
+      <button class="btn btn-sm btn-light" @click="$emit('new-entity', entity.route)">
         Add New
       </button>
       <div class="d-flex flex-row align-items-center gap-2" aria-label="Page navigation"
@@ -86,7 +86,7 @@ export default{
       return this.entity.page.next_page_url !== null;
     },
     onDelete(data) {
-      if( confirm(`You are deleting an item from ${this.entity.name}. Are you sure?`) ) {
+      if( confirm(`You are deleting an item from ${this.entity.route}. Are you sure?`) ) {
         this.$emit('on-delete', data);
       }
     },

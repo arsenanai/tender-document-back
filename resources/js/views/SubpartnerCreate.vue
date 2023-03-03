@@ -17,66 +17,48 @@ export default {
   components: {
     Form,
   },
-  name: 'PartnerIDEdit',
+  name: 'SubpartnerCreate',
   mixins: [common, forms],
   data() {
     return {
       entity: {
-        label: 'Partner ID Edit Form',
-        route: 'partner-ids',
+        label: 'Subpartner Create Form',
+        route: 'subpartners',
         pad: parseInt(import.meta.env.VITE_PAD_SUBPARTNER_ID),
         fillables: [
           {
-            codename: 'id',
-            type: 'hidden',
-            required: true,
-          },
-          {
-            codename: 'lotNumber',
+            codename: 'name',
             type: 'text',
-            title: 'Lot Number',
+            title: 'Name',
             required: true,
             validationMessage: 'This field is required',
           },
           {
-            codename: 'procurementNumber',
-            type: 'text',
-            title: 'Procurement Number',
-            required: true,
-            validationMessage: 'This field is required',
-          },
-          {
-            codename: 'subpartner_id',
+            codename: 'partner_id',
             type: 'autocomplete',
             autocomplete: {
-              for: 'subpartner',
+              for: 'partner',
               selectionField: 'id',
               displayField: 'name',
               minChars: 3,
-              link: '/api/subpartners',
+              link: '/api/partners',
               method: 'GET',
             },
-            title: 'Subpartner',
+            title: 'Partner',
             required: true,
             validationMessage: 'This field is required',
           },
-          {
-            codename: 'comments',
-            type: 'textarea',
-            title: 'Comments',
-          },
         ],
         // fillables here
-        lotNumber: null, // must match the codename
-        procurementNumber: null,
+        name: null,
         comments: null,
-        subpartner_id: null,
-        subpartner: {
+        partner_id: null,
+        partner: {
           name: null,
         }
         // fillables end
       },
-      submit: 'Update',
+      submit: 'Create',
       loading: false,
       alert: {
         type: null,
@@ -92,8 +74,8 @@ export default {
       if (this.validated(this.entity)) {
         this.loading = true;
         axios({
-          method: 'PUT',
-          url: `/api/${this.entity.route}/${this.data.id}`,
+          method: 'POST',
+          url: `/api/${this.entity.route}`,
           data: this.data,
           withCredentials: true,
           headers: {
@@ -102,12 +84,12 @@ export default {
         })
         .then(response => {
           console.log('response', response);
-          if(response.status === 202 && response.data.success === true) {
+          if(response.status === 201 && response.data.success === true) {
             this.alert.type = 'alert-success';
-            this.alert.message = `Updation successful`;
+            this.alert.message = `Creation successful`;
           } else {
             this.alert.type = 'alert-danger';
-            this.alert.message = `Updation failed`;
+            this.alert.message = `Creation failed`;
           }
         })
         .catch((error) => {
@@ -120,9 +102,6 @@ export default {
         });
       }
     },
-  },
-  created() {
-    this.populateData(this.$route, this.entity, this.data);
   },
 }
 </script>

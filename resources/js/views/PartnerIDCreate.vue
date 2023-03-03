@@ -14,23 +14,18 @@ import common from '@/mixins/common';
 import forms from '@/mixins/forms';
 
 export default {
+  name: 'PartnerIDCreate',
   components: {
     Form,
   },
-  name: 'PartnerIDEdit',
   mixins: [common, forms],
   data() {
     return {
       entity: {
-        label: 'Partner ID Edit Form',
+        label: 'Partner ID Create Form',
         route: 'partner-ids',
         pad: parseInt(import.meta.env.VITE_PAD_SUBPARTNER_ID),
         fillables: [
-          {
-            codename: 'id',
-            type: 'hidden',
-            required: true,
-          },
           {
             codename: 'lotNumber',
             type: 'text',
@@ -76,7 +71,7 @@ export default {
         }
         // fillables end
       },
-      submit: 'Update',
+      submit: 'Create',
       loading: false,
       alert: {
         type: null,
@@ -92,8 +87,8 @@ export default {
       if (this.validated(this.entity)) {
         this.loading = true;
         axios({
-          method: 'PUT',
-          url: `/api/${this.entity.route}/${this.data.id}`,
+          method: 'POST',
+          url: `/api/${this.entity.route}`,
           data: this.data,
           withCredentials: true,
           headers: {
@@ -102,12 +97,12 @@ export default {
         })
         .then(response => {
           console.log('response', response);
-          if(response.status === 202 && response.data.success === true) {
+          if(response.status === 201 && response.data.success === true) {
             this.alert.type = 'alert-success';
-            this.alert.message = `Updation successful`;
+            this.alert.message = `Creation successful`;
           } else {
             this.alert.type = 'alert-danger';
-            this.alert.message = `Updation failed`;
+            this.alert.message = `Creation failed`;
           }
         })
         .catch((error) => {
@@ -120,9 +115,6 @@ export default {
         });
       }
     },
-  },
-  created() {
-    this.populateData(this.$route, this.entity, this.data);
   },
 }
 </script>
