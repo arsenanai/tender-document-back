@@ -7,6 +7,7 @@
         @on-prev="onPrev"
         @on-edit="onEdit"
         @on-delete="onDelete"
+        @on-search="onSearch"
         />
 </template>
 

@@ -123,7 +123,7 @@ class PartnerIDTest extends TestCase
         $response
             ->assertJson(fn (AssertableJson $json) => 
                 $json->has('data', config('cnf.PAGINATION_SIZE'))
-                    ->where('data.0', $first)
+                    ->whereContains('data.0', $first)
                     ->etc()
             );
         foreach ($ids as $id)
@@ -131,6 +131,59 @@ class PartnerIDTest extends TestCase
             $id->delete();
         }
 	}
+
+    public function testPartnerIDsSearch()
+    {
+        Sanctum::actingAs( $this->admin, ['*']);
+        $ids = PartnerID::factory()
+            ->for($this->subpartner)
+            ->count((int)config('cnf.PAGINATION_SIZE') + 10)
+            ->create();
+        $first = $ids[(int)config('cnf.PAGINATION_SIZE') + 5];
+        $response = $this->getJson('/api/partner-ids', ['search' => $first->lotNumber]);
+        $response
+            ->assertJson(fn (AssertableJson $json) => 
+                $json->whereContains('data.0.lotNumber', $first->lotNumber)
+                    ->etc()
+            );
+        $response = $this->getJson('/api/partner-ids', ['search' => $first->procurementNumber]);
+        $response
+            ->assertJson(fn (AssertableJson $json) => 
+                $json->whereContains('data.0.procurementNumber', $first->procurementNumber)
+                    ->etc()
+            );
+        $response = $this->getJson('/api/partner-ids', ['search' => $this->subpartner->name]);
+        $response
+            ->assertJson(fn (AssertableJson $json) => 
+                $json->whereContains('data.0.subpartner.name', $this->subpartner->name)
+                    ->etc()
+            );
+        $response = $this->getJson('/api/partner-ids', ['search' => $this->partner->name]);
+        $response
+            ->assertJson(fn (AssertableJson $json) => 
+                $json->whereContains('data.0.partner.name', $this->partner->name)
+                    ->etc()
+            );
+        $response = $this->getJson('/api/partner-ids', ['search' => $this->getFullEntry($first)]);
+        // echo json_encode($first, JSON_PRETTY_PRINT) . PHP_EOL;
+        // echo json_encode($response, JSON_PRETTY_PRINT) . PHP_EOL;
+        $response
+            ->assertJson(fn (AssertableJson $json) => 
+                $json->whereContains('data.0', $first)
+                    ->etc()
+            );
+        foreach ($ids as $id)
+        {
+            $id->delete();
+        }
+    }
+
+    private function getFullEntry($obj) {
+        return $obj->created_at->format('ymd') 
+        . '-' . str_pad($this->partner->id, config('cnf.PAD_PARTNER_ID'), '0', STR_PAD_LEFT)
+        . '-' . str_pad($this->subpartner->id, config('cnf.PAD_SUBPARTNER_ID'), '0', STR_PAD_LEFT)
+        . '-' . str_pad($obj->id, config('cnf.ID_PAD'), '0', STR_PAD_LEFT);
+    }
 
     public function testPartnerIDDelete()
     {

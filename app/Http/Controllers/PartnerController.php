@@ -13,9 +13,19 @@ class PartnerController extends Controller
         'name' => 'string|required',
     ];
 
-    public function index()
+    public function index(Request $request)
     {
-        return new AnyResource(Partner::paginate(config('cnf.PAGINATION_SIZE')));
+        $r = Partner::where('id', '>', -1);
+        try{
+            if ($request->has('search')) {
+                $s = $request->input('search');
+                $r->where('id', $s)
+                    ->orWhere('name', 'like', "%$s%");
+            }
+        } catch(\Throwable $t) {
+
+        }
+        return new AnyResource($r->paginate(config('cnf.PAGINATION_SIZE')));
     }
 
     public function store(Request $request)

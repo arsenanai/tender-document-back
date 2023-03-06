@@ -18,9 +18,17 @@ class SubpartnerController extends Controller
     public function index(Request $request)
     {
         $r = Subpartner::with('partner');
-        // $by = '';
-        if ($request->has('search')){
-            $r = $r->where('name', 'like', '%'.$request->input('search').'%');
+        try{
+            if ($request->has('search')) {
+                $s = $request->input('search');
+                $r->where('id', $s)
+                    ->orWhere('name', 'like', "%$s%")
+                    ->orWhereHas('partner', function($query) use($s){
+                        $query->where('name', 'like', "%$s%");
+                    });
+            }
+        } catch(\Throwable $t) {
+
         }
         $r = $r->paginate(config('cnf.PAGINATION_SIZE'));
         return new AnyResource($r);

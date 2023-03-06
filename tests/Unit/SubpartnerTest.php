@@ -12,12 +12,16 @@ use Laravel\Sanctum\Sanctum;
 class SubpartnerTest extends TestCase
 {
     use RefreshDatabase;
-    private $admin, $partner;
+    private $admin, $partner, $subpartners;
     public function setUp() :void
     {
         parent::setUp();
         $this->admin = User::factory()->create();
         $this->partner = Partner::factory()->create();
+        $this->subpartners = Subpartner::factory()
+            ->for($this->partner)
+            ->count((int)config('cnf.PAGINATION_SIZE') + 10)
+            ->create();
     }
 
     public function tearDown(): void
@@ -25,6 +29,10 @@ class SubpartnerTest extends TestCase
         parent::tearDown();
         $this->admin->tokens()->delete();
         $this->admin->delete();
+        foreach($this->subpartners as $d)
+        {
+            $d->delete();
+        }
         $this->partner->delete();
     }
     public function testSubpartnerHasNeededRelations()
@@ -40,23 +48,36 @@ class SubpartnerTest extends TestCase
     public function testSubpartnersIndex()
 	{
         Sanctum::actingAs( $this->admin, ['*']);
-        $subpartners = Subpartner::factory()
-            ->for($this->partner)
-            ->count((int)config('cnf.PAGINATION_SIZE') + 10)
-            ->create();
-        $first = $subpartners[0];
+        $first = $this->subpartners[0];
         $response = $this->getJson('/api/subpartners');
         $response
             ->assertJson(fn (AssertableJson $json) => 
                 $json->has('data', config('cnf.PAGINATION_SIZE'))
-                    ->where('data.0', $first)
+                    ->whereContains('data.0', $first)
                     ->etc()
             );
-        foreach($subpartners as $d)
-        {
-            $d->delete();
-        }
 	}
+
+    public function testSubpartnersSearch()
+    {
+        Sanctum::actingAs( $this->admin, ['*']);
+        $first = $this->subpartners[0];
+        $response = $this->getJson('/api/subpartners?search=' . $first->id);
+        $response->assertJson(fn (AssertableJson $json) => 
+            $json->whereContains('data.0', $first)
+                ->etc()
+        );
+        $response = $this->getJson('/api/subpartners?search=' . $first->name);
+        $response->assertJson(fn (AssertableJson $json) => 
+            $json->whereContains('data.0', $first)
+                ->etc()
+        );
+        $response = $this->getJson('/api/subpartners?search=' . $this->partner->name);
+        $response->assertJson(fn (AssertableJson $json) => 
+            $json->whereContains('data.0', $first)
+                ->etc()
+        );
+    }
 
     public function testSubpartnerCanBeStored()
     {

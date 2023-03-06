@@ -27,6 +27,10 @@ export default {
         localStorage.setItem(`${this.entity.route}-to-edit`, JSON.stringify(data));
         this.goTo({path:`/${this.entity.route}/edit/${data.id}`});
     },
+    onSearch(input) {
+        this.currentPage = 1;
+        this.goTo({path:`/${this.entity.route}`, query:{search: input}});
+    },
     onDelete(data) {
         this.sendDeleteRequest(data);
     },
@@ -53,7 +57,8 @@ export default {
             method: 'GET',
             url: `/api/${this.entity.route}`,
             params: {
-                page: this.$route.query.page
+                page: this.$route.query.page,
+                search: this.$route.query.search,
             },
             withCredentials: true,
             headers: {

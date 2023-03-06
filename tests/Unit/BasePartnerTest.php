@@ -70,6 +70,26 @@ class BasePartnerTest extends TestCase
         }
 	}
 
+    public function testPartnersSearch()
+    {
+        Sanctum::actingAs( $this->admin, ['*']);
+        $partners = Partner::factory()
+            ->count((int)config('cnf.PAGINATION_SIZE') + 10)
+            ->create();
+        $first = $partners[(int)config('cnf.PAGINATION_SIZE')+1];
+        $response = $this->getJson('/api/partners?search=' . $first->id);
+        $response->assertJson(fn (AssertableJson $json) => 
+            $json->whereContains('data.0', $first)
+                ->etc()
+        );
+        $response = $this->getJson('/api/partners?search=' . $first->name);
+        $response->assertJson(fn (AssertableJson $json) => 
+            $json->whereContains('data.0', $first)
+                ->etc()
+        );
+    }
+
+
     public function testPartnerCanBeStored()
     {
         Sanctum::actingAs( $this->admin, ['*']);

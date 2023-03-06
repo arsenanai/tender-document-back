@@ -4,15 +4,14 @@ namespace App\Http\Controllers;
 
 use App\Http\Resources\AnyResource;
 use Illuminate\Http\Request;
-use Illuminate\Validation\ValidationException;
 use App\Models\{Partner, Subpartner, PartnerID};
 use App\Rules\PartnerIDRule;
 use Illuminate\Http\Response;
-use Illuminate\Support\Facades\DB;
-use Illuminate\Validation\Validator;
 
 class PartnerIDController extends Controller
 {
+    private $partner, $subpartner, $partnerID, $date;
+
     private $byRules = [
         'lotNumber' => 'required',
         'procurementNumber' => 'required',
@@ -27,9 +26,42 @@ class PartnerIDController extends Controller
     public function index(Request $request)
     {
         $r = PartnerID::with('subpartner.partner');
-        $by = '';
-        if ($request->has('search')){
-
+        try{
+            if ($request->has('search')) {
+                $s = $request->input('search');
+                $pattern = "/^([0-9]{6})?[-]?([0-9]{"
+                    . (int) config('cnf.PAD_PARTNER_ID')
+                    . "})?[-]?([0-9]{"
+                    . (int) config('cnf.PAD_SUBPARTNER_ID')
+                    . "})?[-]?([0-9]{"
+                    . (int) config('cnf.ID_PAD')
+                    . "})?$/";
+                if (preg_match($pattern, $s) && $this->checkById($s)) {
+                    return new AnyResource(
+                        $r->where('id', $this->partnerID->id)
+                        ->paginate(config('cnf.PAGINATION_SIZE'))
+                    );
+                }
+            }
+        } catch(\Throwable $t) {
+            // echo 'block 1:' . $t->__toString() . PHP_EOL;
+        }
+        try {
+            if ($request->has('search')) {
+                $s = $request->input('search');
+                $r->where('lotNumber', 'like', "%$s%")
+                    ->orWhere('procurementNumber', 'like', "%$s%")
+                    ->orWhereHas('subpartner', function($query) use($s){
+                        $query->where('name', 'like', "%$s%");
+                    })
+                    ->orWhereHas('subpartner', function($query) use($s){
+                        $query->whereHas('partner', function($query) use($s){
+                            $query->where('name', 'like', "%$s%");
+                        });
+                    });
+            }
+        } catch(\Throwable $t) {
+            // echo 'block 2:' . $t->__toString() . PHP_EOL;
         }
         $r = $r->paginate(config('cnf.PAGINATION_SIZE'));
         return new AnyResource($r);
@@ -87,22 +119,14 @@ class PartnerIDController extends Controller
             'entry' => ['required', 'string', new PartnerIDRule],
         ]);
         try {
-            $parts = explode('-', $request->input('entry'));
-            $date = $parts[0];
-            $partner = Partner::findOrFail((int)$parts[1]);
-            $subpartner = Subpartner::with('partner')->findOrFail((int)$parts[2]);
-            $partnerID = PartnerID::with('subpartner')->findOrFail((int)$parts[3]);
-            if (
-                $subpartner->is($partnerID->subpartner)
-                && $partner->is($subpartner->partner)
-                && $partnerID->created_at->format('ymd') === $date
-            ) {
+            if ($this->checkById($request->input('entry'))) 
+            {
                 return response()->json(
                     [
                         'answer' => 'correct',
                         'details' => [
-                            'partner' => $partner,
-                            'subpartner' => $subpartner,
+                            'partner' => $this->partner,
+                            'subpartner' => $this->subpartner,
                         ],
                     ]
                 );
@@ -112,9 +136,9 @@ class PartnerIDController extends Controller
                     'reason' => 'mismatch',
                 ];
                 if (config('cnf.APP_DEBUG') == 'true') {
-                    $r['details'] = 'p: ' . $partner->id . ' vs ' . $subpartner->partner->id
-                        . ', sp: ' . $subpartner->id . ' vs ' . $partnerID->subpartner->id
-                        . ', id: ' . $partnerID->created_at->format('ymd') . ' vs ' . $date;
+                    $r['details'] = 'p: ' . $this->partner->id . ' vs ' . $this->subpartner->partner->id
+                        . ', sp: ' . $this->subpartner->id . ' vs ' . $this->partnerID->subpartner->id
+                        . ', id: ' . $this->partnerID->created_at->format('ymd') . ' vs ' . $this->date;
                 }
                 return response()->json($r);
             }
@@ -126,5 +150,18 @@ class PartnerIDController extends Controller
             ]);
         }
         
+    }
+
+    private function checkById($id) {
+        $parts = explode('-', $id);
+        $this->date = $parts[0];
+        $this->partner = Partner::findOrFail((int)$parts[1]);
+        $this->subpartner = Subpartner::with('partner')->findOrFail((int)$parts[2]);
+        $this->partnerID = PartnerID::with('subpartner')->findOrFail((int)$parts[3]);
+        return (
+            $this->subpartner->is($this->partnerID->subpartner)
+            && $this->partner->is($this->subpartner->partner)
+            && $this->partnerID->created_at->format('ymd') === $this->date
+        );
     }
 }

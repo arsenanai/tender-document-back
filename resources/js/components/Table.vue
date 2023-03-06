@@ -1,10 +1,13 @@
 <template>
   <div>
-    <h1 class="fs-2 text-capitalize">{{ entity.label }}</h1>
-    <div class="d-flex flex-row align-items-center justify-content-between mb-2">
+    <h1 class="fs-2 text-capitalize text-center text-md-start">{{ entity.label }}</h1>
+    <div class="d-flex flex-column flex-md-row align-items-center justify-content-between gap-2 mb-2">
       <button class="btn btn-sm btn-light" @click="$emit('new-entity', entity.route)">
         Add New
       </button>
+      <search-form
+        @on-search="onSearch"
+      />
       <div class="d-flex flex-row align-items-center gap-2" aria-label="Page navigation"
         v-if="entity.page !== null && entity.page.to > 0">
         <span>{{ entity.page.from }} - {{ entity.page.to }} &#47; {{ entity.page.total }}</span>
@@ -64,6 +67,7 @@
 </template>
 
 <script>
+import SearchForm from './SearchForm.vue';
 export default{
   name: 'Table',
   props: {
@@ -73,6 +77,9 @@ export default{
       type: Object,
     },
     loading: Boolean,
+  },
+  components: {
+    SearchForm,
   },
   methods: {
     getId(data, i) {
@@ -84,6 +91,9 @@ export default{
     },
     hasNextPage() {
       return this.entity.page.next_page_url !== null;
+    },
+    onSearch(input) {
+      this.$emit('onSearch', input);
     },
     onDelete(data) {
       if( confirm(`You are deleting an item from ${this.entity.route}. Are you sure?`) ) {
