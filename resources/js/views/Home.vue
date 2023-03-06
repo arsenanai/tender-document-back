@@ -67,7 +67,6 @@ export default {
             if(response.status === 200 && response.data.answer === 'correct') {
               this.alert.type = 'alert-success';
               this.alert.message = `Entry code is valid
-                <br><i>Partner</i>: <b>${response.data.details.partner.name}</b>
                 <br><i>Subpartner</i>: <b>${response.data.details.subpartner.name}</b>`;
             } else {
               this.alert.type = 'alert-danger';
