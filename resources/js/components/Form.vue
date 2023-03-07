@@ -6,9 +6,10 @@
       autocomplete="off"
       @submit.prevent="onSubmit"
       :class="{'was-validated': entity.fillables.some(fillable => { return fillable.hasOwnProperty('error') } ) }">
-        <div v-show="alert.message!=null" 
-        class="alert" role="alert"
-        :class="alert.type" v-html="alert.message">
+        <div
+        v-show="alert.message!=null"
+        class="p-3 mb-3 border rounded bg-light" :class="alert.type" role="alert"
+        v-html="alert.message">
         </div>
         <div
           v-for="(fillable, i) in entity.fillables" :key="i"

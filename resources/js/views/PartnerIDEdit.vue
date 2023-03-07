@@ -103,16 +103,16 @@ export default {
         .then(response => {
           console.log('response', response);
           if(response.status === 202 && response.data.success === true) {
-            this.alert.type = 'alert-success';
+            this.alert.type = 'text-success';
             this.alert.message = `Updation successful`;
           } else {
-            this.alert.type = 'alert-danger';
+            this.alert.type = 'text-danger';
             this.alert.message = `Updation failed`;
           }
         })
         .catch((error) => {
           console.log('error', error);
-          this.alert.type = 'alert-danger';
+          this.alert.type = 'text-danger';
           this.alert.message = 'Server side error, contact vendor';
         })
         .then(_ => {

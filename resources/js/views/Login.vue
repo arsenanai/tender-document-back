@@ -72,19 +72,19 @@ export default {
           .then(response => {
             // console.log('response', typeof response.status);
             if(response.status === 200) {
-              this.alert.type = 'alert-success';
+              this.alert.type = 'text-success';
               this.alert.message = 'Logged in successfully, proceeding...';
               this.authenticate(response.data.data);
               // await nextTick();
               this.goTo("/partners");
             } else {
-              this.alert.type = 'alert-danger';
+              this.alert.type = 'text-danger';
               this.alert.message = 'Invalid credentials, try again';
             }
           })
           .catch((error) => {
             console.log('error', error);
-            this.alert.type = 'alert-danger';
+            this.alert.type = 'text-danger';
             this.alert.message = 'Invalid credentials, try again';
           })
           .then(_ => {

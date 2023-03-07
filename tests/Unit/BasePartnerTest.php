@@ -77,12 +77,12 @@ class BasePartnerTest extends TestCase
             ->count((int)config('cnf.PAGINATION_SIZE') + 10)
             ->create();
         $first = $partners[(int)config('cnf.PAGINATION_SIZE')+1];
-        $response = $this->getJson('/api/partners?search=' . $first->id);
+        $response = $this->getJson('/api/partners?search=' . urlencode($first->id));
         $response->assertJson(fn (AssertableJson $json) => 
             $json->whereContains('data.0', $first)
                 ->etc()
         );
-        $response = $this->getJson('/api/partners?search=' . $first->name);
+        $response = $this->getJson('/api/partners?search=' . urlencode($first->name));
         $response->assertJson(fn (AssertableJson $json) => 
             $json->whereContains('data.0', $first)
                 ->etc()

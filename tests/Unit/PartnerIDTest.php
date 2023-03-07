@@ -140,33 +140,15 @@ class PartnerIDTest extends TestCase
             ->count((int)config('cnf.PAGINATION_SIZE') + 10)
             ->create();
         $first = $ids[(int)config('cnf.PAGINATION_SIZE') + 5];
-        $response = $this->getJson('/api/partner-ids', ['search' => $first->lotNumber]);
-        $response
-            ->assertJson(fn (AssertableJson $json) => 
-                $json->whereContains('data.0.lotNumber', $first->lotNumber)
-                    ->etc()
-            );
-        $response = $this->getJson('/api/partner-ids', ['search' => $first->procurementNumber]);
-        $response
-            ->assertJson(fn (AssertableJson $json) => 
-                $json->whereContains('data.0.procurementNumber', $first->procurementNumber)
-                    ->etc()
-            );
-        $response = $this->getJson('/api/partner-ids', ['search' => $this->subpartner->name]);
-        $response
-            ->assertJson(fn (AssertableJson $json) => 
-                $json->whereContains('data.0.subpartner.name', $this->subpartner->name)
-                    ->etc()
-            );
-        $response = $this->getJson('/api/partner-ids', ['search' => $this->partner->name]);
-        $response
-            ->assertJson(fn (AssertableJson $json) => 
-                $json->whereContains('data.0.partner.name', $this->partner->name)
-                    ->etc()
-            );
-        $response = $this->getJson('/api/partner-ids', ['search' => $this->getFullEntry($first)]);
-        // echo json_encode($first, JSON_PRETTY_PRINT) . PHP_EOL;
-        // echo json_encode($response, JSON_PRETTY_PRINT) . PHP_EOL;
+        $response = $this->getJson('/api/partner-ids?search=' . urlencode($first->lotNumber));
+        $response->assertJsonFragment(['lotNumber' => $first->lotNumber]);
+        $response = $this->getJson('/api/partner-ids?search=' . urlencode($first->procurementNumber));
+        $response->assertJsonFragment(['procurementNumber' => $first->procurementNumber]);
+        $response = $this->getJson('/api/partner-ids?search=' . urlencode($this->partner->name));
+        $response->assertJsonFragment(['name' => $this->partner->name]);
+        $response = $this->getJson('/api/partner-ids?search=' . urlencode($this->subpartner->name));
+        $response->assertJsonFragment(['name' => $this->subpartner->name]);
+        $response = $this->getJson('/api/partner-ids?search=' . urlencode($this->getFullEntry($first)));
         $response
             ->assertJson(fn (AssertableJson $json) => 
                 $json->whereContains('data.0', $first)
@@ -175,7 +157,7 @@ class PartnerIDTest extends TestCase
         foreach ($ids as $id)
         {
             $id->delete();
-        }
+        } 
     }
 
     private function getFullEntry($obj) {

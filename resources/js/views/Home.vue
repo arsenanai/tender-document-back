@@ -65,17 +65,17 @@ export default {
           .then(response => {
             console.log('response', response);
             if(response.status === 200 && response.data.answer === 'correct') {
-              this.alert.type = 'alert-success';
+              this.alert.type = 'text-success';
               this.alert.message = `Entry code is valid
                 <br><i>Subpartner</i>: <b>${response.data.details.subpartner.name}</b>`;
             } else {
-              this.alert.type = 'alert-danger';
+              this.alert.type = 'text-danger';
               this.alert.message = 'Entry code is invalid';
             }
           })
           .catch((error) => {
             console.log('error', error);
-            this.alert.type = 'alert-danger';
+            this.alert.type = 'text-danger';
             this.alert.message = 'Server side error, contact vendor';
           })
           .then(_ => {

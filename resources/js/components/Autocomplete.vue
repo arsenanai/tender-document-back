@@ -98,7 +98,7 @@ export default {
         })
         .catch((error) => {
           console.log('error', error);
-          this.alert.type = 'alert-danger';
+          this.alert.type = 'text-danger';
           this.alert.message = 'Server side error, contact vendor';
         })
         .then(_ => {

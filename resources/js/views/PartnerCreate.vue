@@ -64,16 +64,16 @@ export default {
         .then(response => {
           console.log('response', response);
           if(response.status === 201 && response.data.success === true) {
-            this.alert.type = 'alert-success';
+            this.alert.type = 'text-success';
             this.alert.message = `Creation successful`;
           } else {
-            this.alert.type = 'alert-danger';
+            this.alert.type = 'text-danger';
             this.alert.message = `Creation failed`;
           }
         })
         .catch((error) => {
           console.log('error', error);
-          this.alert.type = 'alert-danger';
+          this.alert.type = 'text-danger';
           this.alert.message = 'Server side error, contact vendor';
         })
         .then(_ => {

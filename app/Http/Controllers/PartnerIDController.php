@@ -159,7 +159,8 @@ class PartnerIDController extends Controller
         $this->subpartner = Subpartner::with('partner')->findOrFail((int)$parts[2]);
         $this->partnerID = PartnerID::with('subpartner')->findOrFail((int)$parts[3]);
         return (
-            $this->subpartner->is($this->partnerID->subpartner)
+            /*$this->partnerID->id === (int)$parts[3]
+            &&*/ $this->subpartner->is($this->partnerID->subpartner)
             && $this->partner->is($this->subpartner->partner)
             && $this->partnerID->created_at->format('ymd') === $this->date
         );

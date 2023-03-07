@@ -62,17 +62,17 @@ class SubpartnerTest extends TestCase
     {
         Sanctum::actingAs( $this->admin, ['*']);
         $first = $this->subpartners[0];
-        $response = $this->getJson('/api/subpartners?search=' . $first->id);
+        $response = $this->getJson('/api/subpartners?search=' . urlencode($first->id));
         $response->assertJson(fn (AssertableJson $json) => 
             $json->whereContains('data.0', $first)
                 ->etc()
         );
-        $response = $this->getJson('/api/subpartners?search=' . $first->name);
+        $response = $this->getJson('/api/subpartners?search=' . urlencode($first->name));
         $response->assertJson(fn (AssertableJson $json) => 
             $json->whereContains('data.0', $first)
                 ->etc()
         );
-        $response = $this->getJson('/api/subpartners?search=' . $this->partner->name);
+        $response = $this->getJson('/api/subpartners?search=' . urlencode($this->partner->name));
         $response->assertJson(fn (AssertableJson $json) => 
             $json->whereContains('data.0', $first)
                 ->etc()
