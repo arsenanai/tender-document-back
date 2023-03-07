@@ -2,9 +2,10 @@
   <div>
     <h1 class="fs-3 text-capitalize text-center mb-3">{{ entity.label }}</h1>
     <div class="row justify-content-center">
-      <form class="col-12 col-md-6 col-lg-4 align-self-center" novalidate
+      <form class="col-12 col-md-6 col-lg-4 align-self-center"
       autocomplete="off"
       @submit.prevent="onSubmit"
+      novalidate
       :class="{'was-validated': entity.fillables.some(fillable => { return fillable.hasOwnProperty('error') } ) }">
         <div
         v-show="alert.message!=null"
@@ -49,7 +50,6 @@
               class="form-control"
               :id="fillable.codename"
               v-model="entity[fillable.codename]"
-              :pattern="fillable.regex"
               :required="{'true': fillable.hasOwnProperty('required')}"
               :class="{'invalid': fillable.error !== null}"
               :disabled="loading"

@@ -21,10 +21,12 @@ export default {
           entity.fillables[i].error = "This field is required";
           r = false;
         }
-        if (entity.fillables[i].hasOwnProperty('regex') &&
-          !entity.fillables[i].regex.test(entity[entity.fillables[i].codename])) {
-          entity.fillables[i].error = entity.fillables[i].validationMessage;
-          r = false;
+        if (entity.fillables[i].hasOwnProperty('regex')) {
+          const reg = new RegExp(entity.fillables[i].regex);
+          if (!reg.test(entity[entity.fillables[i].codename])) {
+            entity.fillables[i].error = entity.fillables[i].validationMessage;
+            r = false;
+          }
         }
       }
       return r;

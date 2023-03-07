@@ -86,7 +86,8 @@ export default {
     },
   },
   created() {
-    this.entity.fillables[0].regex = new RegExp(`^([0-9]{6})?[-]?([0-9]{${this.pPad}})?[-]?([0-9]{${this.sPad}})?[-]?([0-9]{${this.pad}})?$`);
+    // ^[0-9]{6}[-]?[0-9]{2}[-]?[0-9]{2}[-]?[0-9]{3}$
+    this.entity.fillables[0].regex = `^[0-9]{6}[-]?[0-9]{${this.pPad}}[-]?[0-9]{${this.sPad}}[-]?[0-9]{${this.pad}}$`;
   },
 }
 </script>

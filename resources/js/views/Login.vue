@@ -29,7 +29,7 @@ export default {
             title: 'Email',
             required: true,
             // eslint-disable-next-line no-useless-escape
-            regex: /^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$/,
+            regex: '^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$',
             validationMessage: 'Invalid email address',
           },
           {
@@ -37,7 +37,7 @@ export default {
             type: 'password',
             title: 'Password',
             required: true,
-            regex: /^.{8,}/,
+            regex: '^.{8,}',
             validationMessage: 'Password must have a length of 8',
           },
         ],
