@@ -42,6 +42,8 @@ class SubpartnerTest extends TestCase
             ->make();
         $this->assertIsObject($object->partner);
         $this->assertInstanceOf(Partner::class, $object->partner);
+        $this->assertTrue(in_array('partner_id', $object->getFillable()));
+        $this->assertTrue(in_array('name', $object->getFillable()));
         //$this->assertInstanceOf(Partner::class, $object->partner);
     }
 

@@ -35,6 +35,14 @@ export default {
                         dataClasses: 'py-1 text-truncate',
                     },
                     {
+                        label: 'Lot number',
+                        name: 'lotNumber',
+                    },
+                    {
+                        label: 'Procurement number',
+                        name: 'procurementNumber',
+                    },
+                    {
                         label: 'Created at',
                         data: 'raw',
                         raw: data => data.created_at.replaceAll('T', ' ').substring(0,16),

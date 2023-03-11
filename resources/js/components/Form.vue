@@ -5,8 +5,7 @@
       <form class="col-12 col-md-6 col-lg-4 align-self-center"
       autocomplete="off"
       @submit.prevent="onSubmit"
-      novalidate
-      :class="{'was-validated': entity.fillables.some(fillable => { return fillable.hasOwnProperty('error') } ) }">
+      novalidate>
         <div
         v-show="alert.message!=null"
         class="p-3 mb-3 border rounded bg-light" :class="alert.type" role="alert"
@@ -43,7 +42,7 @@
               v-model="entity[fillable.codename]"
               :pattern="fillable.regex"
               :required="{'true': fillable.hasOwnProperty('required')}"
-              :class="{'invalid': fillable.error !== null}"
+              :class="{'is-invalid': fillable.hasOwnProperty('error')}"
               :disabled="loading"/>
             <textarea
               v-if="'textarea' === fillable.type"
@@ -51,7 +50,7 @@
               :id="fillable.codename"
               v-model="entity[fillable.codename]"
               :required="{'true': fillable.hasOwnProperty('required')}"
-              :class="{'invalid': fillable.error !== null}"
+              :class="{'is-invalid': fillable.hasOwnProperty('error')}"
               :disabled="loading"
             ></textarea>
             <div class="invalid-feedback" v-show="fillable.hasOwnProperty('error')">
@@ -100,6 +99,14 @@ export default {
     onSubmit() {
       this.$emit('onSubmit');
     },
+    hasNoErrors() {
+      for(const fillable in this.entity.fillables) {
+        if (fillable.hasOwnProperty('error')) {
+          return false;
+        }
+      }
+      return true;
+    }
   }
 }
 </script>

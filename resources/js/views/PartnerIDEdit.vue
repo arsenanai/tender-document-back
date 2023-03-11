@@ -32,20 +32,6 @@ export default {
             required: true,
           },
           {
-            codename: 'lotNumber',
-            type: 'text',
-            title: 'Lot Number',
-            required: true,
-            validationMessage: 'This field is required',
-          },
-          {
-            codename: 'procurementNumber',
-            type: 'text',
-            title: 'Procurement Number',
-            required: true,
-            validationMessage: 'This field is required',
-          },
-          {
             codename: 'subpartner_id',
             type: 'autocomplete',
             autocomplete: {
@@ -111,9 +97,19 @@ export default {
           }
         })
         .catch((error) => {
-          console.log('error', error);
           this.alert.type = 'text-danger';
-          this.alert.message = 'Server side error, contact vendor';
+          if (error.response.status === 422) {
+            for (let ii = 0; ii < this.entity.fillables.length; ii+=1) {
+              if (error.response.data.errors.hasOwnProperty(this.entity.fillables[ii].codename)) {
+                this.entity.fillables[ii].error = error.response.data.errors[
+                  this.entity.fillables[ii].codename
+                ][0];
+              }
+            }
+            this.alert.message = 'Invalid data provided';
+          } else {
+            this.alert.message = 'Server side error, contact vendor';
+          }
         })
         .then(_ => {
           this.loading = false;

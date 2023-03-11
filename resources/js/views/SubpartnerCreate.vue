@@ -93,9 +93,19 @@ export default {
           }
         })
         .catch((error) => {
-          console.log('error', error);
           this.alert.type = 'text-danger';
-          this.alert.message = 'Server side error, contact vendor';
+          if (error.response.status === 422) {
+            for (let ii = 0; ii < this.entity.fillables.length; ii+=1) {
+              if (error.response.data.errors.hasOwnProperty(this.entity.fillables[ii].codename)) {
+                this.entity.fillables[ii].error = error.response.data.errors[
+                  this.entity.fillables[ii].codename
+                ][0];
+              }
+            }
+            this.alert.message = 'Invalid data provided';
+          } else {
+            this.alert.message = 'Server side error, contact vendor';
+          }
         })
         .then(_ => {
           this.loading = false;

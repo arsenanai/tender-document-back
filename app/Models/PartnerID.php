@@ -10,7 +10,7 @@ class PartnerID extends Model
     use HasFactory;
     
     protected $fillable = [
-        'lotNumber', 'procurementNumber', 'comments', 'subpartner_id'
+        'comments', 'subpartner_id'
     ];
 
     public function subpartner()

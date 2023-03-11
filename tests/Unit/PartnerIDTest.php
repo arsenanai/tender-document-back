@@ -47,8 +47,7 @@ class PartnerIDTest extends TestCase
         $object = PartnerID::factory()
             ->for($this->subpartner)
             ->make();
-        $this->assertTrue(in_array('lotNumber', $object->getFillable()));
-        $this->assertTrue(in_array('procurementNumber', $object->getFillable()));
+        $this->assertTrue(in_array('subpartner_id', $object->getFillable()));
         $this->assertTrue(in_array('comments', $object->getFillable()));
     }
 
@@ -140,10 +139,10 @@ class PartnerIDTest extends TestCase
             ->count((int)config('cnf.PAGINATION_SIZE') + 10)
             ->create();
         $first = $ids[(int)config('cnf.PAGINATION_SIZE') + 5];
-        $response = $this->getJson('/api/partner-ids?search=' . urlencode($first->lotNumber));
-        $response->assertJsonFragment(['lotNumber' => $first->lotNumber]);
-        $response = $this->getJson('/api/partner-ids?search=' . urlencode($first->procurementNumber));
-        $response->assertJsonFragment(['procurementNumber' => $first->procurementNumber]);
+        $response = $this->getJson('/api/partner-ids?search=' . urlencode($this->partner->lotNumber));
+        $response->assertJsonFragment(['lotNumber' => $this->partner->lotNumber]);
+        $response = $this->getJson('/api/partner-ids?search=' . urlencode($this->partner->procurementNumber));
+        $response->assertJsonFragment(['procurementNumber' => $this->partner->procurementNumber]);
         $response = $this->getJson('/api/partner-ids?search=' . urlencode($this->partner->name));
         $response->assertJsonFragment(['name' => $this->partner->name]);
         $response = $this->getJson('/api/partner-ids?search=' . urlencode($this->subpartner->name));

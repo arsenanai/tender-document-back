@@ -13,8 +13,6 @@ class PartnerIDController extends Controller
     private $partner, $subpartner, $partnerID, $date;
 
     private $byRules = [
-        'lotNumber' => 'required',
-        'procurementNumber' => 'required',
         'comments' => 'string|nullable',
         'subpartner_id' => 'required|exists:subpartners,id',
     ];
@@ -49,10 +47,18 @@ class PartnerIDController extends Controller
         try {
             if ($request->has('search')) {
                 $s = $request->input('search');
-                $r->where('lotNumber', 'like', "%$s%")
-                    ->orWhere('procurementNumber', 'like', "%$s%")
-                    ->orWhereHas('subpartner', function($query) use($s){
+                $r->whereHas('subpartner', function($query) use($s){
                         $query->where('name', 'like', "%$s%");
+                    })
+                    ->orWhereHas('subpartner', function($query) use($s){
+                        $query->whereHas('partner', function($query) use($s){
+                            $query->where('lotNumber', 'like', "%$s%");
+                        });
+                    })
+                    ->orWhereHas('subpartner', function($query) use($s){
+                        $query->whereHas('partner', function($query) use($s){
+                            $query->where('procurementNumber', 'like', "%$s%");
+                        });
                     })
                     ->orWhereHas('subpartner', function($query) use($s){
                         $query->whereHas('partner', function($query) use($s){

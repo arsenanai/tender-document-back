@@ -29,16 +29,18 @@ export default {
                 withIndex: true,
                 fillables:[
                     {
+                        label: 'Partner',
+                        raw: data => data.subpartner.partner.name,
+                        data: 'raw',
+                    },
+                    {
                         label: 'Lot number',
-                        name: 'lotNumber',
+                        raw: data => data.subpartner.partner.lotNumber,
+                        data: 'raw',
                     },
                     {
                         label: 'Procurement number',
-                        name: 'procurementNumber',
-                    },
-                    {
-                        label: 'Partner',
-                        raw: data => data.subpartner.partner.name,
+                        raw: data => data.subpartner.partner.procurementNumber,
                         data: 'raw',
                     },
                     {
