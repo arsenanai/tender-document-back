@@ -2,6 +2,8 @@ import { defineConfig } from 'vite';
 import laravel from 'laravel-vite-plugin';
 import vue from '@vitejs/plugin-vue';
 import path from 'path';
+const purgecss = require('@fullhuman/postcss-purgecss');
+import VueI18nPlugin from '@intlify/unplugin-vue-i18n/vite';
 
 export default defineConfig({
     plugins: [
@@ -36,5 +38,14 @@ export default defineConfig({
         alias: {
             '~bootstrap': path.resolve(__dirname, 'node_modules/bootstrap'),
         }
+    },
+    css: {
+        postcss: {
+            plugins: [
+                purgecss({
+                    content: ['./**/*.blade.php', './**/*.vue', './*.vue', './**/*.js']
+                })
+            ],
+        },
     },
 });

@@ -1,5 +1,5 @@
 <template>
-  <Header/>
+  <Header @locale-changed="changeLocale"/>
   <div class="container mt-4">
     <router-view v-slot="{ Component, route }">
       <transition :name="route.meta.transition || 'fade'">

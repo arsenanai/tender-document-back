@@ -18,7 +18,7 @@ export default {
             || (entity[entity.fillables[i].codename] !== null 
               && entity[entity.fillables[i].codename].length === 0)
             )) {
-          entity.fillables[i].error = "This field is required";
+          entity.fillables[i].error = this.$t("This field is required");
           r = false;
         }
         if (entity.fillables[i].hasOwnProperty('regex')) {

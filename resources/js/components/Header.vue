@@ -45,6 +45,20 @@
             Logout
           </router-link>
         </li>
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+            <img src="../../images/language.png" height="20"/>
+          </a>
+          <ul class="dropdown-menu">
+            <li v-for="locale in $i18n.availableLocales"
+              :key="`locale-${locale}`"
+              :value="locale">
+              <a class="dropdown-item" @click="$emit('locale-changed', locale)">
+                {{ locales[locale] }}
+              </a>
+            </li>
+          </ul>
+        </li>
       </ul>
     </div>
   </div>

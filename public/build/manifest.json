@@ -1,13 +1,20 @@
 {
+  "resources/images/language.png": {
+    "file": "assets/language-18db373e.png",
+    "src": "resources/images/language.png"
+  },
   "resources/js/app.css": {
-    "file": "assets/app-5ab5a0da.css",
+    "file": "assets/app-e1ba3f8a.css",
     "src": "resources/js/app.css"
   },
   "resources/js/app.js": {
-    "css": [
-      "assets/app-5ab5a0da.css"
+    "assets": [
+      "assets/language-18db373e.png"
     ],
-    "file": "assets/app-56b8972f.js",
+    "css": [
+      "assets/app-e1ba3f8a.css"
+    ],
+    "file": "assets/app-a785f969.js",
     "isEntry": true,
     "src": "resources/js/app.js"
   }

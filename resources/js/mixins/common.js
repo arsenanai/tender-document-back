@@ -4,6 +4,10 @@ export default {
   data() {
     return {
       store,
+      locales: {
+        kk: 'Қазақша',
+        ru: 'Русский'
+      },
     };
   },
   methods: {
@@ -85,5 +89,11 @@ export default {
     getUserToken() {
       return this.store.user.token;
     },
+    changeLocale(locale) {
+      // console.log('locale', locale);
+      // this.$i18n.locale = locale;
+      localStorage.setItem('entries_lang', locale);
+      this.$router.go();
+    }
   },
 };

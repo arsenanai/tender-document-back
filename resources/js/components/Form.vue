@@ -41,6 +41,7 @@
               :id="fillable.codename"
               v-model="entity[fillable.codename]"
               :pattern="fillable.regex"
+              :placeholder="fillable.placeholder"
               :required="{'true': fillable.hasOwnProperty('required')}"
               :class="{'is-invalid': fillable.hasOwnProperty('error')}"
               :disabled="loading"/>
