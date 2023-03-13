@@ -3,6 +3,7 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\API\RegisterController;
+use App\Http\Controllers\NumbersController;
 use App\Http\Controllers\PartnerController;
 use App\Http\Controllers\PartnerIDController;
 use App\Http\Controllers\SubpartnerController;
@@ -32,6 +33,7 @@ Route::middleware('auth:sanctum')->group( function () {
         'partner-ids' => PartnerIDController::class,
         'subpartners' => SubpartnerController::class,
         'partners' => PartnerController::class,
+        'numbers' => NumbersController::class,
     ]);
     Route::post('logout', [RegisterController::class, 'logout']);
 });

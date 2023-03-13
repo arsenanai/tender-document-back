@@ -3,26 +3,28 @@
 namespace App\Http\Controllers;
 
 use App\Http\Resources\AnyResource;
-use App\Models\Subpartner;
+use App\Models\Number;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Validation\Rule;
 
-class SubpartnerController extends Controller
+class NumbersController extends Controller
 {
-
     private $byRules = [
-        'name' => 'string|required',
         'partner_id' => 'required|exists:partners,id',
+        'lotNumber' => 'required|unique:numbers',
+        'procurementNumber' => 'required|unique:numbers',
     ];
-    
+
     public function index(Request $request)
     {
-        $r = Subpartner::with('partner');
+        $r = Number::with('partner');
         try{
             if ($request->has('search')) {
                 $s = $request->input('search');
-                $r->where('id', $s)
-                    ->orWhere('name', 'like', "%$s%");
+                $r->where('lotNumber', 'like', "%$s%")
+                    ->orWhere('procurementNumber', 'like', "%$s%");
                 if (!$request->has('parent')) {
                     $r->orWhereHas('partner', function($query) use($s){
                         $query->where('name', 'like', "%$s%");
@@ -36,14 +38,13 @@ class SubpartnerController extends Controller
             $p = $request->input('parent');
             $r->where('partner_id', $p);
         }
-        $r = $r->paginate(config('cnf.PAGINATION_SIZE'));
-        return new AnyResource($r);
+        return new AnyResource($r->paginate(config('cnf.PAGINATION_SIZE')));
     }
 
     public function store(Request $request)
     {
         $request->validate($this->byRules);
-        $object = Subpartner::create($request->all());
+        $object = Number::create($request->all());
         return response()->json([
             "success" => true,
             "message" => "item.created.successfully",
@@ -53,7 +54,7 @@ class SubpartnerController extends Controller
 
     public function show($id)
     {
-        $object = Subpartner::find($id);
+        $object = Number::find($id);
         if (is_null($object)) {
             return $this->sendError('item.not.found');
         }
@@ -64,24 +65,34 @@ class SubpartnerController extends Controller
         ]);
     }
 
-    public function update(Request $request, Subpartner $subpartner)
+    public function update(Request $request, Number $number)
     {
-        $request->validate($this->byRules);
-        $subpartner->update($request->all());
+        $request->validate([
+            'partner_id' => 'required|exists:partners,id',
+            'lotNumber' => [
+                'required',
+                Rule::unique('numbers')->ignore($number->id),
+            ],
+            'procurementNumber' => [
+                'required',
+                Rule::unique('numbers')->ignore($number->id),
+            ]
+        ]);
+        $number->update($request->all());
         return response()->json([
             "success" => true,
             "message" => "item.updated.successfully",
-            "data" => $subpartner->toArray()
+            "data" => $number->toArray()
         ], Response::HTTP_ACCEPTED);
     }
 
-    public function destroy(Subpartner $subpartner)
+    public function destroy(Number $number)
     {
-        $subpartner->delete();
+        $number->delete();
         return response()->json([
-            "success" => true,
-            "message" => "item.deleted.successfully",
-            "data" => $subpartner
+            'success' => true,
+            'message' => 'item.deleted.successfully',
+            'data' => $number
         ], Response::HTTP_ACCEPTED);
     }
 }

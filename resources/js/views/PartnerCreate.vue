@@ -32,20 +32,6 @@ export default {
             required: true,
             validationMessage: 'This field is required',
           },
-          {
-            codename: 'lotNumber',
-            type: 'text',
-            title: 'Lot Number',
-            required: true,
-            validationMessage: 'This field is required',
-          },
-          {
-            codename: 'procurementNumber',
-            type: 'text',
-            title: 'Procurement Number',
-            required: true,
-            validationMessage: 'This field is required',
-          },
         ],
         // fillables here
         name: null, // must match the codename

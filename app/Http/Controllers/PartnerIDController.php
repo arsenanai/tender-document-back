@@ -15,6 +15,7 @@ class PartnerIDController extends Controller
     private $byRules = [
         'comments' => 'string|nullable',
         'subpartner_id' => 'required|exists:subpartners,id',
+        'number_id' => 'required|exists:numbers,id',
     ];
     /**
      * Display a listing of the resource.
@@ -23,7 +24,7 @@ class PartnerIDController extends Controller
      */
     public function index(Request $request)
     {
-        $r = PartnerID::with('subpartner.partner');
+        $r = PartnerID::with('number', 'subpartner.partner');
         try{
             if ($request->has('search')) {
                 $s = $request->input('search');
@@ -50,15 +51,11 @@ class PartnerIDController extends Controller
                 $r->whereHas('subpartner', function($query) use($s){
                         $query->where('name', 'like', "%$s%");
                     })
-                    ->orWhereHas('subpartner', function($query) use($s){
-                        $query->whereHas('partner', function($query) use($s){
-                            $query->where('lotNumber', 'like', "%$s%");
-                        });
+                    ->orWhereHas('number', function($query) use($s){
+                        $query->where('lotNumber', 'like', "%$s%");
                     })
-                    ->orWhereHas('subpartner', function($query) use($s){
-                        $query->whereHas('partner', function($query) use($s){
-                            $query->where('procurementNumber', 'like', "%$s%");
-                        });
+                    ->orWhereHas('number', function($query) use($s){
+                        $query->where('procurementNumber', 'like', "%$s%");
                     })
                     ->orWhereHas('subpartner', function($query) use($s){
                         $query->whereHas('partner', function($query) use($s){
@@ -86,7 +83,7 @@ class PartnerIDController extends Controller
 
     public function show($id)
     {
-        $object = PartnerID::with('subpartner')->find($id);
+        $object = PartnerID::with('subpartner.partner', 'number')->find($id);
         if (is_null($object)) {
             return $this->sendError('item.not.found');
         }
@@ -131,7 +128,7 @@ class PartnerIDController extends Controller
                     [
                         'answer' => 'correct',
                         'details' => [
-                            'partner' => $this->partner,
+                            //'partner' => $this->partner,
                             'subpartner' => $this->subpartner,
                         ],
                     ]

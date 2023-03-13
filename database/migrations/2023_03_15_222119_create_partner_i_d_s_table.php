@@ -15,11 +15,12 @@ return new class extends Migration
     {
         Schema::create('partner_i_d_s', function (Blueprint $table) {
             $table->id();
-            $table->string('lotNumber');
-            $table->string('procurementNumber');
             // $table->unsignedBigInteger('subpartner_id');
             $table->string('comments');
             $table->timestamps();
+            $table->foreignId('number_id')
+                ->constrained('numbers')
+                ->onDelete('cascade');
             $table->foreignId('subpartner_id')
                 ->constrained('subpartners')
                 ->onDelete('cascade');
@@ -35,6 +36,7 @@ return new class extends Migration
     {
         Schema::table('partner_i_d_s', function (Blueprint $table) {
             $table->dropForeign(['subpartner_id']);
+            $table->dropForeign(['number_id']);
         });
         Schema::dropIfExists('partner_i_d_s');
     }

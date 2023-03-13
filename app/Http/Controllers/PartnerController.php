@@ -12,8 +12,6 @@ class PartnerController extends Controller
 {
     private $byRules = [
         'name' => 'string|required',
-        'lotNumber' => 'required|unique:partners',
-        'procurementNumber' => 'required|unique:partners',
     ];
 
     public function index(Request $request)
@@ -24,8 +22,6 @@ class PartnerController extends Controller
                 $s = $request->input('search');
                 $r->where('id', $s)
                     ->orWhere('name', 'like', "%$s%")
-                    ->orWhere('lotNumber', 'like', "%$s%")
-                    ->orWhere('procurementNumber', 'like', "%$s%")
                     ;
             }
         } catch(\Throwable $t) {
@@ -60,17 +56,7 @@ class PartnerController extends Controller
 
     public function update(Request $request, Partner $partner)
     {
-        $request->validate([
-            'name' => 'string|required',
-            'lotNumber' => [
-            'required',
-                Rule::unique('partners')->ignore($partner->id),
-            ],
-            'procurementNumber' => [
-                'required',
-                Rule::unique('partners')->ignore($partner->id),
-            ]
-        ]);
+        $request->validate($this->byRules);
         $partner->update($request->all());
         return response()->json([
             "success" => true,

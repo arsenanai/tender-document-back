@@ -46,7 +46,11 @@ export default {
         .then((response) => {
             this.fetchPage();
         }).catch(error => {
-            console.log(error)
+            console.log(error);
+            if (error.response.status === 401) {
+                this.eraseUserData()
+                this.goTo("/login");
+            }
         }).then(_ => {
             this.loading = false
         })
@@ -70,7 +74,11 @@ export default {
             this.entity.page = response.data;
             this.currentPage = response.data.current_page;
         }).catch(error => {
-            console.log(error)
+            console.log(error);
+            if (error.response.status === 401) {
+                this.eraseUserData()
+                this.goTo("/login");
+            }
         }).then(_ => {
             this.loading = false
         })

@@ -10,12 +10,17 @@ class PartnerID extends Model
     use HasFactory;
     
     protected $fillable = [
-        'comments', 'subpartner_id'
+        'comments', 'subpartner_id', 'number_id'
     ];
 
     public function subpartner()
     {
         return $this->belongsTo(Subpartner::class);
+    }
+
+    public function number()
+    {
+        return $this->belongsTo(Number::class);
     }
 
     public function getFullEntry(): String

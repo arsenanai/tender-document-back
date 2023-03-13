@@ -14,7 +14,7 @@ import common from '@/mixins/common';
 import forms from '@/mixins/forms';
 
 export default {
-  name: 'PartnerEdit',
+  name: 'NumberEdit',
   components: {
     Form,
   },
@@ -22,8 +22,8 @@ export default {
   data() {
     return {
       entity: {
-        label: 'Partner Edit Form',
-        route: 'partners',
+        label: 'Number Edit Form',
+        route: 'numbers',
         fillables: [
           {
             codename: 'id',
@@ -31,15 +31,41 @@ export default {
             required: true,
           },
           {
-            codename: 'name',
+            codename: 'partner_id',
+            type: 'autocomplete',
+            autocomplete: {
+              for: 'partner',
+              selectionField: 'id',
+              displayField: 'name',
+              minChars: 3,
+              link: '/api/partners',
+              method: 'GET',
+            },
+            title: 'Partner',
+            required: true,
+            validationMessage: 'This field is required',
+          },
+          {
+            codename: 'lotNumber',
             type: 'text',
-            title: 'Name',
+            title: 'Lot Number',
+            required: true,
+            validationMessage: 'This field is required',
+          },
+          {
+            codename: 'procurementNumber',
+            type: 'text',
+            title: 'Procurement Number',
             required: true,
             validationMessage: 'This field is required',
           },
         ],
         // fillables here
         name: null, // must match the codename
+        partner_id: null,
+        partner: {
+          name: null,
+        }
         // fillables end
       },
       submit: 'Update',

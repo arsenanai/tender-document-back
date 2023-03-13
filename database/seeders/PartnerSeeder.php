@@ -3,7 +3,7 @@
 namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
-use App\Models\{Partner, Subpartner, PartnerID};
+use App\Models\{Partner, Subpartner, PartnerID, Number};
 
 class PartnerSeeder extends Seeder
 {
@@ -17,9 +17,13 @@ class PartnerSeeder extends Seeder
         Partner::factory()
             ->has(
                 Subpartner::factory()
-                ->has(PartnerID::factory()->count(5))
+                //->has(PartnerID::factory()->count(5))
                 ->count(3)
                 )
+            ->has(
+                Number::factory()
+                ->count(3)
+            )
             ->count((int)config('cnf.PAGINATION_SIZE', 20) + 5)
             ->create();
     }

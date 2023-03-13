@@ -13,9 +13,14 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::table('partners', function (Blueprint $table) {
+        Schema::create('numbers', function (Blueprint $table) {
+            $table->id();
             $table->string('lotNumber')->unique();
             $table->string('procurementNumber')->unique();
+            $table->foreignId('partner_id')
+                ->constrained('partners')
+                ->onDelete('cascade');
+            $table->timestamps();
         });
     }
 
@@ -26,8 +31,9 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::table('partners', function (Blueprint $table) {
-            $table->dropColumn(['lotNumber', 'procurementNumber']);
+        Schema::table('numbers', function (Blueprint $table) {
+            $table->dropForeign(['partner_id']);
         });
+        Schema::dropIfExists('numbers');
     }
 };

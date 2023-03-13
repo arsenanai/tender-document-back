@@ -12,6 +12,7 @@ use Laravel\Sanctum\Sanctum;
 use App\Models\User;
 use Illuminate\Http\Response;
 use App\Http\Resources\PartnerIDResource;
+use App\Models\Number;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Http\Request;
 use Illuminate\Testing\Fluent\AssertableJson;
@@ -61,7 +62,8 @@ class PartnerIDCheckTest extends TestCase
         //this factory creates all other records
         $partner = Partner::factory()->create();
         $subpartner = Subpartner::factory()->for($partner)->create();
-        $partnerID = PartnerID::factory()->for($subpartner)->create();
+        $number = Number::factory()->for($partner)->create();
+        $partnerID = PartnerID::factory()->for($subpartner)->for($number)->create();
         $this->assertTrue(
             method_exists(PartnerID::class, 'getFullEntry'), 
             'PartnerID does not have method getFullEntry'
@@ -74,7 +76,7 @@ class PartnerIDCheckTest extends TestCase
                 [
                     'answer',
                     'details' => [
-                        'partner',
+                        //'partner',
                         'subpartner'
                     ]
                 ]
@@ -88,6 +90,8 @@ class PartnerIDCheckTest extends TestCase
         //rest stuff should be removed via cascade delete
         $this->assertDatabaseMissing('partners', $partner->toArray());
         $this->assertDatabaseMissing('subpartners', $subpartner->toArray());
+        $this->assertDatabaseMissing('numbers', $number->toArray());
+        $this->assertDatabaseMissing('partner_i_d_s', $partnerID->toArray());
         $this->assertTrue(PartnerID::where('comments', 'like', '%testing')->count() === 0);
     }
 }

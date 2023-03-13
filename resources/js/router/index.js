@@ -12,6 +12,9 @@ import PartnerEdit from '@/views/PartnerEdit.vue';
 import PartnerCreate from '@/views/PartnerCreate.vue';
 import SubpartnerEdit from '@/views/SubpartnerEdit.vue';
 import SubpartnerCreate from '@/views/SubpartnerCreate.vue';
+import Numbers from '@/views/Numbers.vue';
+import NumberCreate from '@/views/NumberCreate.vue';
+import NumberEdit from '@/views/NumberEdit.vue';
 
 const routes = [
     {
@@ -45,6 +48,18 @@ const routes = [
     {
         path: "/subpartners/create",
         component: SubpartnerCreate,
+    },
+    {
+        path: "/numbers",
+        component: Numbers,
+    },
+    {
+        path: "/numbers/create",
+        component: NumberCreate,
+    },
+    {
+        path: "/numbers/edit/:id",
+        component: NumberEdit,
     },
     {
         path: "/partner-ids",

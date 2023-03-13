@@ -23,8 +23,6 @@ class PartnerFactory extends Factory
     {
     	return [
     	    'name' => $this->faker->name . ' testing',
-            'lotNumber' => $this->faker->unique()->randomNumber() . '',
-            'procurementNumber' => $this->faker->unique()->randomNumber() . '',
     	];
     }
 }

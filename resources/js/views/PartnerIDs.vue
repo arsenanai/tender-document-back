@@ -35,12 +35,12 @@ export default {
                     },
                     {
                         label: 'Lot number',
-                        raw: data => data.subpartner.partner.lotNumber,
+                        raw: data => data.number.lotNumber,
                         data: 'raw',
                     },
                     {
                         label: 'Procurement number',
-                        raw: data => data.subpartner.partner.procurementNumber,
+                        raw: data => data.number.procurementNumber,
                         data: 'raw',
                     },
                     {

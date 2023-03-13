@@ -80,7 +80,6 @@ export default {
       this.$router.push(route);
     },
     fetchUser() {
-      console.log('previous user', this.store.user);
       const userData = this.getAuthenticatedUser();
       if (userData !== null) {
         this.store.user = userData;

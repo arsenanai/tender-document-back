@@ -35,8 +35,6 @@ class BasePartnerTest extends TestCase
     public function testPartnerHasTwoDigitIdParam()
     {
         $object = Partner::factory()->make();
-        $this->assertTrue(in_array('lotNumber', $object->getFillable()));
-        $this->assertTrue(in_array('procurementNumber', $object->getFillable()));
         $this->assertTrue(in_array('name', $object->getFillable()));
     }
 
@@ -83,10 +81,6 @@ class BasePartnerTest extends TestCase
         $response->assertJsonFragment(['id' => $first->id]);
         $response = $this->getJson('/api/partners?search=' . urlencode($first->name));
         $response->assertJsonFragment(['name' => $first->name]);
-        $response = $this->getJson('/api/partners?search=' . urlencode($first->lotNumber));
-        $response->assertJsonFragment(['lotNumber' => $first->lotNumber]);
-        $response = $this->getJson('/api/partners?search=' . urlencode($first->procurementNumber));
-        $response->assertJsonFragment(['procurementNumber' => $first->procurementNumber]);
     }
 
 
@@ -101,32 +95,6 @@ class BasePartnerTest extends TestCase
             $response->assertJsonPath('data.'.$fillable, $object[$fillable]);
         }
         Partner::where('name', 'like', '%testing')->delete();
-    }
-
-    public function testLotNumberIsUnique()
-    {
-        Sanctum::actingAs( $this->admin, ['*']);
-        $first = Partner::factory()
-            ->create();
-        $object = Partner::factory()
-            ->make();
-        $object->lotNumber = $first->lotNumber;
-        $this->postJson('api/partners', $object->toArray())
-            ->assertStatus(Response::HTTP_UNPROCESSABLE_ENTITY);
-        $first->delete();
-    }
-
-    public function testProcurementNumberIsUnique()
-    {
-        Sanctum::actingAs( $this->admin, ['*']);
-        $first = Partner::factory()
-            ->create();
-        $object = Partner::factory()
-            ->make();
-        $object->procurementNumber = $first->procurementNumber;
-        $this->postJson('api/partners', $object->toArray())
-            ->assertStatus(Response::HTTP_UNPROCESSABLE_ENTITY);
-        $first->delete();
     }
 
     public function testPartnerIsShownCorrectly()

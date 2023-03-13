@@ -32,8 +32,39 @@ export default {
             required: true,
           },
           {
+            codename: 'partner_id',
+            type: 'autocomplete',
+            autocomplete: {
+              for: 'partner',
+              selectionField: 'id',
+              displayField: 'name',
+              minChars: 3,
+              link: '/api/partners',
+              method: 'GET',
+            },
+            title: 'Partner',
+            validationMessage: 'This field is required',
+          },
+          {
+            codename: 'number_id',
+            type: 'autocomplete',
+            dependsOn: 'partner_id',
+            autocomplete: {
+              for: 'number',
+              selectionField: 'id',
+              displayField: 'lotNumber',
+              minChars: 3,
+              link: '/api/numbers',
+              method: 'GET',
+            },
+            title: 'Number',
+            required: true,
+            validationMessage: 'This field is required',
+          },
+          {
             codename: 'subpartner_id',
             type: 'autocomplete',
+            dependsOn: 'partner_id',
             autocomplete: {
               for: 'subpartner',
               selectionField: 'id',
@@ -53,12 +84,18 @@ export default {
           },
         ],
         // fillables here
-        lotNumber: null, // must match the codename
-        procurementNumber: null,
         comments: null,
+        partner_id: null,
+        partner: {
+          name: null,
+        },
         subpartner_id: null,
         subpartner: {
           name: null,
+        },
+        number_id: null,
+        number: {
+          lotNumber: null,
         }
         // fillables end
       },

@@ -27,6 +27,13 @@
         <li class="nav-item" v-if="authenticated()">
           <router-link
             class="nav-link" active-class="active"
+            to="/numbers">
+            Numbers
+          </router-link>
+        </li>
+        <li class="nav-item" v-if="authenticated()">
+          <router-link
+            class="nav-link" active-class="active"
             to="/partner-ids">
             Partner IDs
           </router-link>

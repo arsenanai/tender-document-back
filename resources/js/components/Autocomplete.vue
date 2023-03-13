@@ -11,7 +11,7 @@
         :pattern="fillable.regex"
         :required="{'true': fillable.hasOwnProperty('required')}"
         :class="{'invalid': fillable.error !== null}"
-        :disabled="loading">
+        :disabled="loading || disabled">
       <div class="invalid-feedback" v-show="fillable.hasOwnProperty('error')">
         {{ fillable.error }}
       </div>
@@ -47,6 +47,7 @@ export default {
       required: true,
     },
     loading: Boolean,
+    disabled: Boolean,
   },
   data() {
     return {
@@ -80,11 +81,12 @@ export default {
       } else {
         this.load = true;
         this.options = null;
+        const parent = this.fillable.hasOwnProperty('dependsOn') ? this.entity[this.fillable.dependsOn] : null;
         axios({
           method: this.fillable.autocomplete.method,
           url: this.fillable.autocomplete.link,
           params: {
-            by: this.fillable.autocomplete.displayField,
+            parent,
             search: this.entity[this.fillable.autocomplete.for][this.fillable.autocomplete.displayField],
           },
           withCredentials: true,

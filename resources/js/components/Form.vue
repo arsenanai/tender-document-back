@@ -29,6 +29,7 @@
             :entity="entity"
             :fillable="fillable"
             :loading="loading"
+            :disabled="fillable.hasOwnProperty('dependsOn') && entity[fillable.dependsOn] === null"
           />
           <input type="hidden"
           :name="fillable.codename"

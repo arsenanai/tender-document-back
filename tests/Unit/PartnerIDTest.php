@@ -2,6 +2,7 @@
 
 namespace Tests\Unit;
 
+use App\Models\Number;
 use App\Models\Partner;
 use App\Models\PartnerID;
 use App\Models\Subpartner;
@@ -15,7 +16,7 @@ use Tests\TestCase;
 class PartnerIDTest extends TestCase
 {
     use RefreshDatabase;
-    private $admin, $partner, $subpartner;
+    private $admin, $partner, $subpartner, $number;
 
     public function setUp(): void
     {
@@ -23,6 +24,7 @@ class PartnerIDTest extends TestCase
         $this->admin = User::factory()->create();
         $this->partner = Partner::factory()->create();
         $this->subpartner = Subpartner::factory()->for($this->partner)->create();
+        $this->number = Number::factory()->for($this->partner)->create();
     }
 
     public function tearDown(): void
@@ -31,13 +33,14 @@ class PartnerIDTest extends TestCase
         $this->admin->tokens()->delete();
         $this->admin->delete();
         $this->partner->delete();
-        // subpartner will be deleted by cascade
+        // others will be deleted by cascade
     }
 
     public function testModelExists()
     {
         $object = PartnerID::factory()
             ->for($this->subpartner)
+            ->for($this->number)
             ->make();
         return $this->assertTrue($object !== null);
     }
@@ -46,8 +49,10 @@ class PartnerIDTest extends TestCase
     {
         $object = PartnerID::factory()
             ->for($this->subpartner)
+            ->for($this->number)
             ->make();
         $this->assertTrue(in_array('subpartner_id', $object->getFillable()));
+        $this->assertTrue(in_array('number_id', $object->getFillable()));
         $this->assertTrue(in_array('comments', $object->getFillable()));
     }
 
@@ -55,9 +60,12 @@ class PartnerIDTest extends TestCase
     {
         $object = PartnerID::factory()
             ->for($this->subpartner)
+            ->for($this->number)
             ->make();
         $this->assertIsObject($object->subpartner);
+        $this->assertIsObject($object->number);
         $this->assertInstanceOf(Subpartner::class, $object->subpartner);
+        $this->assertInstanceOf(Number::class, $object->number);
     }
 
     public function testPartnerIDCanBeStored()
@@ -65,6 +73,7 @@ class PartnerIDTest extends TestCase
         Sanctum::actingAs( $this->admin, ['*']);
         $object = PartnerID::factory()
             ->for($this->subpartner)
+            ->for($this->number)
             ->make();
         $response = $this->postJson('api/partner-ids', $object->toArray())
             ->assertStatus(Response::HTTP_CREATED);
@@ -79,6 +88,7 @@ class PartnerIDTest extends TestCase
         Sanctum::actingAs( $this->admin, ['*']);
         $object = PartnerID::factory()
             ->for($this->subpartner)
+            ->for($this->number)
             ->create();
         $response = $this->getJson('api/partner-ids/' . $object->id)
             ->assertOk();
@@ -94,9 +104,11 @@ class PartnerIDTest extends TestCase
         Sanctum::actingAs( $this->admin, ['*']);
         $object = PartnerID::factory()
             ->for($this->subpartner)
+            ->for($this->number)
             ->create();
         $changed = PartnerID::factory()
             ->for($this->subpartner)
+            ->for($this->number)
             ->make();
         foreach($object->getFillable() as $fillable) {
             $object[$fillable] = $changed[$fillable];
@@ -115,6 +127,7 @@ class PartnerIDTest extends TestCase
         Sanctum::actingAs( $this->admin, ['*']);
         $ids = PartnerID::factory()
             ->for($this->subpartner)
+            ->for($this->number)
             ->count((int)config('cnf.PAGINATION_SIZE') + 10)
             ->create();
         $first = $ids[0];
@@ -136,13 +149,14 @@ class PartnerIDTest extends TestCase
         Sanctum::actingAs( $this->admin, ['*']);
         $ids = PartnerID::factory()
             ->for($this->subpartner)
+            ->for($this->number)
             ->count((int)config('cnf.PAGINATION_SIZE') + 10)
             ->create();
         $first = $ids[(int)config('cnf.PAGINATION_SIZE') + 5];
-        $response = $this->getJson('/api/partner-ids?search=' . urlencode($this->partner->lotNumber));
-        $response->assertJsonFragment(['lotNumber' => $this->partner->lotNumber]);
-        $response = $this->getJson('/api/partner-ids?search=' . urlencode($this->partner->procurementNumber));
-        $response->assertJsonFragment(['procurementNumber' => $this->partner->procurementNumber]);
+        $response = $this->getJson('/api/partner-ids?search=' . urlencode($this->number->lotNumber));
+        $response->assertJsonFragment(['lotNumber' => $this->number->lotNumber]);
+        $response = $this->getJson('/api/partner-ids?search=' . urlencode($this->number->procurementNumber));
+        $response->assertJsonFragment(['procurementNumber' => $this->number->procurementNumber]);
         $response = $this->getJson('/api/partner-ids?search=' . urlencode($this->partner->name));
         $response->assertJsonFragment(['name' => $this->partner->name]);
         $response = $this->getJson('/api/partner-ids?search=' . urlencode($this->subpartner->name));
@@ -169,7 +183,7 @@ class PartnerIDTest extends TestCase
     public function testPartnerIDDelete()
     {
         Sanctum::actingAs( $this->admin, ['*']);
-        $object = PartnerID::factory()->for($this->subpartner)->create();
+        $object = PartnerID::factory()->for($this->subpartner)->for($this->number)->create();
         $response = $this->deleteJson('/api/partner-ids/' . $object->id);
         $response
             ->assertStatus(Response::HTTP_ACCEPTED);

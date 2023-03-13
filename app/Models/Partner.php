@@ -14,11 +14,16 @@ class Partner extends Model
      * @var string[]
      */
     protected $fillable = [
-        'name', 'lotNumber', 'procurementNumber',
+        'name',
     ];
 
     public function subpartners()
     {
         return $this->hasMany(Subpartner::class);
+    }
+
+    public function numbers()
+    {
+        return $this->hasMany(Number::class);
     }
 }
