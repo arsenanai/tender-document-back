@@ -1,8 +1,12 @@
 <template>
   <div>
-    <h1 class="fs-3 text-capitalize text-center mb-3">{{ entity.label }}</h1>
     <div class="row justify-content-center">
-      <form class="col-12 col-md-6 col-lg-4 align-self-center"
+      <div class="col-12 col-md-6 col-lg-4 align-self-center bg-light pt-3 rounded-top">
+        <h1 class="fs-3 text-capitalize text-center mb-3">{{ entity.label }}</h1>
+      </div>
+    </div>
+    <div class="row justify-content-center">
+      <form class="col-12 col-md-6 col-lg-4 align-self-center bg-light pb-3 rounded-bottom"
       autocomplete="off"
       @submit.prevent="onSubmit"
       novalidate>

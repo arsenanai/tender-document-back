@@ -93,3 +93,16 @@ export default {
   },
 }
 </script>
+
+<style>
+html, body, #entries-app, .with-background {
+  height: 100%;
+}
+body {
+  background-image: url('../../images/background.png');
+  background-repeat: no-repeat;
+  background-position: left bottom;
+  background-size: cover;
+  width: 100%;
+}
+</style>

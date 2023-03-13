@@ -6,5 +6,6 @@
   "Entry code is valid": "ID номер STEAM LAB компаниясынан берілгендігін растайды",
   "Subpartner": "Компания",
   "Entry code is invalid": "Бұл ID номер біздің жүйемізде тіркелмеген",
-  "Server side error, contact vendor": "Бағдарламалық қате кетті, техникалық қолдауға хабарласыңыз"
+  "Server side error, contact vendor": "Бағдарламалық қате кетті, техникалық қолдауға хабарласыңыз",
+  "Login": "Кіру"
 }

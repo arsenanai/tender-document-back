@@ -6,5 +6,6 @@
   "Entry code is valid": "Подтверждает, что ID был предоставлен компанией STEAM LAB",
   "Subpartner": "Компания",
   "Entry code is invalid": "Этот ID номер не зарегистрирован в нашей системе",
-  "Server side error, contact vendor": "Произошла программная ошибка, обратитесь в техническую поддержку"
+  "Server side error, contact vendor": "Произошла программная ошибка, обратитесь в техническую поддержку",
+  "Login": "Ввойти"
 }

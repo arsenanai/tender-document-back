@@ -1,20 +1,25 @@
 {
+  "resources/images/background.png": {
+    "file": "assets/background-ea9ad32d.png",
+    "src": "resources/images/background.png"
+  },
   "resources/images/language.png": {
     "file": "assets/language-18db373e.png",
     "src": "resources/images/language.png"
   },
   "resources/js/app.css": {
-    "file": "assets/app-e1ba3f8a.css",
+    "file": "assets/app-1653df39.css",
     "src": "resources/js/app.css"
   },
   "resources/js/app.js": {
     "assets": [
-      "assets/language-18db373e.png"
+      "assets/language-18db373e.png",
+      "assets/background-ea9ad32d.png"
     ],
     "css": [
-      "assets/app-e1ba3f8a.css"
+      "assets/app-1653df39.css"
     ],
-    "file": "assets/app-a785f969.js",
+    "file": "assets/app-61f14b42.js",
     "isEntry": true,
     "src": "resources/js/app.js"
   }
