@@ -53,7 +53,8 @@
             <li v-for="locale in $i18n.availableLocales"
               :key="`locale-${locale}`"
               :value="locale">
-              <a class="dropdown-item" @click="$emit('locale-changed', locale)">
+              <a class="dropdown-item" @click="$emit('locale-changed', locale)"
+              :class="{'active': locale === $i18n.locale}">
                 {{ locales[locale] }}
               </a>
             </li>

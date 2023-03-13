@@ -1,7 +1,8 @@
 <template>
   <Header @locale-changed="changeLocale"/>
   <div class="with-background">
-    <div class="container mt-4">
+    <div class="container mt-4"
+      :class="{'bg-white rounded pt-2': filterRoutes()}">
       <router-view v-slot="{ Component, route }">
         <transition :name="route.meta.transition || 'fade'">
           <component :is="Component" :key="route.path"/>
@@ -25,6 +26,11 @@ export default {
     this.fetchUser();
   },
   methods: {
+    filterRoutes() {
+      return !(['/login','/'].includes(this.$route.path)
+      || this.$route.path.includes('/edit')
+      || this.$route.path.includes('/create'));
+    }
   }
 }
 </script>
