@@ -7,3 +7,4 @@ Homestead.yaml
 .DS_Store
 node_modules
 public/build/assets
+public/build/manifest.json
