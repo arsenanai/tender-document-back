@@ -26,7 +26,7 @@ export default {
             entity: {
                 label: 'Partner IDs',
                 route: 'partner-ids',
-                withIndex: true,
+                //withIndex: true,
                 fillables:[
                     {
                         label: 'Partner',

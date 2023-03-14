@@ -66,7 +66,7 @@ class PartnerIDController extends Controller
         } catch(\Throwable $t) {
             // echo 'block 2:' . $t->__toString() . PHP_EOL;
         }
-        $r = $r->paginate(config('cnf.PAGINATION_SIZE'));
+        $r = $r->orderBy('id', 'desc')->paginate(config('cnf.PAGINATION_SIZE'));
         return new AnyResource($r);
     }
 

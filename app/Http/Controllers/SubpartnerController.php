@@ -36,7 +36,7 @@ class SubpartnerController extends Controller
             $p = $request->input('parent');
             $r->where('partner_id', $p);
         }
-        $r = $r->paginate(config('cnf.PAGINATION_SIZE'));
+        $r = $r->orderBy('id', 'desc')->paginate(config('cnf.PAGINATION_SIZE'));
         return new AnyResource($r);
     }
 
@@ -53,7 +53,7 @@ class SubpartnerController extends Controller
 
     public function show($id)
     {
-        $object = Subpartner::find($id);
+        $object = Subpartner::with('partner')->find($id);
         if (is_null($object)) {
             return $this->sendError('item.not.found');
         }

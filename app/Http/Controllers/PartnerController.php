@@ -27,7 +27,7 @@ class PartnerController extends Controller
         } catch(\Throwable $t) {
 
         }
-        return new AnyResource($r->paginate(config('cnf.PAGINATION_SIZE')));
+        return new AnyResource($r->orderBy('id', 'desc')->paginate(config('cnf.PAGINATION_SIZE')));
     }
 
     public function store(Request $request)

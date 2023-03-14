@@ -7,6 +7,7 @@
         type="text"
         :id="`${fillable.codename}_display`"
         @keyup="onKeyup"
+        @click="loadOptions"
         v-model="entity[fillable.autocomplete.for][fillable.autocomplete.displayField]"
         :pattern="fillable.regex"
         :required="{'true': fillable.hasOwnProperty('required')}"
@@ -79,34 +80,37 @@ export default {
         this.fillable.autocomplete.minChars){
         return;
       } else {
-        this.load = true;
-        this.options = null;
-        const parent = this.fillable.hasOwnProperty('dependsOn') ? this.entity[this.fillable.dependsOn] : null;
-        axios({
-          method: this.fillable.autocomplete.method,
-          url: this.fillable.autocomplete.link,
-          params: {
-            parent,
-            search: this.entity[this.fillable.autocomplete.for][this.fillable.autocomplete.displayField],
-          },
-          withCredentials: true,
-          headers: {
-            'Authorization': `Bearer ${this.getUserToken()}`,
-          }
-        })
-        .then(response => {
-          console.log('response', response);
-          this.options = response.data.data;
-        })
-        .catch((error) => {
-          console.log('error', error);
-          this.alert.type = 'text-danger';
-          this.alert.message = 'Server side error, contact vendor';
-        })
-        .then(_ => {
-          this.load = false;
-        });
+        this.loadOptions();
       }
+    },
+    loadOptions() {
+      this.load = true;
+      this.options = null;
+      const parent = this.fillable.hasOwnProperty('dependsOn') ? this.entity[this.fillable.dependsOn] : null;
+      axios({
+        method: this.fillable.autocomplete.method,
+        url: this.fillable.autocomplete.link,
+        params: {
+          parent,
+          search: this.entity[this.fillable.autocomplete.for][this.fillable.autocomplete.displayField],
+        },
+        withCredentials: true,
+        headers: {
+          'Authorization': `Bearer ${this.getUserToken()}`,
+        }
+      })
+      .then(response => {
+        console.log('response', response);
+        this.options = response.data.data;
+      })
+      .catch((error) => {
+        console.log('error', error);
+        this.alert.type = 'text-danger';
+        this.alert.message = 'Server side error, contact vendor';
+      })
+      .then(_ => {
+        this.load = false;
+      });
     },
     onSelect(option) {
       this.entity[this.fillable.autocomplete.for][this.fillable.autocomplete.displayField] = option[this.fillable.autocomplete.displayField];
