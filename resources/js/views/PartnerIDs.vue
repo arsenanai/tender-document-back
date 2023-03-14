@@ -24,6 +24,9 @@ export default {
     data() {
         return {
             entity: {
+                pad: import.meta.env.VITE_PAD_ID,
+                pPad: import.meta.env.VITE_PAD_PARTNER_ID,
+                sPad: import.meta.env.VITE_PAD_SUBPARTNER_ID,
                 label: 'Partner IDs',
                 route: 'partner-ids',
                 //withIndex: true,
@@ -49,21 +52,21 @@ export default {
                         data: 'raw',
                     },
                     {
-                        label: 'ID',
+                        label: 'Full ID',
                         raw: (data) => {
                             return data.created_at.replace(/-/g, '').substring(2,8)
-                                +'-'+this.iD(data.subpartner.partner_id,this.pPad)
-                                +'-'+this.iD(data.subpartner_id,this.sPad)
-                                +'-'+this.iD(data.id,this.pad);
+                                +'-'+this.iD(data.subpartner.partner_id,this.entity.pPad)
+                                +'-'+this.iD(data.subpartner_id,this.entity.sPad)
+                                +'-'+this.iD(data.id,this.entity.pad);
                         },
                         data: 'raw',
                         class: (data) => {
                             const td = new Date();
                             const pd = new Date(new Date().setDate(td.getDate() - 30));
                             const dd = new Date(data.created_at.substring(0,10));
-                            let r = 'text-success';
+                            let r = 'font-monospace text-success';
                             if (dd < pd) {
-                                r = 'text-danger';
+                                r = 'font-monospace text-danger';
                             }
                             return r;
                         },
@@ -71,9 +74,6 @@ export default {
                 ],
                 page: null,
             },
-            pad: parseInt(import.meta.env.VITE_PAD_ID),
-            pPad: parseInt(import.meta.env.VITE_PAD_PARTNER_ID),
-            sPad: parseInt(import.meta.env.VITE_PAD_SUBPARTNER_ID),
         }
     },
     methods: {
