@@ -130,7 +130,7 @@ class PartnerIDTest extends TestCase
             ->for($this->number)
             ->count((int)config('cnf.PAGINATION_SIZE') + 10)
             ->create();
-        $first = $ids[0];
+        $first = $ids[(int)config('cnf.PAGINATION_SIZE') + 10-1];
         $response = $this->getJson('/api/partner-ids');
         $response
             ->assertJson(fn (AssertableJson $json) => 

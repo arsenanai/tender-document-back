@@ -14,7 +14,7 @@ class NumbersController extends Controller
     private $byRules = [
         'partner_id' => 'required|exists:partners,id',
         'lotNumber' => 'required|unique:numbers',
-        'procurementNumber' => 'required|unique:numbers',
+        'procurementNumber' => 'required',
     ];
 
     public function index(Request $request)
@@ -73,10 +73,7 @@ class NumbersController extends Controller
                 'required',
                 Rule::unique('numbers')->ignore($number->id),
             ],
-            'procurementNumber' => [
-                'required',
-                Rule::unique('numbers')->ignore($number->id),
-            ]
+            'procurementNumber' => 'required',
         ]);
         $number->update($request->all());
         return response()->json([

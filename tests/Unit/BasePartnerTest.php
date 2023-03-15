@@ -56,7 +56,7 @@ class BasePartnerTest extends TestCase
         $partners = Partner::factory()
             ->count((int)config('cnf.PAGINATION_SIZE') + 10)
             ->create();
-        $first = $partners[0];
+        $first = $partners[(int)config('cnf.PAGINATION_SIZE') + 10-1];
         $response = $this->getJson('/api/partners');
         $response
             ->assertJson(fn (AssertableJson $json) => 

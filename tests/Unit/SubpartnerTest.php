@@ -54,7 +54,7 @@ class SubpartnerTest extends TestCase
     public function testSubpartnersIndex()
 	{
         Sanctum::actingAs( $this->admin, ['*']);
-        $first = $this->subpartners[0];
+        $first = $this->subpartners[(int)config('cnf.PAGINATION_SIZE') + 10-1];
         $response = $this->getJson('/api/subpartners');
         $response
             ->assertJson(fn (AssertableJson $json) => 
@@ -67,7 +67,7 @@ class SubpartnerTest extends TestCase
     public function testSubpartnersSearch()
     {
         Sanctum::actingAs( $this->admin, ['*']);
-        $first = $this->subpartners[0];
+        $first = $this->subpartners[(int)config('cnf.PAGINATION_SIZE') + 10-1];
         $response = $this->getJson('/api/subpartners?search=' . urlencode($first->id));
         $response->assertJson(fn (AssertableJson $json) => 
             $json->whereContains('data.0', $first)

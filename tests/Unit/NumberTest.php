@@ -55,7 +55,7 @@ class NumberTest extends TestCase
     public function testNumbersIndex()
 	{
         Sanctum::actingAs( $this->admin, ['*']);
-        $first = $this->numbers[0];
+        $first = $this->numbers[(int)config('cnf.PAGINATION_SIZE') + 10-1];
         $response = $this->getJson('/api/numbers');
         $response
             ->assertJson(fn (AssertableJson $json) => 
@@ -68,7 +68,7 @@ class NumberTest extends TestCase
     public function testNumbersSearch()
     {
         Sanctum::actingAs( $this->admin, ['*']);
-        $first = $this->numbers[0];
+        $first = $this->numbers[(int)config('cnf.PAGINATION_SIZE') + 10-1];
         $response = $this->getJson('/api/numbers?search=' . urlencode($first->lotNumber));
         $response->assertJsonFragment(['lotNumber' => $first->lotNumber]);
         $response = $this->getJson('/api/numbers?search=' . urlencode($first->procurementNumber));
@@ -100,6 +100,36 @@ class NumberTest extends TestCase
         foreach($object->getFillable() as $fillable) {
             $response->assertJsonPath('data.'.$fillable, $object[$fillable]);
         }
+        Number::where('partner_id', $this->partner->id)->delete();
+    }
+
+    public function testNumberHasUniqueLotNumber()
+    {
+        Sanctum::actingAs( $this->admin, ['*']);
+        $object = Number::factory()->for($this->partner)->make();
+        $this->postJson('api/numbers', $object->toArray())
+            ->assertStatus(Response::HTTP_CREATED);
+        $this->postJson('api/numbers', $object->toArray())
+            ->assertStatus(Response::HTTP_UNPROCESSABLE_ENTITY)
+            ->assertJsonStructure([
+                'message',
+                'errors' => [
+                    'lotNumber'
+                ]
+            ]);
+        Number::where('partner_id', $this->partner->id)->delete();
+    }
+
+    public function testNumbersProcurementNumberCanBeDuplicated()
+    {
+        Sanctum::actingAs( $this->admin, ['*']);
+        $object = Number::factory()->for($this->partner)->make();
+        $this->postJson('api/numbers', $object->toArray())
+            ->assertStatus(Response::HTTP_CREATED);
+        $another = Number::factory()->for($this->partner)->make();
+        $another->procurementNumber = $object->procurementNumber;
+        $this->postJson('api/numbers', $another->toArray())
+            ->assertStatus(Response::HTTP_CREATED);
         Number::where('partner_id', $this->partner->id)->delete();
     }
 
