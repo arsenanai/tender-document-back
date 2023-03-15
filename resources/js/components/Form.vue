@@ -64,7 +64,7 @@
             </div>
           </div>
         </div>
-        <div class="">
+        <div class="d-flex gap-3">
           <button type="submit" class="btn btn-light" :disabled="loading">
             <span v-if="loading">
               Loading...
@@ -72,6 +72,9 @@
             <span v-else>
               {{ submit }}
             </span>
+          </button>
+          <button class="btn btn-light" :disabled="loading" @click="$router.go()">
+            {{ $t('Reset') }}
           </button>
         </div>
       </form>
