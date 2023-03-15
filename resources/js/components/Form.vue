@@ -73,8 +73,8 @@
               {{ submit }}
             </span>
           </button>
-          <button class="btn btn-light" :disabled="loading" @click="$router.go()">
-            {{ $t('Reset') }}
+          <button class="btn btn-light" :disabled="loading" @click.prevent="$router.go()">
+            {{ $t('Refresh') }}
           </button>
         </div>
       </form>

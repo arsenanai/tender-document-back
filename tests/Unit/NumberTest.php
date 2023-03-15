@@ -142,6 +142,11 @@ class NumberTest extends TestCase
         foreach($object->getFillable() as $fillable) {
             $response->assertJsonPath('data.'.$fillable, fn ($data) => $data == $object[$fillable]);
         }
+        $response->assertJsonStructure([
+            'data' => [
+                'partner'
+            ]
+        ]);
         $object->delete();
     }
 

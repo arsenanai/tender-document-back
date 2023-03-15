@@ -54,7 +54,7 @@ class NumbersController extends Controller
 
     public function show($id)
     {
-        $object = Number::find($id);
+        $object = Number::with('partner')->find($id);
         if (is_null($object)) {
             return $this->sendError('item.not.found');
         }
