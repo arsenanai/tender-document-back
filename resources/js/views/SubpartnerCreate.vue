@@ -97,7 +97,8 @@ export default {
           if (error.response.status === 422) {
             for (let ii = 0; ii < this.entity.fillables.length; ii+=1) {
               if (error.response.data.errors.hasOwnProperty(this.entity.fillables[ii].codename)) {
-                this.entity.fillables[ii].error = error.response.data.errors[
+                this.entity.fillables[ii].hasError = true;
+                this.entity.fillables[ii].feedbackMessage = error.response.data.errors[
                   this.entity.fillables[ii].codename
                 ][0];
               }

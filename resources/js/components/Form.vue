@@ -6,7 +6,7 @@
       </div>
     </div>
     <div class="row justify-content-center">
-      <form class="col-12 col-md-6 col-lg-4 align-self-center bg-white pb-3 rounded-bottom"
+      <form class="col-12 col-md-6 col-lg-4 align-self-center bg-white pb-3 rounded-bottom needs-validation"
       autocomplete="off"
       @submit.prevent="onSubmit"
       novalidate>
@@ -36,7 +36,7 @@
           v-model="entity[fillable.codename]"
           v-if="'hidden' === fillable.type"
           />
-          <div class="input-group has-validation" v-else>
+          <div class="input-group" v-else>
             <input
               v-if="['text', 'email', 'password', 'number', 'date', 'tel', 'search', 'url', 'time', 'range',
               'color'].includes(fillable.type)"
@@ -45,10 +45,11 @@
               :name="fillable.codename"
               :id="fillable.codename"
               v-model="entity[fillable.codename]"
+              @keyup="$emit('onKeyup', entity, fillable)"
               :pattern="fillable.regex"
               :placeholder="fillable.placeholder"
               :required="{'true': fillable.hasOwnProperty('required')}"
-              :class="{'is-invalid': fillable.hasOwnProperty('error')}"
+              :class="{'is-invalid': fillable.hasError, 'is-valid': !fillable.hasError}"
               :disabled="loading"/>
             <textarea
               v-if="'textarea' === fillable.type"
@@ -56,11 +57,12 @@
               :id="fillable.codename"
               v-model="entity[fillable.codename]"
               :required="{'true': fillable.hasOwnProperty('required')}"
-              :class="{'is-invalid': fillable.hasOwnProperty('error')}"
+              :class="{'is-invalid': fillable.hasError, 'is-valid': !fillable.hasError}"
               :disabled="loading"
             ></textarea>
-            <div class="invalid-feedback" v-show="fillable.hasOwnProperty('error')">
-              {{ fillable.error }}
+            <div :class="{'invalid-feedback': fillable.hasError, 'valid-feedback': !fillable.hasError}"
+            v-show="fillable.feedbackMessage"
+            v-html="fillable.feedbackMessage">
             </div>
           </div>
         </div>
@@ -110,7 +112,7 @@ export default {
     },
     hasNoErrors() {
       for(const fillable in this.entity.fillables) {
-        if (fillable.hasOwnProperty('error')) {
+        if (fillable.hasError) {
           return false;
         }
       }

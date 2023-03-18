@@ -23,12 +23,17 @@ class NumbersController extends Controller
         try{
             if ($request->has('search')) {
                 $s = $request->input('search');
-                $r->where('lotNumber', 'like', "%$s%")
-                    ->orWhere('procurementNumber', 'like', "%$s%");
-                if (!$request->has('parent')) {
-                    $r->orWhereHas('partner', function($query) use($s){
-                        $query->where('name', 'like', "%$s%");
-                    });
+                if ($request->has('filterBy')
+                && in_array($request->input('filterBy'), (new Number())->getFillable())) {
+                    $r->where($request->input('filterBy'), 'like', "%$s%");
+                } else {                    
+                    $r->where('lotNumber', 'like', "%$s%")
+                        ->orWhere('procurementNumber', 'like', "%$s%");
+                    if (!$request->has('parent')) {
+                        $r->orWhereHas('partner', function ($query) use ($s) {
+                            $query->where('name', 'like', "%$s%");
+                        });
+                    }
                 }
             }
         } catch(\Throwable $t) {

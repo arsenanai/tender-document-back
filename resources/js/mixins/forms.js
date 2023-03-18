@@ -9,7 +9,8 @@ export default {
       let r = true;
       this.data = {};
       for (let i = 0; i < entity.fillables.length; i++) {
-        entity.fillables[i].error = null;
+        entity.fillables[i].hasError = false;
+        entity.fillables[i].feedbackMessage = null;
         this.data[entity.fillables[i].codename] = entity[entity.fillables[i].codename];
         if (
           entity.fillables[i].hasOwnProperty('required')
@@ -18,13 +19,15 @@ export default {
             || (entity[entity.fillables[i].codename] !== null 
               && entity[entity.fillables[i].codename].length === 0)
             )) {
-          entity.fillables[i].error = this.$t("This field is required");
+          entity.fillables[i].hasError = true;
+          entity.fillables[i].feedbackMessage = this.$t("This field is required");
           r = false;
         }
         if (entity.fillables[i].hasOwnProperty('regex')) {
           const reg = new RegExp(entity.fillables[i].regex);
           if (!reg.test(entity[entity.fillables[i].codename])) {
-            entity.fillables[i].error = entity.fillables[i].validationMessage;
+            entity.fillables[i].hasError = true;
+            entity.fillables[i].feedbackMessage = entity.fillables[i].validationMessage;
             r = false;
           }
         }

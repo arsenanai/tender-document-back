@@ -96,7 +96,7 @@ export default{
       this.$emit('onSearch', input);
     },
     onDelete(data) {
-      if( confirm(`You are deleting an item from ${this.entity.route}. Are you sure?`) ) {
+      if( confirm(`You are deleting an item from ${this.toTitleCase(this.entity.route)}, this will delete all it's child entries as well if there are. Are you sure?`) ) {
         this.$emit('on-delete', data);
       }
     },
@@ -108,6 +108,9 @@ export default{
         return object[fn](input);
       }
       return null;
+    },
+    toTitleCase(str) {
+      return str.toLowerCase().replace(/\b\w/g, s => s.toUpperCase());
     }
   }
 }

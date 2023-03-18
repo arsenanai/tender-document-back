@@ -11,10 +11,10 @@
         v-model="entity[fillable.autocomplete.for][fillable.autocomplete.displayField]"
         :pattern="fillable.regex"
         :required="{'true': fillable.hasOwnProperty('required')}"
-        :class="{'invalid': fillable.error !== null}"
+        :class="{'is-invalid': fillable.hasError, 'is-valid': !fillable.hasError}"
         :disabled="loading || disabled">
-      <div class="invalid-feedback" v-show="fillable.hasOwnProperty('error')">
-        {{ fillable.error }}
+      <div class="invalid-feedback" v-show="fillable.hasOwnProperty('validationMessage')">
+        {{ fillable.feedbackMessage }}
       </div>
     </div>
     <div class="position-absolute w-100 shadow rounded-3 top-100 left-0 mt-1 autocomplete-wrapper"
