@@ -27,32 +27,32 @@ export default {
                 pad: import.meta.env.VITE_PAD_ID,
                 pPad: import.meta.env.VITE_PAD_PARTNER_ID,
                 sPad: import.meta.env.VITE_PAD_SUBPARTNER_ID,
-                label: 'Partner IDs',
+                label: this.$t('Partner IDs'),
                 route: 'partner-ids',
                 //withIndex: true,
                 fillables:[
                     {
-                        label: 'Partner',
+                        label: this.$t('Partner'),
                         raw: data => data.subpartner.partner.name,
                         data: 'raw',
                     },
                     {
-                        label: 'Lot number',
+                        label: this.$t('Lot number'),
                         raw: data => data.number.lotNumber,
                         data: 'raw',
                     },
                     {
-                        label: 'Procurement number',
+                        label: this.$t('Procurement number'),
                         raw: data => data.number.procurementNumber,
                         data: 'raw',
                     },
                     {
-                        label: 'Subpartner',
+                        label: this.$t('Subpartner'),
                         raw: data => data.subpartner.name,
                         data: 'raw',
                     },
                     {
-                        label: 'Full ID',
+                        label: this.$t('Full ID'),
                         raw: (data) => {
                             return data.created_at.replace(/-/g, '').substring(2,8)
                                 +'-'+this.iD(data.subpartner.partner_id,this.entity.pPad)

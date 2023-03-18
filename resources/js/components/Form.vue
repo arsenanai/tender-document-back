@@ -22,7 +22,7 @@
         >
           <label class="form-label w-100 text-capitalize"
             :for="fillable.codename" v-if="fillable.type !== 'hidden'">
-            {{ fillable.title }}
+            {{ $t(fillable.title) }}
           </label>
           <Autocomplete
             v-if="'autocomplete' === fillable.type"
@@ -69,10 +69,10 @@
         <div class="d-flex gap-3">
           <button type="submit" class="btn btn-light" :disabled="loading">
             <span v-if="loading">
-              Loading...
+              {{ $t('Loading') }}...
             </span>
             <span v-else>
-              {{ submit }}
+              {{ $t(submit) }}
             </span>
           </button>
           <button class="btn btn-light" :disabled="loading" @click.prevent="$router.go()">

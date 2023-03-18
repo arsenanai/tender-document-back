@@ -24,25 +24,25 @@ export default {
   data() {
       return {
           entity: {
-              label: 'Numbers',
+              label: this.$t('Numbers'),
               route: 'numbers',
               pad: parseInt(import.meta.env.VITE_PAD_PARTNER_ID),
               fillables:[
                   {
-                      label: 'Partner',
+                      label: this.$t('Partner'),
                       raw: data => data.partner.name,
                       data: 'raw',
                   },
                   {
-                      label: 'Lot number',
+                      label: this.$t('Lot number'),
                       name: 'lotNumber',
                   },
                   {
-                      label: 'Procurement number',
+                      label: this.$t('Procurement number'),
                       name: 'procurementNumber',
                   },
                   {
-                      label: 'Created at',
+                      label: this.$t('Created at'),
                       data: 'raw',
                       raw: data => data.created_at.replaceAll('T', ' ').substring(0,16),
                   }

@@ -1,7 +1,7 @@
 <template>
     <div class="container">
         <p class="text-center">
-            <span v-if="loading">Logging out...</span>
+            <span v-if="loading">{{$t('Logging out')}}...</span>
         </p>
     </div>
 </template>

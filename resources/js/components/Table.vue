@@ -3,7 +3,7 @@
     <h1 class="fs-2 text-capitalize text-center text-md-start">{{ entity.label }}</h1>
     <div class="d-flex flex-column flex-md-row align-items-center justify-content-between gap-2 mb-2">
       <button class="btn btn-sm btn-light" @click="$emit('new-entity', entity.route)">
-        Add New
+        {{$t('Add New')}}
       </button>
       <search-form
         @on-search="onSearch"
@@ -29,13 +29,13 @@
               &#x2116;
             </th>
             <th scope="col" v-else>
-                ID
+              ID
             </th>
             <th scope="col" v-for="(fillable,i) in entity.fillables" :key="i">
-              {{ fillable.label }}
+              {{ $t(fillable.label) }}
             </th>
             <th scope="col">
-              Actions
+              {{ $t('Actions') }}
             </th>
           </tr>
         </thead>
@@ -96,7 +96,7 @@ export default{
       this.$emit('onSearch', input);
     },
     onDelete(data) {
-      if( confirm(`You are deleting an item from ${this.toTitleCase(this.entity.route)}, this will delete all it's child entries as well if there are. Are you sure?`) ) {
+      if( confirm(`${this.$t('You are deleting an item from')} ${this.$t(this.toTitleCase(this.entity.route))}, ${this.$t("this will delete all it's child entries as well if there are. Are you sure?")}`) ) {
         this.$emit('on-delete', data);
       }
     },
@@ -109,9 +109,6 @@ export default{
       }
       return null;
     },
-    toTitleCase(str) {
-      return str.toLowerCase().replace(/\b\w/g, s => s.toUpperCase());
-    }
   }
 }
 </script>

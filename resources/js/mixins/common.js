@@ -11,28 +11,6 @@ export default {
     };
   },
   methods: {
-    /* display(what,target){
-      var result = ''
-      if(target!==null)
-          if(what==='name')
-              result = target['name_'+this.$i18n.locale]
-          else if(what==='description')
-              result = target['description_'+this.$i18n.locale]
-        //if(this.stringIsSet(result) &&result.length>100)
-        //result = result.substring(0,75)+' ... '+result.substring(result.length-25,result.length)
-         return result
-      },
-      view(what,target){
-      var result = ''
-      if(target!==null)
-          if(what==='name')
-              result = target['name_'+this.$i18n.locale]
-          else if(what==='description')
-              result = target['description_'+this.$i18n.locale]
-        if(this.stringIsSet(result) &&result.length>100)
-          result = result.substring(0,75)+' ... '+result.substring(result.length-25,result.length)
-         return result
-      }, */
     basicErrorHandling(e) {
       console.log('error', e.stack);
       if (e.response) {
@@ -93,6 +71,9 @@ export default {
       // this.$i18n.locale = locale;
       localStorage.setItem('entries_lang', locale);
       this.$router.go();
+    },
+    toTitleCase(str) {
+      return str.toLowerCase().replace(/\b\w/g, s => s.toUpperCase());
     }
   },
 };

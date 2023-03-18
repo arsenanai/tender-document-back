@@ -22,7 +22,7 @@ export default {
   data() {
     return {
       entity: {
-        label: 'Number Edit Form',
+        label: this.$t('Number Edit Form'),
         route: 'numbers',
         fillables: [
           {
@@ -41,23 +41,23 @@ export default {
               link: '/api/partners',
               method: 'GET',
             },
-            title: 'Partner',
+            title: this.$t('Partner'),
             required: true,
-            validationMessage: 'This field is required',
+            validationMessage: this.$t('This field is required'),
           },
           {
             codename: 'lotNumber',
             type: 'text',
-            title: 'Lot Number',
+            title: this.$t('Lot Number'),
             required: true,
-            validationMessage: 'This field is required',
+            validationMessage: this.$t('This field is required'),
           },
           {
             codename: 'procurementNumber',
             type: 'text',
-            title: 'Procurement Number',
+            title: this.$t('Procurement Number'),
             required: true,
-            validationMessage: 'This field is required',
+            validationMessage: this.$t('This field is required'),
           },
         ],
         // fillables here
@@ -68,7 +68,7 @@ export default {
         }
         // fillables end
       },
-      submit: 'Update',
+      submit: this.$t('Update'),
       loading: false,
       alert: {
         type: null,
@@ -96,10 +96,10 @@ export default {
           console.log('response', response);
           if(response.status === 202 && response.data.success === true) {
             this.alert.type = 'text-success';
-            this.alert.message = `Updation successful`;
+            this.alert.message = this.$t('Updation successful');
           } else {
             this.alert.type = 'text-danger';
-            this.alert.message = `Updation failed`;
+            this.alert.message = this.$t('Updation failed');
           }
         })
         .catch((error) => {
@@ -113,9 +113,9 @@ export default {
                 ][0];
               }
             }
-            this.alert.message = 'Invalid data provided';
+            this.alert.message = this.$t('Invalid data provided');
           } else {
-            this.alert.message = 'Server side error, contact vendor';
+            this.alert.message = this.$t('Server side error, contact vendor');
           }
         })
         .then(_ => {

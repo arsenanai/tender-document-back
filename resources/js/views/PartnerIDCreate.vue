@@ -22,7 +22,7 @@ export default {
   data() {
     return {
       entity: {
-        label: 'Partner ID Create Form',
+        label: this.$t('Partner ID Create Form'),
         route: 'partner-ids',
         pad: parseInt(import.meta.env.VITE_PAD_SUBPARTNER_ID),
         fillables: [
@@ -37,9 +37,9 @@ export default {
               link: '/api/partners',
               method: 'GET',
             },
-            title: 'Partner',
+            title: this.$t('Partner'),
             required: true,
-            validationMessage: 'This field is required',
+            validationMessage: this.$t('This field is required'),
           },
           {
             codename: 'number_id',
@@ -53,9 +53,9 @@ export default {
               link: '/api/numbers',
               method: 'GET',
             },
-            title: 'Number',
+            title: this.$t('Number'),
             required: true,
-            validationMessage: 'This field is required',
+            validationMessage: this.$t('This field is required'),
           },
           {
             codename: 'subpartner_id',
@@ -69,14 +69,14 @@ export default {
               link: '/api/subpartners',
               method: 'GET',
             },
-            title: 'Subpartner',
+            title: this.$t('Subpartner'),
             required: true,
-            validationMessage: 'This field is required',
+            validationMessage: this.$t('This field is required'),
           },
           {
             codename: 'comments',
             type: 'textarea',
-            title: 'Comments',
+            title: this.$t('Comments'),
           },
         ],
         // fillables here
@@ -95,7 +95,7 @@ export default {
         }
         // fillables end
       },
-      submit: 'Create',
+      submit: this.$t('Create'),
       loading: false,
       alert: {
         type: null,
@@ -123,10 +123,10 @@ export default {
           console.log('response', response);
           if(response.status === 201 && response.data.success === true) {
             this.alert.type = 'text-success';
-            this.alert.message = `Creation successful`;
+            this.alert.message = this.$t('Creation successful');
           } else {
             this.alert.type = 'text-danger';
-            this.alert.message = `Creation failed`;
+            this.alert.message = this.$t('Creation failed');
           }
         })
         .catch((error) => {
@@ -140,9 +140,9 @@ export default {
                 ][0];
               }
             }
-            this.alert.message = 'Invalid data provided';
+            this.alert.message = this.$t('Invalid data provided');
           } else {
-            this.alert.message = 'Server side error, contact vendor';
+            this.alert.message = this.$t('Server side error, contact vendor');
           }
         })
         .then(_ => {

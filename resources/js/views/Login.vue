@@ -21,24 +21,24 @@ export default {
   data() {
     return {
       entity: {
-        label: 'Login Form',
+        label: this.$t('Login Form'),
         fillables: [
           {
             codename: 'email',
             type: 'email',
-            title: 'Email',
+            title: this.$t('Email'),
             required: true,
             // eslint-disable-next-line no-useless-escape
             regex: '^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$',
-            validationMessage: 'Invalid email address',
+            validationMessage: this.$t('Invalid email address'),
           },
           {
             codename: 'password',
             type: 'password',
-            title: 'Password',
+            title: this.$t('Password'),
             required: true,
             regex: '^.{8,}',
-            validationMessage: 'Password must have a length of 8',
+            validationMessage: this.$t('Password must have a length of 8'),
           },
         ],
         // fillables here
@@ -46,7 +46,7 @@ export default {
         password: null,
         // fillables end
       },
-      submit: 'Login',
+      submit: this.$t('Login'),
       loading: false,
       alert: {
         type: null,
@@ -73,19 +73,19 @@ export default {
             // console.log('response', typeof response.status);
             if(response.status === 200) {
               this.alert.type = 'text-success';
-              this.alert.message = 'Logged in successfully, proceeding...';
+              this.alert.message = this.$t('Logged in successfully, proceeding') + '...';
               this.authenticate(response.data.data);
               // await nextTick();
               this.goTo("/partners");
             } else {
               this.alert.type = 'text-danger';
-              this.alert.message = 'Invalid credentials, try again';
+              this.alert.message = this.$t('Invalid credentials, try again');
             }
           })
           .catch((error) => {
             console.log('error', error);
             this.alert.type = 'text-danger';
-            this.alert.message = 'Invalid credentials, try again';
+            this.alert.message = this.$t('Invalid credentials, try again');
           })
           .then(_ => {
             this.loading = false;

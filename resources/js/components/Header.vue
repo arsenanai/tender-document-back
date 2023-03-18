@@ -14,28 +14,28 @@
           <router-link
             class="nav-link" active-class="active"
             to="/partners">
-            Partners
+            {{$t('Partners')}}
           </router-link>
         </li>
         <li class="nav-item" v-if="authenticated()">
           <router-link
             class="nav-link" active-class="active"
             to="/subpartners">
-            Subpartners
+            {{$t('Subpartners')}}
           </router-link>
         </li>
         <li class="nav-item" v-if="authenticated()">
           <router-link
             class="nav-link" active-class="active"
             to="/numbers">
-            Numbers
+            {{$t('Numbers')}}
           </router-link>
         </li>
         <li class="nav-item" v-if="authenticated()">
           <router-link
             class="nav-link" active-class="active"
             to="/partner-ids">
-            Partner IDs
+            {{$t('Partner IDs')}}
           </router-link>
         </li>
         <li class="nav-item" v-if="!authenticated()">
@@ -49,7 +49,7 @@
           <router-link
             class="nav-link" active-class="active"
             to="/logout">
-            Logout
+            {{$t('Logout')}}
           </router-link>
         </li>
         <li class="nav-item dropdown">

@@ -22,7 +22,7 @@ export default {
   data() {
     return {
       entity: {
-        label: 'Partner ID Edit Form',
+        label: this.$t('Partner ID Edit Form'),
         route: 'partner-ids',
         pad: parseInt(import.meta.env.VITE_PAD_SUBPARTNER_ID),
         fillables: [
@@ -42,8 +42,8 @@ export default {
               link: '/api/partners',
               method: 'GET',
             },
-            title: 'Partner',
-            validationMessage: 'This field is required',
+            title: this.$t('Partner'),
+            validationMessage: this.$t('This field is required'),
           },
           {
             codename: 'number_id',
@@ -57,9 +57,9 @@ export default {
               link: '/api/numbers',
               method: 'GET',
             },
-            title: 'Number',
+            title: this.$t('Number'),
             required: true,
-            validationMessage: 'This field is required',
+            validationMessage: this.$t('This field is required'),
           },
           {
             codename: 'subpartner_id',
@@ -73,14 +73,14 @@ export default {
               link: '/api/subpartners',
               method: 'GET',
             },
-            title: 'Subpartner',
+            title: this.$t('Subpartner'),
             required: true,
-            validationMessage: 'This field is required',
+            validationMessage: this.$t('This field is required'),
           },
           {
             codename: 'comments',
             type: 'textarea',
-            title: 'Comments',
+            title: this.$t('Comments'),
           },
         ],
         // fillables here
@@ -99,7 +99,7 @@ export default {
         }
         // fillables end
       },
-      submit: 'Update',
+      submit: this.$t('Update'),
       loading: false,
       alert: {
         type: null,
@@ -127,10 +127,10 @@ export default {
           console.log('response', response);
           if(response.status === 202 && response.data.success === true) {
             this.alert.type = 'text-success';
-            this.alert.message = `Updation successful`;
+            this.alert.message = this.$t('Updation successful');
           } else {
             this.alert.type = 'text-danger';
-            this.alert.message = `Updation failed`;
+            this.alert.message = this.$t('Updation failed');
           }
         })
         .catch((error) => {
@@ -144,9 +144,9 @@ export default {
                 ][0];
               }
             }
-            this.alert.message = 'Invalid data provided';
+            this.alert.message = this.$t('Invalid data provided');
           } else {
-            this.alert.message = 'Server side error, contact vendor';
+            this.alert.message = this.$t('Server side error, contact vendor');
           }
         })
         .then(_ => {

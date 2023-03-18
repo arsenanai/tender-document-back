@@ -24,23 +24,23 @@ export default {
     data() {
         return {
             entity: {
-                label: 'Subpartners',
+                label: this.$t('Subpartners'),
                 route: 'subpartners',
                 pad: import.meta.env.VITE_PAD_SUBPARTNER_ID,
                 fillables:[
                     {
-                        label: 'Name',
+                        label: this.$t('Name'),
                         name: 'name',
                         classes: 'col-4 col-sm-6 col-lg-8',
                         dataClasses: 'py-1 text-truncate',
                     },
                     {
-                        label: 'Partner',
+                        label: this.$t('Partner'),
                         raw: data => data.partner.name,
                         data: 'raw',
                     },
                     {
-                        label: 'Created at',
+                        label: this.$t('Created at'),
                         raw: data => data.created_at.replaceAll('T', ' ').substring(0,16),
                         data: 'raw',
                     }
