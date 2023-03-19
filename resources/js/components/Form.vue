@@ -6,7 +6,7 @@
       </div>
     </div>
     <div class="row justify-content-center">
-      <form class="col-12 col-md-6 col-lg-4 align-self-center bg-white pb-3 rounded-bottom needs-validation"
+      <form class="col-12 col-md-6 col-lg-4 align-self-center bg-white pb-3 rounded-bottom"
       autocomplete="off"
       @submit.prevent="onSubmit"
       novalidate>
@@ -22,7 +22,7 @@
         >
           <label class="form-label w-100 text-capitalize"
             :for="fillable.codename" v-if="fillable.type !== 'hidden'">
-            {{ $t(fillable.title) }}
+            {{ fillable.title }}
           </label>
           <Autocomplete
             v-if="'autocomplete' === fillable.type"
@@ -72,7 +72,7 @@
               {{ $t('Loading') }}...
             </span>
             <span v-else>
-              {{ $t(submit) }}
+              {{ submit }}
             </span>
           </button>
           <button class="btn btn-light" :disabled="loading" @click.prevent="$router.go()">

@@ -21,8 +21,8 @@
   "Delete": "Өшіру",
   "Create": "Сақтау",
   "Update": "Түзеу",
-  "You are deleting an item form": "Сіз келесі кестеден жазбаны өшірейін деп жатсыз",
-  "this will delete all it's child entries as well if there are. Are you sure": "бұл әрекет, табылған жағдайда, оның туынды жазбаларын да өшіреді. Сіз сенімдісіз бе",
+  "You are deleting an item from": "Сіз келесі кестеден жазбаны өшірейін деп жатсыз",
+  "This will delete all it's child entries as well if there are. Are you sure": "Бұл әрекет, табылған жағдайда, оның туынды жазбаларын да өшіреді. Сіз сенімдісіз бе",
   "Invalid data provided": "Форма дұрыс толтырылмаған",
   "Login Form": "Кіру формасы",
   "Email": "Email",
@@ -55,5 +55,7 @@
   "Full ID": "Толық ID",
   "Invalid email address": "Email адрес қате",
   "Creation successful": "Сәтті сақталды",
-  "Updation successful": "Сәтті түзелді"
+  "Updation successful": "Сәтті түзелді",
+  "Loading data": "Жазбалар жүктелуде",
+  "No entries": "Жазбалар жоқ"
 }

@@ -60,16 +60,19 @@
           </tr>
         </tbody>
       </table>
-      <p v-else-if="loading">Loading data...</p>
-      <h6 v-else><i>No entries</i></h6>
+      <p v-else-if="loading">{{ $t('Loading data') }}...</p>
+      <h6 v-else><i>{{ $t('No entries') }}</i></h6>
     </div>
   </div>
 </template>
 
 <script>
 import SearchForm from './SearchForm.vue';
+import common from '@/mixins/common';
+
 export default{
   name: 'Table',
+  mixins: [common],
   props: {
     title: String,
     entity: {
@@ -96,7 +99,7 @@ export default{
       this.$emit('onSearch', input);
     },
     onDelete(data) {
-      if( confirm(`${this.$t('You are deleting an item from')} ${this.$t(this.toTitleCase(this.entity.route))}, ${this.$t("this will delete all it's child entries as well if there are. Are you sure")}?`) ) {
+      if( confirm(`${this.$t('You are deleting an item from')}: ${this.$t(this.toTitleCase(this.entity.route))}. ${this.$t("This will delete all it's child entries as well if there are. Are you sure")}?`) ) {
         this.$emit('on-delete', data);
       }
     },

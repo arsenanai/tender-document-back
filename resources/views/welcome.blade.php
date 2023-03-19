@@ -20,7 +20,7 @@
             }
         </style>
     </head>
-    <body class="text-my-indigo">
+    <body class="text-my-indigo bg-light">
         <div id="entries-app"></div>
         @vite(['resources/js/app.js'])
     </body>
