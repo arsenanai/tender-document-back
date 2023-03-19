@@ -26,9 +26,9 @@
         </li>
         <li class="nav-item" v-if="authenticated()">
           <router-link
-            class="nav-link" active-class="active"
+            class="nav-link text-capitalize" active-class="active"
             to="/numbers">
-            {{$t('Numbers')}}
+            {{$t('numbers')}}
           </router-link>
         </li>
         <li class="nav-item" v-if="authenticated()">

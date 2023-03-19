@@ -4,7 +4,7 @@
     :submit="submit"
     :alert="alert"
     :loading="loading"
-    @onSubmit="onSubmit"
+    @onSubmit="onSubmit('Creation')"
   />
 </template>
 
@@ -103,53 +103,6 @@ export default {
       },
       data: null,
     };
-  },
-  methods: {
-    onSubmit() {
-      this.alert.type = null;
-      this.alert.message = null;
-      if (this.validated(this.entity)) {
-        this.loading = true;
-        axios({
-          method: 'POST',
-          url: `/api/${this.entity.route}`,
-          data: this.data,
-          withCredentials: true,
-          headers: {
-            'Authorization': `Bearer ${this.getUserToken()}`,
-          }
-        })
-        .then(response => {
-          console.log('response', response);
-          if(response.status === 201 && response.data.success === true) {
-            this.alert.type = 'text-success';
-            this.alert.message = this.$t('Creation successful');
-          } else {
-            this.alert.type = 'text-danger';
-            this.alert.message = this.$t('Creation failed');
-          }
-        })
-        .catch((error) => {
-          this.alert.type = 'text-danger';
-          if (error.response.status === 422) {
-            for (let ii = 0; ii < this.entity.fillables.length; ii+=1) {
-              if (error.response.data.errors.hasOwnProperty(this.entity.fillables[ii].codename)) {
-                this.entity.fillables[ii].hasError = true;
-                this.entity.fillables[ii].feedbackMessage = error.response.data.errors[
-                  this.entity.fillables[ii].codename
-                ][0];
-              }
-            }
-            this.alert.message = this.$t('Invalid data provided');
-          } else {
-            this.alert.message = this.$t('Server side error, contact vendor');
-          }
-        })
-        .then(_ => {
-          this.loading = false;
-        });
-      }
-    },
   },
 }
 </script>

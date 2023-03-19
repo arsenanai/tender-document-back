@@ -75,6 +75,10 @@ class NumberTest extends TestCase
         $response->assertJsonFragment(['procurementNumber' => $first->procurementNumber]);
         $response = $this->getJson('/api/numbers?search=' . urlencode($this->partner->name));
         $response->assertJsonFragment(['name' => $this->partner->name]);
+        $response = $this->getJson('/api/numbers?filterBy=lotNumber&search=' . urlencode($first->lotNumber));
+        $response->assertJsonFragment(['lotNumber' => $first->lotNumber]);
+        $response = $this->getJson('/api/numbers?filterBy=procurementNumber&search=' . urlencode($first->procurementNumber));
+        $response->assertJsonFragment(['procurementNumber' => $first->procurementNumber]);
     }
 
     public function testNumberCanBeFilteredByPartner()

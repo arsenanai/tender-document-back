@@ -4,7 +4,7 @@
     :submit="submit"
     :alert="alert"
     :loading="loading"
-    @onSubmit="onSubmit"
+    @onSubmit="onSubmit('Creation')"
     @onKeyup="onKeyup"
   />
 </template>
@@ -45,7 +45,7 @@ export default {
           {
             codename: 'lotNumber',
             type: 'text',
-            title: this.$t('Lot Number'),
+            title: this.$t('Lot number'),
             required: true,
             validationMessage: this.$t('This field is required'),
             preValidation: {
@@ -54,11 +54,11 @@ export default {
               minChars: 3,
               message: (data, input, fillable) => {
                 if (data.length > 1) {
-                  fillable.feedbackMessage = `${this.$t('Already in use in')} <a target="_blank"
+                  fillable.feedbackMessage = `${this.$t('Already in use by')} <a target="_blank"
                   href="/numbers?search=${input}&filterBy=lotNumber">${data.length} ${this.$t('numbers')}</a>`;
                   fillable.hasError = true;
                 } else if (data.length === 1) {
-                  fillable.feedbackMessage = `${this.$t('Already in use in')} <a target="_blank"
+                  fillable.feedbackMessage = `${this.$t('Already in use by')} <a target="_blank"
                   href="/numbers/edit/${data[0].id}">${data[0].partner.name}</a>`;
                   fillable.hasError = true;
                 }
@@ -68,7 +68,7 @@ export default {
           {
             codename: 'procurementNumber',
             type: 'text',
-            title: this.$t('Procurement Number'),
+            title: this.$t('Procurement number'),
             required: true,
             validationMessage: this.$t('This field is required'),
             preValidation: {
@@ -105,53 +105,6 @@ export default {
       },
       data: null,
     };
-  },
-  methods: {
-    onSubmit() {
-      this.alert.type = null;
-      this.alert.message = null;
-      if (this.validated(this.entity)) {
-        this.loading = true;
-        axios({
-          method: 'POST',
-          url: `/api/${this.entity.route}`,
-          data: this.data,
-          withCredentials: true,
-          headers: {
-            'Authorization': `Bearer ${this.getUserToken()}`,
-          }
-        })
-        .then(response => {
-          //console.log('response', response);
-          if(response.status === 201 && response.data.success === true) {
-            this.alert.type = 'text-success';
-            this.alert.message = this.$t('Creation successful');
-          } else {
-            this.alert.type = 'text-danger';
-            this.alert.message = this.$t('Creation failed');
-          }
-        })
-        .catch((error) => {
-          this.alert.type = 'text-danger';
-          if (error.response.status === 422) {
-            for (let ii = 0; ii < this.entity.fillables.length; ii+=1) {
-              if (error.response.data.errors.hasOwnProperty(this.entity.fillables[ii].codename)) {
-                this.entity.fillables[ii].hasError = true;
-                this.entity.fillables[ii].feedbackMessage = error.response.data.errors[
-                  this.entity.fillables[ii].codename
-                ][0];
-              }
-            }
-            this.alert.message = this.$t('Invalid data provided');
-          } else {
-            this.alert.message = this.$t('Server side error, contact vendor');
-          }
-        })
-        .then(_ => {
-          this.loading = false;
-        });
-      }
-    },
   },
 }
 </script>

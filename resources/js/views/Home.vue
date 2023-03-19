@@ -1,5 +1,6 @@
 <template>
   <Form
+    id="home-form"
     :entity="entity"
     :submit="submit"
     :alert="alert"
@@ -91,18 +92,13 @@ export default {
     this.entity.fillables[0].regex = `^[0-9]{6}[-]?[0-9]{${this.pPad}}[-]?[0-9]{${this.sPad}}[-]?[0-9]{${this.pad}}$`;
     this.entity.fillables[0].placeholder = `######-${''.padStart(this.pPad, '#')}-${''.padStart(this.sPad, '#')}-${''.padStart(this.pad, '#')}`;
   },
+  mounted() {
+    const body = document.querySelector('body');
+    body.style.backgroundImage = "url('/background.png')";
+  },
+  unmounted() {
+    const body = document.querySelector('body');
+    body.style.backgroundImage = null;
+  },
 }
 </script>
-
-<style>
-html, body, #entries-app, .with-background {
-  height: 100%;
-}
-body {
-  background-image: url('../../images/background.png');
-  background-repeat: no-repeat;
-  background-position: left bottom;
-  background-size: cover;
-  width: 100%;
-}
-</style>

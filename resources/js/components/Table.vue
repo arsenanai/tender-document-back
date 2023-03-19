@@ -32,7 +32,7 @@
               ID
             </th>
             <th scope="col" v-for="(fillable,i) in entity.fillables" :key="i">
-              {{ $t(fillable.label) }}
+              {{ fillable.label }}
             </th>
             <th scope="col">
               {{ $t('Actions') }}
@@ -54,8 +54,8 @@
               </template>
             </td>
             <td>
-              <a class="btn btn-light btn-sm" @click="$emit('on-edit', data)">Edit</a>
-              <a class="btn btn-light btn-sm mx-2 text-danger" @click="onDelete(data)">Delete</a>
+              <a class="btn btn-light btn-sm" @click="$emit('on-edit', data)">{{ $t('Edit') }}</a>
+              <a class="btn btn-light btn-sm mx-2 text-danger" @click="onDelete(data)">{{ $t('Delete') }}</a>
             </td>
           </tr>
         </tbody>
@@ -96,7 +96,7 @@ export default{
       this.$emit('onSearch', input);
     },
     onDelete(data) {
-      if( confirm(`${this.$t('You are deleting an item from')} ${this.$t(this.toTitleCase(this.entity.route))}, ${this.$t("this will delete all it's child entries as well if there are. Are you sure?")}`) ) {
+      if( confirm(`${this.$t('You are deleting an item from')} ${this.$t(this.toTitleCase(this.entity.route))}, ${this.$t("this will delete all it's child entries as well if there are. Are you sure")}?`) ) {
         this.$emit('on-delete', data);
       }
     },

@@ -8,6 +8,17 @@
         <link rel="icon" href="/cropped-STEAM_RGB-без_дескриптора_сайтқа-1536x523-1-192x192.png" sizes="192x192">
         <link rel="apple-touch-icon" href="/cropped-STEAM_RGB-без_дескриптора_сайтқа-1536x523-1-180x180.png">
         <meta name="msapplication-TileImage" content="/cropped-STEAM_RGB-без_дескриптора_сайтқа-1536x523-1-270x270.png">
+        <style>
+            html, body, #entries-app, .with-background {
+                height: 100%;
+            }
+            body {
+                background-repeat: no-repeat;
+                background-position: left bottom;
+                background-size: cover;
+                width: 100%;
+            }
+        </style>
     </head>
     <body class="text-my-indigo">
         <div id="entries-app"></div>
