@@ -11,9 +11,10 @@
         v-model="entity[fillable.autocomplete.for][fillable.autocomplete.displayField]"
         :pattern="fillable.regex"
         :required="{'true': fillable.hasOwnProperty('required')}"
-        :class="{'is-invalid': fillable.hasError, 'is-valid': !fillable.hasError}"
+        :class="{'is-invalid': fillable.hasError, 'is-valid': fillable.hasError === false}"
         :disabled="loading || disabled">
-      <div class="invalid-feedback" v-show="fillable.hasOwnProperty('validationMessage')">
+      <div :class="{'invalid-feedback': fillable.hasError, 'valid-feedback': fillable.hasError === false}"
+        v-if="fillable.feedbackMessage">
         {{ fillable.feedbackMessage }}
       </div>
     </div>
@@ -129,7 +130,7 @@ export default {
 
 <style scoped>
 .autocomplete-wrapper {
-  z-index: 1;
+  z-index: 5;
 }
 .autocomplete-options {
   max-height: 145px;

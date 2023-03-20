@@ -36,7 +36,7 @@
           v-model="entity[fillable.codename]"
           v-if="'hidden' === fillable.type"
           />
-          <div class="input-group" v-else>
+          <div class="input-group has-validation" v-else>
             <input
               v-if="['text', 'email', 'password', 'number', 'date', 'tel', 'search', 'url', 'time', 'range',
               'color'].includes(fillable.type)"
@@ -49,20 +49,24 @@
               :pattern="fillable.regex"
               :placeholder="fillable.placeholder"
               :required="{'true': fillable.hasOwnProperty('required')}"
-              :class="{'is-invalid': fillable.hasError, 'is-valid': !fillable.hasError}"
-              :disabled="loading"/>
+              :class="{'is-invalid': fillable.hasError, 'is-valid': fillable.hasError === false}"
+              :disabled="loading"
+              :aria-describedby="`${fillable.codename}Feedback`"
+            />
             <textarea
               v-if="'textarea' === fillable.type"
               class="form-control"
               :id="fillable.codename"
               v-model="entity[fillable.codename]"
               :required="{'true': fillable.hasOwnProperty('required')}"
-              :class="{'is-invalid': fillable.hasError, 'is-valid': !fillable.hasError}"
+              :class="{'is-invalid': fillable.hasError}"
               :disabled="loading"
+              :aria-describedby="`${fillable.codename}Feedback`"
             ></textarea>
-            <div :class="{'invalid-feedback': fillable.hasError, 'valid-feedback': !fillable.hasError}"
-            v-show="fillable.feedbackMessage"
-            v-html="fillable.feedbackMessage">
+            <div :class="{'invalid-feedback': fillable.hasError, 'valid-feedback': fillable.hasError === false}"
+              :id="`${fillable.codename}Feedback`"
+              v-if="fillable.feedbackMessage"
+              v-html="fillable.feedbackMessage">
             </div>
           </div>
         </div>

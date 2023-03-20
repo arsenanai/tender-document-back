@@ -21,8 +21,8 @@
   "Delete": "Өшіру",
   "Create": "Сақтау",
   "Update": "Түзеу",
-  "You are deleting an item from": "Сіз келесі кестеден жазбаны өшірейін деп жатсыз",
-  "This will delete all it's child entries as well if there are. Are you sure": "Бұл әрекет, табылған жағдайда, оның туынды жазбаларын да өшіреді. Сіз сенімдісіз бе",
+  "You are deleting an item from": "Сіз келесіден жазбаны өшіргелі жатсыз",
+  "This will delete all it's child entries as well if there are. Are you sure": "Бұлай оның барлық табылған туынды жазбалары да өшеді. Сіз сенімдісіз бе",
   "Invalid data provided": "Форма дұрыс толтырылмаған",
   "Login Form": "Кіру формасы",
   "Email": "Email",
@@ -32,7 +32,7 @@
   "Invalid credentials, try again": "Email немесе құпиясөз қате, қайтадан көріңіз",
   "Logging out": "Жүйеден шығуда",
   "Not found": "Ешнәрсе табылмады",
-  "Woops! Looks like the page you requested cannot be found.": "Ой. Сіз іздеген бет табылмады",
+  "Woops! Looks like the page you requested cannot be found.": "Ой. Сіз іздеген бет сайтта табылмады",
   "Number Create Form": "Номерды Қосу Формасы",
   "Partner": "Партнер",
   "This field is required": "Толтыруға міндетті",
@@ -57,5 +57,6 @@
   "Creation successful": "Сәтті сақталды",
   "Updation successful": "Сәтті түзелді",
   "Loading data": "Жазбалар жүктелуде",
-  "No entries": "Жазбалар жоқ"
+  "No entries": "Жазбалар жоқ",
+  "The lot number has already been taken.": "Бұл лот номеры қолданылған болатын."
 }

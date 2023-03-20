@@ -6,7 +6,8 @@ export default {
       store,
       locales: {
         kk: 'Қазақша',
-        ru: 'Русский'
+        ru: 'Русский',
+        en: 'English',
       },
     };
   },
