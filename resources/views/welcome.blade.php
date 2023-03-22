@@ -9,7 +9,7 @@
         <link rel="apple-touch-icon" href="/cropped-STEAM_RGB-без_дескриптора_сайтқа-1536x523-1-180x180.png">
         <meta name="msapplication-TileImage" content="/cropped-STEAM_RGB-без_дескриптора_сайтқа-1536x523-1-270x270.png">
         <style>
-            html, body, #entries-app, .with-background {
+            html, body {
                 height: 100%;
             }
             body {
