@@ -81,6 +81,19 @@ class NumberTest extends TestCase
         $response->assertJsonFragment(['procurementNumber' => $first->procurementNumber]);
     }
 
+    public function testNumberShowsWarningAtProcurementSegment()
+    {
+        Sanctum::actingAs( $this->admin, ['*']);
+        $first = $this->numbers[(int)config('cnf.PAGINATION_SIZE') + 10-1];
+        $s = substr($first->procurementNumber, 0, 8);
+        $response = $this->getJson('/api/numbers?filterBy=procurementNumber&search=' . urlencode($s));
+        $response->assertJsonFragment(['procurementNumber' => $first->procurementNumber]);
+        $another = Number::factory()->for($this->partner)->make();
+        $another->procurementNumber = $s . '-OK1';
+        $response = $this->getJson('/api/numbers?filterBy=procurementNumber&search=' . urlencode($another->procurementNumber));
+        $response->assertJsonFragment(['procurementNumber' => $first->procurementNumber]);
+    }
+
     public function testNumberCanBeFilteredByPartner()
     {
         Sanctum::actingAs( $this->admin, ['*']);

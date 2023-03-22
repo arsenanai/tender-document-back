@@ -25,7 +25,7 @@ class NumbersController extends Controller
                 $s = $request->input('search');
                 if ($request->has('filterBy')
                 && in_array($request->input('filterBy'), (new Number())->getFillable())) {
-                    $r->where($request->input('filterBy'), 'like', "%$s%");
+                    $r->where($request->input('filterBy'), 'like', substr($s, 0, 8) . "%");
                 } else {                    
                     $r->where('lotNumber', 'like', "%$s%")
                         ->orWhere('procurementNumber', 'like', "%$s%");

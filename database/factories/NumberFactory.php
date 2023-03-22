@@ -20,7 +20,8 @@ class NumberFactory extends Factory
     {
         return [
             'lotNumber' => $this->faker->unique()->randomNumber() . '',
-            'procurementNumber' => $this->faker->unique()->randomNumber() . '',
+            'procurementNumber' => $this->faker->unique()->numberBetween(11111111, 99999999) 
+            . $this->faker->name(),
         ];
     }
 }
