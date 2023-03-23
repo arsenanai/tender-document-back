@@ -16,98 +16,98 @@ import Numbers from '@/views/Numbers.vue';
 import NumberCreate from '@/views/NumberCreate.vue';
 import NumberEdit from '@/views/NumberEdit.vue';
 
-const routes = [
-    {
-        path: "/",
-        component: Home,
-        name: 'home',
-        meta: {
-            public: true
-        } 
-    },
-    {
-        path: '/partners',
-        component: Partners,
-    },
-    {
-        path: "/partners/edit/:id",
-        component: PartnerEdit,
-    },
-    {
-        path: "/partners/create",
-        component: PartnerCreate,
-    },
-    {
-        path: "/subpartners",
-        component: Subpartners,
-    },
-    {
-        path: "/subpartners/edit/:id",
-        component: SubpartnerEdit,
-    },
-    {
-        path: "/subpartners/create",
-        component: SubpartnerCreate,
-    },
-    {
-        path: "/numbers",
-        component: Numbers,
-    },
-    {
-        path: "/numbers/create",
-        component: NumberCreate,
-    },
-    {
-        path: "/numbers/edit/:id",
-        component: NumberEdit,
-    },
-    {
-        path: "/partner-ids",
-        component: Entries,
-    },
-    {
-        path: "/partner-ids/edit/:id",
-        component: PartnerIDEdit,
-    },
-    {
-        path: "/partner-ids/create",
-        component: PartnerIDCreate,
-    },
-    {
-        path: '/login',
-        name: 'auth.login',
-        component: Login,
-        meta: {
-            public: true
-        }
-    },
-    {
-        path: '/logout',
-        name: 'auth.logout',
-        component: Logout,
-    },
-    { path: '/404', name: '404', component: NotFound, meta: {public: true} },
-    {
-        path: "/:catchAll(.*)",
-        redirect: '/404',
-        meta: {
-            public: true
-        } 
-    }
-];
-
 const router = createRouter({
     history: createWebHistory(),
-    routes,
-});
-
-router.beforeEach((to, from, next) => {
-  if (to.matched.some(record => record.meta.public)
-    || localStorage.getItem('entries_user')!==null) {
-    next();
-  } else {
-    next({ name: 'auth.login' });
-  }
+    routes : [
+        {
+            path: "/",
+            component: Home,
+            name: 'home',
+            meta: {public: true}
+        },
+        {
+            path: '/partners',
+            component: Partners,
+            name: 'partners',
+        },
+        {
+            path: "/partners/edit/:id",
+            component: PartnerEdit,
+            name: 'partner.edit',
+        },
+        {
+            path: "/partners/create",
+            component: PartnerCreate,
+            name: 'partner.create',
+        },
+        {
+            path: "/subpartners",
+            component: Subpartners,
+            name: 'subpartners',
+        },
+        {
+            path: "/subpartners/edit/:id",
+            component: SubpartnerEdit,
+            name: 'subpartner.edit',
+        },
+        {
+            path: "/subpartners/create",
+            component: SubpartnerCreate,
+            name: 'subpartner.create',
+        },
+        {
+            path: "/numbers",
+            component: Numbers,
+            name: 'numbers',
+        },
+        {
+            path: "/numbers/create",
+            component: NumberCreate,
+            name: 'number.create',
+        },
+        {
+            path: "/numbers/edit/:id",
+            component: NumberEdit,
+            name: 'number.edit',
+        },
+        {
+            path: "/partner-ids",
+            component: Entries,
+            name: 'partner.ids',
+        },
+        {
+            path: "/partner-ids/edit/:id",
+            component: PartnerIDEdit,
+            name: 'partner.id.edit',
+        },
+        {
+            path: "/partner-ids/create",
+            component: PartnerIDCreate,
+            name: 'partner.id.create',
+        },
+        {
+            path: '/login',
+            name: 'auth.login',
+            component: Login,
+            meta: {public: true}
+        },
+        {
+            path: '/logout',
+            name: 'auth.logout',
+            component: Logout,
+        },
+        {   
+            path: '/404',
+            name: '404',
+            component: NotFound,
+            meta: {public: true}
+        },
+        {
+            path: "/:catchAll(.*)",
+            redirect: '/404',
+            meta: {public: true}
+        }
+    ]
 });
 
 export default router;
