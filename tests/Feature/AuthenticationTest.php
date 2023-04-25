@@ -22,7 +22,7 @@ class AuthenticationTest extends TestCase
         $response = $this->withHeaders([
             'Accept' => 'application/json',
         ])->json('post', '/api/login', [
-            'email' => 'admin@entry.com',
+            'email' => config('cnf.ADMIN_EMAIL'),
             'password' => config('cnf.ADMIN_INITIAL_PASSWORD')
         ]);
  
