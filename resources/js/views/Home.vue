@@ -6,6 +6,7 @@
     :alert="alert"
     :loading="loading"
     @onSubmit="onSubmit"
+    @onKeyup="onKeyup"
   />
 </template>
 
@@ -51,9 +52,17 @@ export default {
     };
   },
   methods: {
-    // onKeyup(entity, fillable, event){
-      
-    // },
+    onKeyup(){
+      let p = this.entity.entry;
+      if (p.length >= (6+this.pPad+this.sPad+this.pad) && this.containsOnlyNumbers(p)) {
+        const pattern = `(\\d{6})(\\d{${this.pPad}})(\\d{${this.sPad}})(\\d{${this.pad}})`;
+        p = p.replace(/\D+/g, '').replace(new RegExp(pattern), '$1-$2-$3-$4');
+        this.entity.entry = p;
+      }
+    },
+    containsOnlyNumbers(str) {
+      return /^\d+$/.test(str);
+    },
     onSubmit() {
       this.alert.type = null;
       this.alert.message = null;
