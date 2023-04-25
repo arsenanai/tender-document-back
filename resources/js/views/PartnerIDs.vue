@@ -8,13 +8,15 @@
         @on-edit="onEdit"
         @on-delete="onDelete"
         @on-search="onSearch"
-        />
+        >
+    </Table>
 </template>
 
 <script>
 import common from '@/mixins/common';
 import pagination from '@/mixins/pagination';
 import Table from '../components/Table.vue';
+
 export default {
     name: 'PartnerIDs',
     components: {
@@ -54,10 +56,14 @@ export default {
                     {
                         label: this.$t('Full ID'),
                         raw: (data) => {
-                            return data.created_at.replace(/-/g, '').substring(2,8)
+                            const fullId = data.created_at.replace(/-/g, '').substring(2,8)
                                 +'-'+this.iD(data.subpartner.partner_id,this.entity.pPad)
                                 +'-'+this.iD(data.subpartner_id,this.entity.sPad)
                                 +'-'+this.iD(data.id,this.entity.pad);
+                            return `<a href="/generate-qr-code/${fullId}" target='_blank'
+                            title="${this.$t('Click to generate QR Code')}"
+                            style="color:inherit;text-decoration:inherit"
+                            >${fullId}</a>`;
                         },
                         data: 'raw',
                         class: (data) => {

@@ -25,15 +25,12 @@ export default {
         if (
           entity.fillables[i].hasOwnProperty('required')
           && entity.fillables[i].required === true
-          && (entity[entity.fillables[i].codename] === null
-            || (entity[entity.fillables[i].codename] !== null 
-              && entity[entity.fillables[i].codename].length === 0)
-            )) {
+          && !entity[entity.fillables[i].codename]
+          ) {
           entity.fillables[i].hasError = true;
           entity.fillables[i].feedbackMessage = this.$t("This field is required");
           r = false;
-        }
-        if (entity.fillables[i].hasOwnProperty('regex')) {
+        } else if (entity.fillables[i].hasOwnProperty('regex')) {
           const reg = new RegExp(entity.fillables[i].regex);
           if (!reg.test(entity[entity.fillables[i].codename])) {
             entity.fillables[i].hasError = true;
@@ -45,12 +42,12 @@ export default {
       return r;
     },
     populateData(route, entity, data) {
-      console.log('entity', entity);
+      //console.log('entity', entity);
       if (localStorage.getItem(`${entity.route}-to-edit`) !== null) {
         data = JSON.parse(
           localStorage.getItem(`${entity.route}-to-edit`)
         );
-        console.log('data', data);
+        //console.log('data', data);
         localStorage.removeItem(`${entity.route}-to-edit`);
         this.syncEntity(entity, data);
       } else {
@@ -65,7 +62,7 @@ export default {
           }
         })
         .then((response) => {
-          console.log('response', response.data);
+          //console.log('response', response.data);
           data = response.data.data;
           data.id = route.params.id;
           this.syncEntity(entity, data);

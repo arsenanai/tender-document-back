@@ -15,6 +15,7 @@ import SubpartnerCreate from '@/views/SubpartnerCreate.vue';
 import Numbers from '@/views/Numbers.vue';
 import NumberCreate from '@/views/NumberCreate.vue';
 import NumberEdit from '@/views/NumberEdit.vue';
+import QRCodePage from '@/views/QRCodePage.vue';
 
 const router = createRouter({
     history: createWebHistory(),
@@ -95,6 +96,11 @@ const router = createRouter({
             path: '/logout',
             name: 'auth.logout',
             component: Logout,
+        },
+        {
+            path: '/generate-qr-code/:fullId',
+            name: 'qr.code',
+            component: QRCodePage,
         },
         {   
             path: '/404',

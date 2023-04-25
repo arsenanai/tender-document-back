@@ -45,7 +45,7 @@
               :name="fillable.codename"
               :id="fillable.codename"
               v-model="entity[fillable.codename]"
-              @keyup="$emit('onKeyup', entity, fillable)"
+              @keyup="$emit('onKeyup', entity, fillable, $event)"
               :pattern="fillable.regex"
               :placeholder="fillable.placeholder"
               :required="{'true': fillable.hasOwnProperty('required')}"
@@ -121,7 +121,7 @@ export default {
         }
       }
       return true;
-    }
+    },
   }
 }
 </script>

@@ -31,9 +31,10 @@ export default {
             codename: 'entry',
             type: 'text',
             title: this.$t('Entry Code'),
-            placeholder: null,
+            placeholder: `######-${''.padStart(this.pPad, '#')}-${''.padStart(this.sPad, '#')}-${''.padStart(this.pad, '#')}`,
             required: true,
-            regex: null,
+            regex: `^[0-9]{6}[-]?[0-9]{${this.pPad}}[-]?[0-9]{${this.sPad}}[-]?[0-9]{${this.pad}}$`,
+            replacePattern: '$1-$2-$3-$4',
             validationMessage: this.$t('Invalid entry code format'),
           },
         ],
@@ -50,6 +51,9 @@ export default {
     };
   },
   methods: {
+    // onKeyup(entity, fillable, event){
+      
+    // },
     onSubmit() {
       this.alert.type = null;
       this.alert.message = null;
@@ -91,6 +95,10 @@ export default {
     // ^[0-9]{6}[-]?[0-9]{2}[-]?[0-9]{2}[-]?[0-9]{3}$
     this.entity.fillables[0].regex = `^[0-9]{6}[-]?[0-9]{${this.pPad}}[-]?[0-9]{${this.sPad}}[-]?[0-9]{${this.pad}}$`;
     this.entity.fillables[0].placeholder = `######-${''.padStart(this.pPad, '#')}-${''.padStart(this.sPad, '#')}-${''.padStart(this.pad, '#')}`;
+    if (this.$route.query.check) {
+      this.entity.entry = this.$route.query.check;
+      this.onSubmit();
+    }
   },
   mounted() {
     const body = document.querySelector('body');

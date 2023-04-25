@@ -2,7 +2,7 @@
 <nav class="navbar navbar-expand-lg navbar-light bg-light">
   <div class="container">
     <router-link class="navbar-brand" to="/">
-      <img :src="logo" alt="Logo" width="24" height="24" class="d-inline-block align-text-top">
+      <img id="brand-logo" :src="logo" alt="Logo" width="24" height="24" class="d-inline-block align-text-top">
       {{brand}}
     </router-link>
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="true" aria-label="Toggle navigation">

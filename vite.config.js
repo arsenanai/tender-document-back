@@ -35,9 +35,17 @@ export default defineConfig({
         }),
     ],
     resolve: {
-        alias: {
-            '~bootstrap': path.resolve(__dirname, 'node_modules/bootstrap'),
-        }
+        alias: [
+            {
+                find: '~bootstrap',
+                replacement: 'node_modules/bootstrap'
+            },
+            // '~bootstrap': path.resolve(__dirname, 'node_modules/bootstrap'),
+            {
+                find: 'vue-i18n',
+                replacement: 'vue-i18n/dist/vue-i18n.cjs.js',
+            },
+        ],
     },
     css: {
         postcss: {
