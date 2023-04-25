@@ -58,5 +58,7 @@
   "Updation successful": "Сәтті түзелді",
   "Loading data": "Жазбалар жүктелуде",
   "No entries": "Жазбалар жоқ",
-  "The lot number has already been taken.": "Бұл лот номеры қолданылған болатын."
+  "The lot number has already been taken.": "Бұл лот номеры қолданылған болатын.",
+  "QR Code": "QR код",
+  "Click to generate QR Code": "QR кодты жүктеу үшін басыңыз"
 }

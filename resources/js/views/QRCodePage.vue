@@ -4,7 +4,7 @@
       {{ $t('QR Code') }}: <span class="font-monospace">{{ $route.params.fullId }}</span>
     </h1>
     <div class="p-4 d-flex flex-column align-items-center justify-content-center">
-      <a href :download="`/qr-for-${$route.params.fullId}.png`" id="download-link">
+      <a href :download="`qr-for-${$route.params.fullId}.png`" id="download-link">
         <QRCodeVue3
           :width="300"
           :height="300"
@@ -35,12 +35,16 @@ export default {
   },
   methods: {
     getURL() {
-      return `${import.meta.env.VITE_APP_URL}/?check=${this.$route.params.fullId}`;
+      return `${import.meta.env.VITE_APP_URL}?check=${this.$route.params.fullId}`;
     },
     prepareDownload() {
-      const link = document.getElementById('download-link');
-      link.href = document.getElementsByClassName('code-qr-img')[0].src;
-      link.click();
+      try{
+        const link = document.getElementById('download-link');
+        link.href = document.getElementsByClassName('code-qr-img')[0].src;
+        link.click();
+      } catch(err) {
+        console.err('error', err);
+      }
     },
   },
   mounted() {

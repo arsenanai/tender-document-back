@@ -58,5 +58,7 @@
   "Updation successful": "Правка успешна",
   "Loading data": "Загрузка данных",
   "No entries": "Нет данных",
-  "The lot number has already been taken.": "Такой номер лота уже используется."
+  "The lot number has already been taken.": "Такой номер лота уже используется.",
+  "QR Code": "QR код",
+  "Click to generate QR Code": "Нажмите чтобы скачать QR код"
 }
