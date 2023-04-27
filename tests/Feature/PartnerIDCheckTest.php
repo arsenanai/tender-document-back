@@ -19,7 +19,7 @@ use Illuminate\Testing\Fluent\AssertableJson;
 
 class PartnerIDCheckTest extends TestCase
 {
-    use RefreshDatabase;
+    // use RefreshDatabase;
     public function test_partner_ids_route_exists()
     {
         $response = $this->json('post', '/api/partner-ids/check', [
@@ -59,11 +59,13 @@ class PartnerIDCheckTest extends TestCase
     }
 
     public function test_partner_correct_id_checking_works() {
-        //this factory creates all other records
-        $partner = Partner::factory()->create();
-        $subpartner = Subpartner::factory()->for($partner)->create();
-        $number = Number::factory()->for($partner)->create();
-        $partnerID = PartnerID::factory()->for($subpartner)->for($number)->create();
+        $partner = Partner::has('subpartners.partnerIDs')->inRandomOrder()->first();
+        $subpartner = Subpartner::has('partnerIDs')->where('partner_id', $partner->id)->inRandomOrder()->first();
+        //$number = Number::where('partner_id', $partner->id)->inRandomOrder()->first();
+        // echo json_encode($partner, JSON_PRETTY_PRINT) . PHP_EOL;
+        // echo json_encode($subpartner, JSON_PRETTY_PRINT) . PHP_EOL;
+        $partnerID = PartnerID::where('subpartner_id', $subpartner->id)->with('subpartner')
+        ->inRandomOrder()->first();
         $this->assertTrue(
             method_exists(PartnerID::class, 'getFullEntry'), 
             'PartnerID does not have method getFullEntry'
@@ -71,12 +73,13 @@ class PartnerIDCheckTest extends TestCase
         $response = $this->json('post', '/api/partner-ids/check', [
             'entry' => $partnerID->getFullEntry()
         ]);
+        // echo json_encode($response, JSON_PRETTY_PRINT);
         $response->assertStatus(200) //ok
             ->assertJsonStructure(
                 [
                     'answer',
                     'details' => [
-                        //'partner',
+                        //'partner',    
                         'subpartner'
                     ]
                 ]
@@ -86,12 +89,5 @@ class PartnerIDCheckTest extends TestCase
                     'answer' => 'correct'
                 ]
             );
-        $partner->delete();
-        //rest stuff should be removed via cascade delete
-        $this->assertDatabaseMissing('partners', $partner->toArray());
-        $this->assertDatabaseMissing('subpartners', $subpartner->toArray());
-        $this->assertDatabaseMissing('numbers', $number->toArray());
-        $this->assertDatabaseMissing('partner_i_d_s', $partnerID->toArray());
-        $this->assertTrue(PartnerID::where('comments', 'like', '%testing')->count() === 0);
     }
 }

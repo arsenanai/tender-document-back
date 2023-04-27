@@ -9,18 +9,18 @@ use Illuminate\Support\Facades\Hash;
 
 class UserTest extends TestCase
 {
-    use RefreshDatabase;
+    // use RefreshDatabase;
     public function testAdminExistance()
     {
-        $object = User::factory()->create();
+        $object = User::where('email', config('cnf.ADMIN_EMAIL'))->first();
         $this->assertTrue($object !== null);
-        $object->delete();
+        // $object->delete();
     }
 
     public function testAdminPasswordIsCorrect()
     {
-        $object = User::factory()->create();
+        $object = User::where('email', config('cnf.ADMIN_EMAIL'))->first();
         $this->assertTrue(Hash::check(config('cnf.ADMIN_INITIAL_PASSWORD'), $object->password));
-        $object->delete();
+        //$object->delete();
     }
 }

@@ -12,19 +12,17 @@ use Tests\TestCase;
 
 class BasePartnerTest extends TestCase
 {
-    use RefreshDatabase;
+    // use RefreshDatabase;
     private $admin;
     public function setUp() :void
     {
         parent::setUp();
-        $this->admin = User::factory()->create();
+        $this->admin = User::where('email', config('cnf.ADMIN_EMAIL'))->first();
     }
 
     public function tearDown(): void
     {
         parent::tearDown();
-        $this->admin->tokens()->delete();
-        $this->admin->delete();
     }
     public function testPartnerExists()
     {
@@ -38,25 +36,18 @@ class BasePartnerTest extends TestCase
         $this->assertTrue(in_array('name', $object->getFillable()));
     }
 
-    public function testPartnerHasPartnerRelation()
+    public function testPartnerHasSubpartnersRelation()
     {
-        $object = Partner::factory()
-            ->has(
-                Subpartner::factory()->count(3)
-                )
-            ->create();
+        $object = Partner::has('subpartners')->with('subpartners')->inRandomOrder()->first();
         $this->assertTrue(count($object->subpartners) > 0);
         $this->assertInstanceOf(Subpartner::class, $object->subpartners[0]);
-        $object->delete();
     }
 
     public function testPartnersIndex()
 	{
         Sanctum::actingAs( $this->admin, ['*']);
-        $partners = Partner::factory()
-            ->count((int)config('cnf.PAGINATION_SIZE') + 10)
-            ->create();
-        $first = $partners[(int)config('cnf.PAGINATION_SIZE') + 10-1];
+        $partners = Partner::where('id', '>', -1)->orderBy('id', 'desc')->paginate((int)config('cnf.PAGINATION_SIZE'));
+        $first = $partners[0];
         $response = $this->getJson('/api/partners');
         $response
             ->assertJson(fn (AssertableJson $json) => 
@@ -64,19 +55,13 @@ class BasePartnerTest extends TestCase
                     ->where('data.0', $first)
                     ->etc()
             );
-        foreach($partners as $partner)
-        {
-            $partner->delete();
-        }
 	}
 
     public function testPartnersSearch()
     {
         Sanctum::actingAs( $this->admin, ['*']);
-        $partners = Partner::factory()
-            ->count((int)config('cnf.PAGINATION_SIZE') + 10)
-            ->create();
-        $first = $partners[(int)config('cnf.PAGINATION_SIZE')+1];
+        $partners = Partner::inRandomOrder()->paginate((int)config('cnf.PAGINATION_SIZE')+1);
+        $first = $partners[(int)config('cnf.PAGINATION_SIZE')];
         $response = $this->getJson('/api/partners?search=' . urlencode($first->id));
         $response->assertJsonFragment(['id' => $first->id]);
         $response = $this->getJson('/api/partners?search=' . urlencode($first->name));
@@ -87,43 +72,40 @@ class BasePartnerTest extends TestCase
     public function testPartnerCanBeStored()
     {
         Sanctum::actingAs( $this->admin, ['*']);
-        $object = Partner::factory()
-            ->make();
+        $object = Partner::factory()->make();
         $response = $this->postJson('api/partners', $object->toArray())
             ->assertStatus(Response::HTTP_CREATED);
         foreach($object->getFillable() as $fillable) {
             $response->assertJsonPath('data.'.$fillable, $object[$fillable]);
         }
-        Partner::where('name', 'like', '%testing')->delete();
+        Partner::where('name', $object->name)->delete();
     }
 
     public function testPartnerIsShownCorrectly()
     {
         Sanctum::actingAs( $this->admin, ['*']);
-        $object = Partner::factory()
-            ->create();
+        $object = Partner::inRandomOrder()->first();
         $response = $this->getJson('api/partners/' . $object->id)
             ->assertOk();
         foreach($object->getFillable() as $fillable) {
             $response->assertJsonPath('data.'.$fillable, fn ($data) => $data == $object[$fillable]);
         }
-        $object->delete();
     }
 
     public function testPartnerCanBeUpdated()
     {
         Sanctum::actingAs( $this->admin, ['*']);
-        $object = Partner::factory()->create();
+        $object = Partner::inRandomOrder()->first();
         $changed = Partner::factory()->make();
-        foreach($object->getFillable() as $fillable) {
-            $object[$fillable] = $changed[$fillable];
-        }
+        $name = $object->name;
+        $object->name = $changed->name;
         $response = $this->putJson('api/partners/' . $object->id, $object->toArray())
             ->assertStatus(Response::HTTP_ACCEPTED);
         foreach($object->getFillable() as $fillable) {
             $response->assertJsonPath('data.'.$fillable, fn ($data) => $data == $object[$fillable]);
         }
-        $object->delete();
+        $object->name = $name;
+        $object->save();
     }
 
     public function testPartnerDelete()

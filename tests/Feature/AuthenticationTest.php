@@ -10,7 +10,7 @@ use Tests\TestCase;
 
 class AuthenticationTest extends TestCase
 {
-    use RefreshDatabase;
+    // use RefreshDatabase;
     /**
      * A basic feature test example.
      *
@@ -18,7 +18,7 @@ class AuthenticationTest extends TestCase
      */
     public function testAdminLoginsSuccessfully()
     {
-        $admin = User::factory()->create();
+        // $admin = User::where('email', config('cnf.ADMIN_EMAIL'))->first();
         $response = $this->withHeaders([
             'Accept' => 'application/json',
         ])->json('post', '/api/login', [
@@ -37,13 +37,11 @@ class AuthenticationTest extends TestCase
                 ]
             ]
         );
-        $admin->tokens()->delete();
-        $admin->delete();
     }
 
     public function testAdminLogoutSuccessfully()
     {
-        $admin = User::factory()->create();
+        $admin = User::where('email', config('cnf.ADMIN_EMAIL'))->first();
         Sanctum::actingAs( $admin, ['*']);
         $this->postJson('/api/logout')
             ->assertOk()
@@ -53,7 +51,5 @@ class AuthenticationTest extends TestCase
                     'message'
                 ]
                 );
-        $admin->tokens()->delete();
-        $admin->delete();
     }
 }

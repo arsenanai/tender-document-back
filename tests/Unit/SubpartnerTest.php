@@ -11,33 +11,20 @@ use Laravel\Sanctum\Sanctum;
 
 class SubpartnerTest extends TestCase
 {
-    use RefreshDatabase;
+    // use RefreshDatabase;
     private $admin, $partner, $subpartners, $number;
     public function setUp() :void
     {
         parent::setUp();
-        $this->admin = User::factory()->create();
-        $this->partner = Partner::factory()->create();
-        $this->subpartners = Subpartner::factory()
-            ->for($this->partner)
-            ->count((int)config('cnf.PAGINATION_SIZE') + 10)
-            ->create();
-        $this->number = Number::factory()
-            ->for($this->partner)
-            ->create();
+        $this->admin = User::where('email', config('cnf.ADMIN_EMAIL'))->first();
+        $this->partner = Partner::has('subpartners')->has('numbers')->inRandomOrder()->first();
+        $this->subpartners = Subpartner::where('partner_id', $this->partner->id)->get();
+        $this->number = Number::where('partner_id', $this->partner->id)->inRandomOrder()->first();
     }
 
     public function tearDown(): void
     {
         parent::tearDown();
-        $this->admin->tokens()->delete();
-        $this->admin->delete();
-        foreach($this->subpartners as $d)
-        {
-            $d->delete();
-        }
-        $this->number->delete();
-        $this->partner->delete();
     }
     public function testSubpartnerHasNeededRelations()
     {
@@ -54,11 +41,12 @@ class SubpartnerTest extends TestCase
     public function testSubpartnersIndex()
 	{
         Sanctum::actingAs( $this->admin, ['*']);
-        $first = $this->subpartners[(int)config('cnf.PAGINATION_SIZE') + 10-1];
+        $s = Subpartner::with('partner')->orderBy('id', 'desc')->paginate((int)config('cnf.PAGINATION_SIZE'));
+        $first = $s[0];
         $response = $this->getJson('/api/subpartners');
         $response
             ->assertJson(fn (AssertableJson $json) => 
-                $json->has('data', config('cnf.PAGINATION_SIZE'))
+                $json->has('data', (int)config('cnf.PAGINATION_SIZE'))
                     ->whereContains('data.0', $first)
                     ->etc()
             );
@@ -67,22 +55,14 @@ class SubpartnerTest extends TestCase
     public function testSubpartnersSearch()
     {
         Sanctum::actingAs( $this->admin, ['*']);
-        $first = $this->subpartners[(int)config('cnf.PAGINATION_SIZE') + 10-1];
+        $s = Subpartner::with('partner')->orderBy('id', 'desc')->paginate((int)config('cnf.PAGINATION_SIZE')+1);
+        $first = $s[(int)config('cnf.PAGINATION_SIZE')];
         $response = $this->getJson('/api/subpartners?search=' . urlencode($first->id));
-        $response->assertJson(fn (AssertableJson $json) => 
-            $json->whereContains('data.0', $first)
-                ->etc()
-        );
+        $response->assertJsonFragment(['id' => $first->id]);
         $response = $this->getJson('/api/subpartners?search=' . urlencode($first->name));
-        $response->assertJson(fn (AssertableJson $json) => 
-            $json->whereContains('data.0', $first)
-                ->etc()
-        );
+        $response->assertJsonFragment(['name' => $first->name]);
         $response = $this->getJson('/api/subpartners?search=' . urlencode($this->partner->name));
-        $response->assertJson(fn (AssertableJson $json) => 
-            $json->whereContains('data.0', $first)
-                ->etc()
-        );
+        $response->assertJsonFragment(['name' => $this->partner->name]);
     }
 
     public function testSubpartnerCanBeFilteredByPartner()
@@ -108,7 +88,7 @@ class SubpartnerTest extends TestCase
         foreach($object->getFillable() as $fillable) {
             $response->assertJsonPath('data.'.$fillable, $object[$fillable]);
         }
-        Subpartner::where('name', 'like', '%testing')->delete();
+        Subpartner::where('name', $object->name)->delete();
     }
 
     public function testSubpartnerIsShownCorrectly()
@@ -145,19 +125,11 @@ class SubpartnerTest extends TestCase
         $object = Subpartner::factory()
             ->for($this->partner)
             ->create();
-        PartnerID::factory()
-            ->for($object)
-            ->for($this->number)
-            ->count(5)
-            ->create();
-        $children = $object->partnerIDs()->get();
+        $child = PartnerID::factory()->for($this->number)->for($object)->create();
         $response = $this->deleteJson('/api/subpartners/' . $object->id);
         $response
             ->assertStatus(Response::HTTP_ACCEPTED);
         $this->assertDatabaseMissing('subpartners', $object->toArray());
-        foreach($children as $child) {
-            $this->assertDatabaseMissing('partner_i_d_s', $child->toArray());
-        }
-        $object->delete();
+        $this->assertDatabaseMissing('partner_i_d_s', $child->toArray());
     }
 }

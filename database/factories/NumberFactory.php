@@ -18,8 +18,11 @@ class NumberFactory extends Factory
      */
     public function definition(): array
     {
+        do {
+            $lotNumber = $this->faker->unique()->numberBetween(11111111, 99999999);
+        } while(Number::where('lotNumber', $lotNumber)->count() > 0);
         return [
-            'lotNumber' => $this->faker->unique()->randomNumber() . '',
+            'lotNumber' => $lotNumber . '',
             'procurementNumber' => $this->faker->unique()->numberBetween(11111111, 99999999) 
             . $this->faker->name(),
         ];

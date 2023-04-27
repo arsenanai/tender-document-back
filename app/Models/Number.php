@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class Number extends Model
 {
     use HasFactory;
+    
     protected $fillable = [
         'partner_id', 'lotNumber', 'procurementNumber',
     ];
