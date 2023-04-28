@@ -19,7 +19,18 @@ use Illuminate\Testing\Fluent\AssertableJson;
 
 class PartnerIDCheckTest extends TestCase
 {
-    // use RefreshDatabase;
+    use RefreshDatabase;
+    public function setUp() :void
+    {
+        parent::setUp();
+        $this->seed();
+    }
+
+    public function tearDown(): void
+    {
+        parent::tearDown();
+    }
+    
     public function test_partner_ids_route_exists()
     {
         $response = $this->json('post', '/api/partner-ids/check', [

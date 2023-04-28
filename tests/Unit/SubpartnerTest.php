@@ -11,11 +11,12 @@ use Laravel\Sanctum\Sanctum;
 
 class SubpartnerTest extends TestCase
 {
-    // use RefreshDatabase;
+    use RefreshDatabase;
     private $admin, $partner, $subpartners, $number;
     public function setUp() :void
     {
         parent::setUp();
+        $this->seed();
         $this->admin = User::where('email', config('cnf.ADMIN_EMAIL'))->first();
         $this->partner = Partner::has('subpartners')->has('numbers')->inRandomOrder()->first();
         $this->subpartners = Subpartner::where('partner_id', $this->partner->id)->get();

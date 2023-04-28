@@ -12,11 +12,12 @@ use Tests\TestCase;
 
 class BasePartnerTest extends TestCase
 {
-    // use RefreshDatabase;
+    use RefreshDatabase;
     private $admin;
     public function setUp() :void
     {
         parent::setUp();
+        $this->seed();
         $this->admin = User::where('email', config('cnf.ADMIN_EMAIL'))->first();
     }
 

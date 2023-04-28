@@ -10,7 +10,19 @@ use Tests\TestCase;
 
 class AuthenticationTest extends TestCase
 {
-    // use RefreshDatabase;
+    use RefreshDatabase;
+
+    public function setUp() :void
+    {
+        parent::setUp();
+        $this->seed();
+    }
+
+    public function tearDown(): void
+    {
+        parent::tearDown();
+    }
+
     /**
      * A basic feature test example.
      *

@@ -9,7 +9,19 @@ use Illuminate\Support\Facades\Hash;
 
 class UserTest extends TestCase
 {
-    // use RefreshDatabase;
+    use RefreshDatabase;
+    
+    public function setUp() :void
+    {
+        parent::setUp();
+        $this->seed();
+    }
+
+    public function tearDown(): void
+    {
+        parent::tearDown();
+    }
+
     public function testAdminExistance()
     {
         $object = User::where('email', config('cnf.ADMIN_EMAIL'))->first();
