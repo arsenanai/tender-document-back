@@ -10,7 +10,6 @@ use Illuminate\Http\Response;
 
 class PartnerIDController extends Controller
 {
-    private $partner, $subpartner, $partnerID, $date;
 
     private $byRules = [
         'comments' => 'string|nullable',
@@ -35,9 +34,10 @@ class PartnerIDController extends Controller
                     . "})?[-]?([0-9]{"
                     . (int) config('cnf.ID_PAD')
                     . "})?$/";
-                if (preg_match($pattern, $s) && $this->checkById($s)) {
+                $partnerID = new \stdClass(); $partner= null; $subpartner= null; $date= null;
+                if (preg_match($pattern, $s) && $this->checkById($s, $date, $partner, $subpartner, $partnerID)) {
                     return new AnyResource(
-                        $r->where('id', $this->partnerID->id)
+                        $r->where('id', $partnerID->id)
                         ->paginate(config('cnf.PAGINATION_SIZE'))
                     );
                 }
@@ -122,14 +122,17 @@ class PartnerIDController extends Controller
             'entry' => ['required', 'string', new PartnerIDRule],
         ]);
         try {
-            if ($this->checkById($request->input('entry'))) 
+            $partnerID = new \stdClass(); $partner= new \stdClass(); $subpartner= new \stdClass(); $date= null;
+            if ($this->checkById($request->input('entry'), $date, $partner, $subpartner, $partnerID)) 
             {
+                $parts = explode('-', $request->input('entry'));
+                $subpartner = Subpartner::findOrFail((int)$parts[2]);
                 return response()->json(
                     [
                         'answer' => 'correct',
                         'details' => [
                             //'partner' => $this->partner,
-                            'subpartner' => $this->subpartner,
+                            'subpartner' => $subpartner,
                         ],
                     ]
                 );
@@ -138,10 +141,11 @@ class PartnerIDController extends Controller
                     'answer' => 'incorrect',
                     'reason' => 'mismatch',
                 ];
+
                 if (config('cnf.APP_DEBUG') == 'true') {
-                    $r['details'] = 'p: ' . $this->partner->id . ' vs ' . $this->subpartner->partner->id
-                        . ', sp: ' . $this->subpartner->id . ' vs ' . $this->partnerID->subpartner->id
-                        . ', id: ' . $this->partnerID->created_at->format('ymd') . ' vs ' . $this->date;
+                    $r['details'] = 'p: ' . $partner->id . ' vs ' . $subpartner->partner->id
+                        . ', sp: ' . $subpartner->id . ' vs ' . $partnerID->subpartner->id
+                        . ', id: ' . $partnerID->created_at->format('ymd') . ' vs ' . $date;
                 }
                 return response()->json($r);
             }
@@ -149,23 +153,23 @@ class PartnerIDController extends Controller
             return response()->json([
                 'answer' => 'incorrect',
                 'reason' => 'exception',
-                'details' => $t->getMessage(),
+                'details' => $t->getTrace(),
             ]);
         }
         
     }
 
-    private function checkById($id) {
+    private function checkById($id, $date, $partner, $subpartner, $partnerID) {
         $parts = explode('-', $id);
-        $this->date = $parts[0];
-        $this->partner = Partner::findOrFail((int)$parts[1]);
-        $this->subpartner = Subpartner::with('partner')->findOrFail((int)$parts[2]);
-        $this->partnerID = PartnerID::with('subpartner')->findOrFail((int)$parts[3]);
+        $date = $parts[0];
+        $partner = Partner::findOrFail((int)$parts[1]);
+        $subpartner = Subpartner::findOrFail((int)$parts[2]);
+        $partnerID = PartnerID::with('subpartner')->findOrFail((int)$parts[3]);
         return (
-            /*$this->partnerID->id === (int)$parts[3]
-            &&*/ $this->subpartner->is($this->partnerID->subpartner)
-            && $this->partner->is($this->subpartner->partner)
-            && $this->partnerID->created_at->format('ymd') === $this->date
+            $partnerID->id === (int)$parts[3]
+            && $subpartner->is($partnerID->subpartner)
+            && $partner->is($subpartner->partner)
+            && $partnerID->created_at->format('ymd') === $date
         );
     }
 }
