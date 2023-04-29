@@ -1,0 +1,21 @@
+{
+  "resources/images/language.png": {
+    "file": "assets/language-18db373e.png",
+    "src": "resources/images/language.png"
+  },
+  "resources/js/app.css": {
+    "file": "assets/app-3f10377a.css",
+    "src": "resources/js/app.css"
+  },
+  "resources/js/app.js": {
+    "assets": [
+      "assets/language-18db373e.png"
+    ],
+    "css": [
+      "assets/app-3f10377a.css"
+    ],
+    "file": "assets/app-bfb3a2b6.js",
+    "isEntry": true,
+    "src": "resources/js/app.js"
+  }
+}
