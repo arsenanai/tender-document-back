@@ -111,7 +111,7 @@ export default {
   },
   mounted() {
     const body = document.querySelector('body');
-    body.style.backgroundImage = "url('/background.png')";
+    body.style.backgroundImage = "url('/background.jpg')";
   },
   unmounted() {
     const body = document.querySelector('body');
