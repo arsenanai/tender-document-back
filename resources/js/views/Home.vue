@@ -25,6 +25,8 @@ export default {
       pad: parseInt(import.meta.env.VITE_PAD_ID),
       pPad: parseInt(import.meta.env.VITE_PAD_PARTNER_ID),
       sPad: parseInt(import.meta.env.VITE_PAD_SUBPARTNER_ID),
+      phone: 'phone',
+      email: 'email',
       entity: {
         label: this.$t('Entry checking form'),
         fillables: [
@@ -109,13 +111,17 @@ export default {
       this.onSubmit();
     }
   },
-  mounted() {
-    const body = document.querySelector('body');
-    body.style.backgroundImage = "url('/background.jpg')";
-  },
-  unmounted() {
-    const body = document.querySelector('body');
-    body.style.backgroundImage = null;
-  },
+  // mounted() {
+  //   const body = document.querySelector('body');
+  //   body.style.backgroundImage = "url('/background.jpg')";
+  // },
+  // unmounted() {
+  //   const body = document.querySelector('body');
+  //   body.style.backgroundImage = null;
+  // },
 }
 </script>
+
+<style scoped>
+
+</style>
