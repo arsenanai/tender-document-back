@@ -17,7 +17,7 @@
         </router-view>
       </div>
     </div>
-    <div class="position-absolute bottom-0 start-0 w-100 d-flex flex-column gap-2 p-4">
+    <div class="position-absolute bottom-0 start-0 w-100 d-flex flex-column gap-2 p-4" v-if="$route.path === '/'">
       <a id="email" class="fw-semibold text-white" style="text-decoration:none" :href="`mailto:${email}`">&#128231; {{ email }}</a>
       <a id="phone" class="fw-semibold text-white" style="text-decoration:none" :href="`tel:${phone}`">&#128222; {{ phone }}</a>
     </div>
