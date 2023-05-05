@@ -42,7 +42,6 @@ export default {
   },
   created() {
     this.fetchUser();
-    console.log('router', this.$route.path);
   },
   methods: {
     filterRoutes() {

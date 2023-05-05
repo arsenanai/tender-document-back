@@ -4,7 +4,7 @@
     "src": "resources/images/language.png"
   },
   "resources/js/app.css": {
-    "file": "assets/app-3f10377a.css",
+    "file": "assets/app-3e583418.css",
     "src": "resources/js/app.css"
   },
   "resources/js/app.js": {
@@ -12,9 +12,9 @@
       "assets/language-18db373e.png"
     ],
     "css": [
-      "assets/app-3f10377a.css"
+      "assets/app-3e583418.css"
     ],
-    "file": "assets/app-31164aaa.js",
+    "file": "assets/app-7db4e49d.js",
     "isEntry": true,
     "src": "resources/js/app.js"
   }
