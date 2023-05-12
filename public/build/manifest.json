@@ -1,10 +1,67 @@
 {
+  "_@intlify-709a1feb.js": {
+    "file": "assets/@intlify-709a1feb.js",
+    "imports": [
+      "_source-map-7d7e1c08.js"
+    ]
+  },
+  "_@popperjs-8746c87e.js": {
+    "file": "assets/@popperjs-8746c87e.js"
+  },
+  "_@vue-a8c8ab0e.js": {
+    "file": "assets/@vue-a8c8ab0e.js"
+  },
+  "_axios-760d4776.js": {
+    "file": "assets/axios-760d4776.js"
+  },
+  "_bootstrap-f7626649.js": {
+    "file": "assets/bootstrap-f7626649.js",
+    "imports": [
+      "_@popperjs-8746c87e.js"
+    ]
+  },
+  "_lodash-b55dff9f.js": {
+    "file": "assets/lodash-b55dff9f.js",
+    "imports": [
+      "_@intlify-709a1feb.js"
+    ]
+  },
+  "_qrcode-vue3-1e6cf7a4.js": {
+    "file": "assets/qrcode-vue3-1e6cf7a4.js",
+    "imports": [
+      "_@intlify-709a1feb.js",
+      "_vue-db3dd943.js"
+    ]
+  },
+  "_source-map-7d7e1c08.js": {
+    "file": "assets/source-map-7d7e1c08.js"
+  },
+  "_vue-db3dd943.js": {
+    "file": "assets/vue-db3dd943.js",
+    "imports": [
+      "_@vue-a8c8ab0e.js",
+      "_@intlify-709a1feb.js"
+    ]
+  },
+  "_vue-i18n-e4504907.js": {
+    "file": "assets/vue-i18n-e4504907.js",
+    "imports": [
+      "_@intlify-709a1feb.js",
+      "_vue-db3dd943.js"
+    ]
+  },
+  "_vue-router-d4b77071.js": {
+    "file": "assets/vue-router-d4b77071.js",
+    "imports": [
+      "_@vue-a8c8ab0e.js"
+    ]
+  },
   "resources/images/language.png": {
     "file": "assets/language-18db373e.png",
     "src": "resources/images/language.png"
   },
   "resources/js/app.css": {
-    "file": "assets/app-142bac42.css",
+    "file": "assets/app-d32af872.css",
     "src": "resources/js/app.css"
   },
   "resources/js/app.js": {
@@ -12,9 +69,22 @@
       "assets/language-18db373e.png"
     ],
     "css": [
-      "assets/app-142bac42.css"
+      "assets/app-d32af872.css"
     ],
-    "file": "assets/app-7d5900a4.js",
+    "file": "assets/app-ec31fb62.js",
+    "imports": [
+      "_vue-db3dd943.js",
+      "_@vue-a8c8ab0e.js",
+      "_vue-router-d4b77071.js",
+      "_qrcode-vue3-1e6cf7a4.js",
+      "_lodash-b55dff9f.js",
+      "_@popperjs-8746c87e.js",
+      "_bootstrap-f7626649.js",
+      "_axios-760d4776.js",
+      "_vue-i18n-e4504907.js",
+      "_@intlify-709a1feb.js",
+      "_source-map-7d7e1c08.js"
+    ],
     "isEntry": true,
     "src": "resources/js/app.js"
   }
