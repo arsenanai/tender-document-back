@@ -1,13 +1,25 @@
 <template>
-  <Header @locale-changed="changeLocale"/>
-  <div class="with-background">
-    <div class="container mt-4"
-      :class="{'bg-white rounded pt-2': filterRoutes()}">
-      <router-view v-slot="{ Component, route }">
-        <transition :name="route.meta.transition || 'fade'">
-          <component :is="Component" :key="route.path"/>
-        </transition>
-      </router-view>
+  <Header class="flex-grow-0" style="z-index:2;" @locale-changed="changeLocale"/>
+  <div class="w-100 position-relative overflow-hidden" style="height: calc(100% - 56px)"
+  :class="{'bg-black': $route.path === '/'}">
+    <img v-if="$route.path === '/'" id="background" :src="backgroundPath"
+    class="position-absolute bottom-0 start-0 object-fit-cover opacity-75" style="z-index:0;"/>
+    <div class="position-absolute top-0 start-0 w-100 h-100">
+      <br>
+      <div class="container" style="z-index:3;"
+        :class="{
+          'bg-white rounded pt-2': filterRoutes(),
+        }">
+        <router-view v-slot="{ Component, route }">
+          <transition :name="route.meta.transition || 'fade'">
+            <component :is="Component" :key="route.path"/>
+          </transition>
+        </router-view>
+      </div>
+    </div>
+    <div class="position-absolute bottom-0 start-0 w-100 d-flex flex-column gap-2 p-4" v-if="$route.path === '/'">
+      <a id="email" class="title text-white" style="text-decoration:none" :href="`mailto:${email}`">&#128231; {{ email }}</a>
+      <a id="phone" class="title text-white" style="text-decoration:none" :href="`tel:${phone}`">&#128222; {{ formatPhone() }}</a>
     </div>
   </div>
 </template>
@@ -22,6 +34,13 @@ export default {
   components: {
     Header,
   },
+  data() {
+    return {
+      email: import.meta.env.VITE_COMPANY_EMAIL,
+      phone: import.meta.env.VITE_COMPANY_PHONE,
+      backgroundPath: import.meta.env.VITE_BACKGROUND_PATH,
+    };
+  },
   created() {
     this.fetchUser();
   },
@@ -30,6 +49,9 @@ export default {
       return !(['/login','/'].includes(this.$route.path)
       || this.$route.path.includes('/edit')
       || this.$route.path.includes('/create'));
+    },
+    formatPhone() {
+      return this.phone.replace(/\D+/g, '').replace(/(\d{1})(\d{3})(\d{3})(\d{2})(\d{2})/, '+$1 ($2) $3-$4-$5');
     }
   }
 }

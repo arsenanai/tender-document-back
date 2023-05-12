@@ -51,9 +51,23 @@ export default defineConfig({
         postcss: {
             plugins: [
                 purgecss({
-                    content: ['./**/*.blade.php', './**/*.vue', './*.vue', './**/*.js']
+                    content: ['./resources/views/**/*.blade.php', './resources/js/**/*.vue'],
+                    safelist: [
+                        'show',
+                    ],
                 })
             ],
         },
     },
+    build: {
+        rollupOptions: {
+            output:{
+                manualChunks(id) {
+                    if (id.includes('node_modules')) {
+                        return id.toString().split('node_modules/')[1].split('/')[0].toString();
+                    }
+                }
+            }
+        }
+    }
 });
