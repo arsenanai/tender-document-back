@@ -51,7 +51,10 @@ export default defineConfig({
         postcss: {
             plugins: [
                 purgecss({
-                    content: ['./**/*.blade.php', './**/*.vue']
+                    content: ['./resources/views/**/*.blade.php', './resources/js/**/*.vue'],
+                    safelist: [
+                        'show',
+                    ],
                 })
             ],
         },
