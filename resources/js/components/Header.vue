@@ -52,11 +52,11 @@
             {{$t('Logout')}}
           </router-link>
         </li>
-        <li class="nav-item dropdown">
+        <li class="nav-item dropdown" v-if="!authenticated()">
           <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-            <img src="../../images/language.png" height="20"/>
+            <img src="../../images/language.png" height="20" style="margin-right:.25rem"/> Language
           </a>
-          <ul class="dropdown-menu">
+          <ul class="dropdown-menu dropdown-menu-end dropdown-menu-lg-start">
             <li v-for="locale in $i18n.availableLocales"
               :key="`locale-${locale}`"
               :value="locale">

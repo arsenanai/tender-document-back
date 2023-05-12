@@ -9,7 +9,7 @@
         <link rel="apple-touch-icon" href="/cropped-STEAM_RGB-без_дескриптора_сайтқа-1536x523-1-180x180.png">
         <meta name="msapplication-TileImage" content="/cropped-STEAM_RGB-без_дескриптора_сайтқа-1536x523-1-270x270.png">
     </head>
-    <body class="text-my-indigo bg-light w-100 h-100">
+    <body class="bg-light w-100 h-100">
         <div id="entries-app" class="w-100 h-100"></div>
         @vite(['resources/js/app.js'])
     </body>

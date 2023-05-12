@@ -5,9 +5,9 @@ export default {
     return {
       store,
       locales: {
-        kk: 'Қазақша',
-        ru: 'Русский',
-        en: 'English',
+        kk: 'QAZ',
+        ru: 'RUS',
+        en: 'ENG',
       },
     };
   },
