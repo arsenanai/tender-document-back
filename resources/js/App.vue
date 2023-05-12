@@ -1,9 +1,9 @@
 <template>
   <Header class="flex-grow-0" style="z-index:2;" @locale-changed="changeLocale"/>
-  <div class="w-100 position-relative" style="height: calc(100% - 56px)"
+  <div class="w-100 position-relative overflow-hidden" style="height: calc(100% - 56px)"
   :class="{'bg-black': $route.path === '/'}">
     <img v-if="$route.path === '/'" id="background" :src="backgroundPath"
-    class="position-absolute bottom-0 start-0 w-100 h-100 object-fit-cover opacity-75" style="z-index:0;"/>
+    class="position-absolute bottom-0 start-0 object-fit-cover opacity-75" style="z-index:0;"/>
     <div class="position-absolute top-0 start-0 w-100 h-100">
       <br>
       <div class="container" style="z-index:3;"
@@ -18,8 +18,8 @@
       </div>
     </div>
     <div class="position-absolute bottom-0 start-0 w-100 d-flex flex-column gap-2 p-4" v-if="$route.path === '/'">
-      <a id="email" class="fw-semibold text-white" style="text-decoration:none" :href="`mailto:${email}`">&#128231; {{ email }}</a>
-      <a id="phone" class="fw-semibold text-white" style="text-decoration:none" :href="`tel:${phone}`">&#128222; {{ formatPhone() }}</a>
+      <a id="email" class="title text-white" style="text-decoration:none" :href="`mailto:${email}`">&#128231; {{ email }}</a>
+      <a id="phone" class="title text-white" style="text-decoration:none" :href="`tel:${phone}`">&#128222; {{ formatPhone() }}</a>
     </div>
   </div>
 </template>
