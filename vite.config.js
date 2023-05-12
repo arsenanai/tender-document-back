@@ -45,6 +45,10 @@ export default defineConfig({
                 find: 'vue-i18n',
                 replacement: 'vue-i18n/dist/vue-i18n.cjs.js',
             },
+            {
+                find: 'vue',
+                replacement: 'vue/dist/vue.esm-bundler.js'
+            },
         ],
     },
     css: {
