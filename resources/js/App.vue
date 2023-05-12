@@ -51,7 +51,7 @@ export default {
       || this.$route.path.includes('/create'));
     },
     formatPhone() {
-      return this.phone.replace(/\D+/g, '').replace(/(\d{1})(\d{3})(\d{3})(\d{2})(\d{2})/, '+$1 ($2) $3-$2-$2');
+      return this.phone.replace(/\D+/g, '').replace(/(\d{1})(\d{3})(\d{3})(\d{2})(\d{2})/, '+$1 ($2) $3-$4-$5');
     }
   }
 }
