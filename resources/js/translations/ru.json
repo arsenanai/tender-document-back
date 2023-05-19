@@ -3,7 +3,7 @@
   "Entry Code": "ID номер",
   "Invalid entry code format": "Неверный формат ID номера",
   "Check": "Проверить",
-  "Entry code is valid": "Подтверждает, что ID был предоставлен компанией Sana Pro",
+  "Entry code is valid": "Подтверждает, что ID был предоставлен компанией {company}",
   "Subpartner": "Компания",
   "Entry code is invalid": "Этот ID номер не зарегистрирован в нашей системе",
   "Server side error, contact vendor": "Произошла программная ошибка, обратитесь в техническую поддержку",

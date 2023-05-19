@@ -83,7 +83,7 @@ export default {
             console.log('response', response);
             if(response.status === 200 && response.data.answer === 'correct') {
               this.alert.type = 'text-success';
-              this.alert.message = `${this.$t('Entry code is valid')}
+              this.alert.message = `${this.$t('Entry code is valid', { company: import.meta.env.VITE_BRAND_TITLE })}
                 <br><i>${this.$t('Subpartner')}</i>: <b>${response.data.details.subpartner.name}</b>`;
             } else {
               this.alert.type = 'text-danger';
