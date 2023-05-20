@@ -58,7 +58,7 @@ export default {
     },
   },
   mounted() {
-    // setTimeout(() => {this.prepareDownload()},1000);
+    setTimeout(() => {this.prepareDownload()},1000);
   }
 }
 </script>
