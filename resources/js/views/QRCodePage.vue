@@ -10,12 +10,17 @@
           :height="300"
           :value="getURL()"
           :qrOptions="{ errorCorrectionLevel: 'H' }"
-          :imageOptions="{ hideBackgroundDots: true, imageSize: 0.4, margin: 0 }"
+          :image="imageURL"
+          :imageOptions="{ 
+            hideBackgroundDots: true, 
+            imageSize: 0.4, 
+            margin: 5 
+          }"
           :dotsOptions="{
-            type: 'square',
+            type: 'extra-rounded',
             color: '#000000',
           }"
-          :cornersSquareOptions="{ type: 'square', color: '#000000' }"
+          :cornersSquareOptions="{ type: 'extra-rounded', color: '#000000' }"
           fileExt="png"
           myclass="my-code-qr"
           imgclass="code-qr-img"
@@ -33,6 +38,11 @@ export default {
   components: {
     QRCodeVue3
   },
+  data() {
+    return {
+      imageURL: import.meta.env.VITE_LOGO_URL,
+    }
+  },
   methods: {
     getURL() {
       return `${import.meta.env.VITE_APP_URL}?check=${this.$route.params.fullId}`;
@@ -48,7 +58,7 @@ export default {
     },
   },
   mounted() {
-    setTimeout(() => {this.prepareDownload()},1000);
+    // setTimeout(() => {this.prepareDownload()},1000);
   }
 }
 </script>
