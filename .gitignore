@@ -7,4 +7,4 @@ Homestead.yaml
 .DS_Store
 node_modules
 backups
-public/build
+/public/build/*
