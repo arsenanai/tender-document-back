@@ -4,6 +4,7 @@ php artisan down
 git fetch --all
 git reset --hard origin/main
 composer install -n
+npm i
 npm run build
 php artisan optimize:clear
 php artisan up
