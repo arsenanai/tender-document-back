@@ -1,39 +1,6 @@
-const CLIENT_ID = '928580067145-b9ub9jr25h1k9dejl47gak2nvjjqsu4c.apps.googleusercontent.com';
-const API_KEY = 'AIzaSyDxk9JJ5BL_7gtEGJFNPRIGLo3qEOTsApk';
-const SPREADSHEET_ID = '1Di6ReUjyV6OO4oaLZKTomfKgguvqn8SATu6lV0huZxM';
-const SHEET_ID = 'Consolidated';
-const SCOPES = 'https://www.googleapis.com/auth/spreadsheets.readonly';
 
-let tokenClient;
-let gapiInited = false;
-let gisInited = false;
 
-window.onbeforeunload = closingCode;
 
-function gapiLoaded() {
-    gapi.load('client', initializeGapiClient);
-}
-async function initializeGapiClient() {
-    await gapi.client.init({
-        apiKey: API_KEY,
-    });
-    gapiInited = true;
-    maybeEnableButtons();
-}
-function gisLoaded() {
-    tokenClient = google.accounts.oauth2.initTokenClient({
-        client_id: CLIENT_ID,
-        scope: SCOPES,
-        callback: '', // defined later
-    });
-    gisInited = true;
-    maybeEnableButtons();
-}
-function maybeEnableButtons() {
-    if (gapiInited && gisInited) {
-        document.getElementById('authorize_button').style.visibility = 'visible';
-    }
-}
 function handleAuthClick() {
     tokenClient.callback = async (resp) => {
         if (resp.error !== undefined) {
@@ -52,14 +19,6 @@ function handleAuthClick() {
         // Skip display of account chooser and consent dialog for an existing session.
         tokenClient.requestAccessToken({prompt: ''});
     // }
-}
-function closingCode() {
-    const token = gapi.client.getToken();
-    if (token !== null) {
-        google.accounts.oauth2.revoke(token.access_token);
-        gapi.client.setToken('');
-        document.getElementById('content').innerText = '';
-    }
 }
 //   async function listMajors() {
 //     let response;
@@ -86,7 +45,7 @@ function closingCode() {
 async function checkCertificate(range, valueInputOption, _values, callback) {
     let values = [
         [
-        // Cell values ...
+            // Cell values ...
         ],
         // Additional rows ...
     ];

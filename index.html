@@ -1,18 +1,43 @@
 <!DOCTYPE html>
-<html>
+<html class="w-full h-full">
   <head>
-    <title>Sheets API Quickstart</title>
+    <title></title>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="main01.css">
+    <link href="https://unpkg.com/tailwindcss@^1.0/dist/tailwind.min.css" rel="stylesheet">
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+    <script src="https://apis.google.com/js/api.js"></script>
+    <script src="https://accounts.google.com/gsi/client"></script>
   </head>
-  <body>
-    <p>Ustaz Pro Check Certificates</p>
-    <!-- <button id="authorize_button" onclick="handleAuthClick()">Authorize</button> -->
-    <pre id="content" style="white-space: pre-wrap;"></pre>
-
-    <script type="text/javascript" src="main01.js"></script>
-    <script async defer src="https://apis.google.com/js/api.js" onload="gapiLoaded()"></script>
-    <script async defer src="https://accounts.google.com/gsi/client" onload="gisLoaded()"></script>
+  <body class="w-full h-full relative">
+    <div class="h-full overflow-hidden px-3 py-4 bg-gray-200 flex justify-center items-center">
+      <div class="w-full max-w-lg" id="vapp">
+        <form class="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
+          <h1 class="block text-gray-700 text-base font-bold text-center mb-2">
+             {{ COMPANY_NAME }} | {{ t( 'certificates_check' ) }}
+          </h1>
+          <div class="mb-4">
+            <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" v-model="certificate" type="text">
+          </div>
+          <div class="flex items-center justify-between">
+            <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+            type="button" :disabled="!gisInited || !gapiInited">
+              {{ t( 'check_label' ) }}
+            </button>
+            <div>
+              <a v-for="( loc, index ) in locales" :id="index" @click="changeLocale( loc.code )"
+              class="inline-block align-baseline font-bold text-sm text-blue-500 hover:text-blue-800 ml-2"
+              :class="{'underline': locale == loc.code}">
+                {{ loc.name }}
+              </a>
+            </div>
+          </div>
+        </form>
+        <p class="text-center text-gray-500 text-xs">
+          <a href="" target="_blank">{{ t( 'contact_text' ) }}</a>
+        </p>
+      </div>
+    </div>
+    <script type="text/javascript" src="vue01.js"></script>
   </body>
 </html>
