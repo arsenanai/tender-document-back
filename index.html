@@ -5,26 +5,36 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="https://unpkg.com/tailwindcss@^1.0/dist/tailwind.min.css" rel="stylesheet">
+    <!-- load this in dev mode -->
     <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+    <!-- load this in prod mode -->
+    <!-- <script src="https://unpkg.com/vue@3/dist/vue.global.prod.js"></script> -->
     <script src="https://apis.google.com/js/api.js"></script>
     <script src="https://accounts.google.com/gsi/client"></script>
   </head>
   <body class="w-full h-full relative">
     <div class="h-full overflow-hidden px-3 py-4 bg-gray-200 flex justify-center items-center">
       <div class="w-full max-w-lg" id="vapp">
-        <form class="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
+        <form class="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4" @submit.prevent="submitCheck()">
           <h1 class="block text-gray-700 text-base font-bold text-center mb-2">
              {{ COMPANY_NAME }} | {{ t( 'certificates_check' ) }}
           </h1>
           <div class="mb-4">
-            <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" v-model="certificate" type="text">
+            <p class="text-red-500 text-xs italic" v-if="formIsValid && !isInteractionAllowed">{{ t( 'contact_support' ) }}</p>
+            <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" v-model="certificate" type="text" required
+            :class="{ 'border border-red-500': !formIsValid }" @keyup="state = 'submitting'" @blur="state = 'loading'">
+            <p class="text-red-500 text-xs italic h-4"><span v-show="!formIsValid">{{ t( validation ) }}</span></p>
           </div>
           <div class="flex items-center justify-between">
-            <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
-            type="button" :disabled="!gisInited || !gapiInited">
-              {{ t( 'check_label' ) }}
-            </button>
+            <input class="text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+            :class="{
+                'bg-blue-500 hover:bg-blue-700 cursor-auto': isInteractionAllowed && formIsValid, 
+                'bg-gray-500 cursor-not-allowed'           : !( isInteractionAllowed && formIsValid ) 
+              }"
+            type="submit" :disabled="!isInteractionAllowed" :value="t( 'check_label' )"/>
             <div>
+              <span class="ml-2">{{state}}</span>
+              <span class="ml-2">{{validation}}</span>
               <a v-for="( loc, index ) in locales" :id="index" @click="changeLocale( loc.code )"
               class="inline-block align-baseline font-bold text-sm text-blue-500 hover:text-blue-800 ml-2"
               :class="{'underline': locale == loc.code}">
@@ -38,6 +48,7 @@
         </p>
       </div>
     </div>
+    <script type="text/javascript" src="gsh01.js"></script>
     <script type="text/javascript" src="vue01.js"></script>
   </body>
 </html>
