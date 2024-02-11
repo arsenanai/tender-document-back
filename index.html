@@ -20,21 +20,29 @@
              {{ COMPANY_NAME }} | {{ t( 'certificates_check' ) }}
           </h1>
           <div class="mb-4">
-            <p class="text-red-500 text-xs italic" v-if="formIsValid && !isInteractionAllowed">{{ t( 'contact_support' ) }}</p>
+            
             <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" v-model="certificate" type="text" required
             :class="{ 'border border-red-500': !formIsValid }" @keyup="state = 'submitting'" @blur="state = 'loading'">
-            <p class="text-red-500 text-xs italic h-4"><span v-show="!formIsValid">{{ t( validation ) }}</span></p>
+            <p class="text-red-500 text-sm md:text-base italic" v-if="!formIsValid">{{ t( validation ) }}</p>
+            <p class="text-green-500 text-sm md:text-base italic" v-if="state === 'success' && response !== null">
+              <span class="text-capitalize">{{ t('entry_found') }}</span> <br>
+              <span>{{ t('full_name') }} - <b>{{ response["Фамилия"] }} {{ response["Имя"] }}</b></span><br>
+              <span>{{ t('course_name') }} - <b>{{ response["Наименование программы курса"] }}</b></span><br>
+              <span>{{ t('spent_hours') }} - <b>{{ response["Количество часов"] }}</b></span><br>
+              <span>{{ t('start_date') }} - <b>{{ response["Дата начала обучения"] }}</b></span><br>
+              <span>{{ t('end_date') }} - <b>{{ response["Дата завершения обучения"] }}</b></span><br>
+              <span>{{ t('certificate_number') }}</b> - <b>{{ response["Номер сертификата"] }}</b></span><br>
+            </p>
+            <p class="text-orange-500 text-sm md:text-base italic" v-if="state === 'loading' && notFoundEverywhere()">{{ t( 'entry_not_found' ) }}</p>
           </div>
           <div class="flex items-center justify-between">
             <input class="text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
             :class="{
-                'bg-blue-500 hover:bg-blue-700 cursor-auto': isInteractionAllowed && formIsValid, 
-                'bg-gray-500 cursor-not-allowed'           : !( isInteractionAllowed && formIsValid ) 
+                'bg-blue-500 hover:bg-blue-700 cursor-auto': formIsValid, 
+                'bg-gray-500 cursor-not-allowed'           : !( formIsValid ) 
               }"
-            type="submit" :disabled="!isInteractionAllowed" :value="t( 'check_label' )"/>
+            type="submit" :disabled="!formIsValid" :value="t( 'check_label' )"/>
             <div>
-              <span class="ml-2">{{state}}</span>
-              <span class="ml-2">{{validation}}</span>
               <a v-for="( loc, index ) in locales" :id="index" @click="changeLocale( loc.code )"
               class="inline-block align-baseline font-bold text-sm text-blue-500 hover:text-blue-800 ml-2"
               :class="{'underline': locale == loc.code}">
@@ -44,11 +52,12 @@
           </div>
         </form>
         <p class="text-center text-gray-500 text-xs">
-          <a href="" target="_blank">{{ t( 'contact_text' ) }}</a>
+          <a href="mailto:arsenanai@gmail.com" target="_blank">{{ t( 'contact_text' ) }}</a>
         </p>
       </div>
     </div>
     <script type="text/javascript" src="gsh01.js"></script>
-    <script type="text/javascript" src="vue01.js"></script>
+    <script type="text/javascript" src="mes01.js"></script>
+    <script type="text/javascript" src="app01.js"></script>
   </body>
 </html>
