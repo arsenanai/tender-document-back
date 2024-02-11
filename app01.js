@@ -30,6 +30,13 @@ createApp({
                 console.log( 'validation passed' );
                 this.searchData()
             }
+        },
+        getButtonLabel() {
+            if( this.state === 'loading' && !this.notFoundEverywhere()) {
+                return this.t( 'loading' )
+            } else {
+                return this.t( 'check_label' )
+            }
         }
     },
     created() {

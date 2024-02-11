@@ -32,7 +32,7 @@ const gsh = {
                     this.state = 'success'
                     this.response = response[i]
                     this.controller.abort()
-                    break
+                    return
                 }
                 i++
             }
@@ -45,7 +45,7 @@ const gsh = {
             return body
         },
         notFoundEverywhere() {
-            return ! (this.answers.length < this.sheets.length)
+            return this.answers.length >= this.sheets.length
         }
 
         // controller.abort();
