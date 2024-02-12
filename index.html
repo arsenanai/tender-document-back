@@ -4,11 +4,13 @@
     <title></title>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" href="favicon.ico" sizes="any">
+    <link rel="icon" href="favicon.svg" type="image/svg+xml">
     <link href="https://unpkg.com/tailwindcss@^1.0/dist/tailwind.min.css" rel="stylesheet">
     <!-- load this in dev mode -->
-    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+    <!-- <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script> -->
     <!-- load this in prod mode -->
-    <!-- <script src="https://unpkg.com/vue@3/dist/vue.global.prod.js"></script> -->
+    <script src="https://unpkg.com/vue@3/dist/vue.global.prod.js"></script>
     <script src="https://apis.google.com/js/api.js"></script>
     <script src="https://accounts.google.com/gsi/client"></script>
   </head>
@@ -16,25 +18,16 @@
     <div class="h-full overflow-hidden px-3 py-4 bg-gray-200 flex justify-center items-center">
       <div class="w-full max-w-lg" id="vapp">
         <form class="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4" @submit.prevent="submitCheck()">
-          <h1 class="block text-gray-700 text-base font-bold text-center mb-2">
-             {{ COMPANY_NAME }} | {{ t( 'certificates_check' ) }}
-          </h1>
-          <div class="mb-4">
-            
-            <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" v-model="certificate" type="text" required
-            :class="{ 'border border-red-500': !formIsValid }" @keyup="state = 'submitting'" @blur="state = 'loading'">
-            <p class="text-red-500 text-sm md:text-base italic" v-if="!formIsValid">{{ t( validation ) }}</p>
-            <p class="text-green-500 text-sm md:text-base italic" v-if="state === 'success' && response !== null">
-              <span class="text-capitalize">{{ t('entry_found') }}</span> <br>
-              <span>{{ t('full_name') }} - <b>{{ response["Фамилия"] }} {{ response["Имя"] }}</b></span><br>
-              <span>{{ t('course_name') }} - <b>{{ response["Наименование программы курса"] }}</b></span><br>
-              <span>{{ t('spent_hours') }} - <b>{{ response["Количество часов"] }}</b></span><br>
-              <span>{{ t('start_date') }} - <b>{{ response["Дата начала обучения"] }}</b></span><br>
-              <span>{{ t('end_date') }} - <b>{{ response["Дата завершения обучения"] }}</b></span><br>
-              <span>{{ t('certificate_number') }}</b> - <b>{{ response["Номер сертификата"] }}</b></span><br>
-            </p>
-            <p class="text-orange-500 text-sm md:text-base italic" v-if="state === 'loading' && notFoundEverywhere()">{{ t( 'entry_not_found' ) }}</p>
+          <div class="flex justify-center items-center h-20 mb-8 mt-4">
+            <img class="h-20" src="logo.svg" alt="">
           </div>
+          <h1 class="block text-gray-700 text-base font-bold text-center mb-2">
+            {{ t( 'certificates_check' ) }}
+          </h1>
+          <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" v-model="certificate" type="text" required
+          :class="{ 'border border-red-500': !formIsValid }" @focus="state = 'submitting'">
+          <p class="text-red-500 text-sm md:text-base leading-normal italic" v-if="!formIsValid">{{ t( validation ) }}</p>
+          <p class="h-6" v-else></p>
           <div class="flex items-center justify-between">
             <input class="text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
             :class="{
@@ -50,6 +43,17 @@
               </a>
             </div>
           </div>
+          <hr class="my-2" v-if="(state === 'success' && response !== null) || (state === 'loading' && notFoundEverywhere())">
+          <p class="text-green-500 text-sm md:text-base italic" v-if="state === 'success' && response !== null">
+            <span class="text-capitalize">{{ t('entry_found') }}</span> <br>
+            <span>{{ t('full_name') }} - <b>{{ response["Фамилия"] }} {{ response["Имя"] }}</b></span><br>
+            <span>{{ t('course_name') }} - <b>{{ response["Наименование программы курса"] }}</b></span><br>
+            <span>{{ t('spent_hours') }} - <b>{{ response["Количество часов"] }}</b></span><br>
+            <span>{{ t('start_date') }} - <b>{{ response["Дата начала обучения"] }}</b></span><br>
+            <span>{{ t('end_date') }} - <b>{{ response["Дата завершения обучения"] }}</b></span><br>
+            <span>{{ t('certificate_number') }}</b> - <b>{{ response["Номер сертификата"] }}</b></span><br>
+          </p>
+          <p class="text-orange-500 text-sm md:text-base italic" v-if="state === 'loading' && notFoundEverywhere()">{{ t( 'entry_not_found' ) }}</p>
         </form>
         <p class="text-center text-gray-500 text-xs">
           <a href="mailto:arsenanai@gmail.com" target="_blank">{{ t( 'contact_text' ) }}</a>
@@ -57,7 +61,7 @@
       </div>
     </div>
     <script type="text/javascript" src="gsh02.js"></script>
-    <script type="text/javascript" src="mes02.js"></script>
-    <script type="text/javascript" src="app02.js"></script>
+    <script type="text/javascript" src="mes03.js"></script>
+    <script type="text/javascript" src="app03.js"></script>
   </body>
 </html>

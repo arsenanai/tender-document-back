@@ -5,7 +5,6 @@ createApp({
     data() {
         return {
             // Application constants
-            COMPANY_NAME: 'Ustaz PRO',
             certificate : '',
             state       : 'submitting',
             validation  : 'validation_rules',
@@ -18,7 +17,7 @@ createApp({
     },
     methods: {
         setTitle() {
-            document.title = this.COMPANY_NAME + ' | ' + this.t( 'certificates_check' )
+            document.title = this.t( 'certificates_check' )
         },
         async submitCheck() {
             console.log( 'form submit is triggered' );
