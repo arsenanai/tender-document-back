@@ -1,9 +1,8 @@
 <template>
   <Header class="flex-grow-0" style="z-index:2;" @locale-changed="changeLocale"/>
-  <div class="w-100 position-relative overflow-hidden" style="height: calc(100% - 56px)"
-  :class="{'bg-black': $route.path === '/'}">
-    <img v-if="$route.path === '/'" id="background" :src="backgroundPath"
-    class="position-absolute bottom-0 start-0 object-cover opacity-75" style="z-index:0;"/>
+  <div class="w-100 position-relative overflow-hidden manual-height" id="main-container"
+  :class="{'has-cover': $route.path === '/'}">
+    <div class="bg-black w-100 h-100 opacity-25"></div>
     <div class="position-absolute top-0 start-0 w-100 h-100">
       <br>
       <div class="container" style="z-index:3;"
@@ -44,6 +43,9 @@ export default {
   created() {
     this.fetchUser();
   },
+  mounted() {
+    this.setBackground();
+  },
   methods: {
     filterRoutes() {
       return !(['/login','/'].includes(this.$route.path)
@@ -52,7 +54,12 @@ export default {
     },
     formatPhone() {
       return this.phone.replace(/\D+/g, '').replace(/(\d{1})(\d{3})(\d{3})(\d{2})(\d{2})/, '+$1 ($2) $3-$4-$5');
-    }
+    },
+    setBackground() {
+      if( this.$route.path === '/' ) {
+        document.getElementById('main-container').style.backgroundImage = `url('${this.backgroundPath}')`;
+      }
+    },
   }
 }
 </script>
@@ -71,5 +78,13 @@ export default {
 .fade-enter-to, .fade-leave-from {
   opacity: 1;
   margin-top: 0px;
+}
+.has-cover {
+  background-size: cover;
+  background-position: center center;
+  background-repeat: no-repeat;
+}
+.manual-height {
+  height: calc(100% - 56px);
 }
 </style>
