@@ -23,6 +23,7 @@ class PartnerFactory extends Factory
     {
     	return [
     	    'name' => $this->faker->name . ' testing',
+            'bin' => $this->faker->unique()->numberBetween(111111111111, 999999999999)
     	];
     }
 }

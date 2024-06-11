@@ -12,6 +12,7 @@ class PartnerController extends Controller
 {
     private $byRules = [
         'name' => 'string|required',
+        'bin' => 'string|required|unique'
     ];
 
     public function index(Request $request)
