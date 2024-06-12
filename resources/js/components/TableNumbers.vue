@@ -61,6 +61,7 @@
                         <th scope="col">
                             {{ $t("Actions") }}
                         </th>
+                        <th scope="col">Толығырақ</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -94,6 +95,13 @@
                                 >{{ $t("Delete") }}</a
                             >
                         </td>
+                        <td>
+                            <a
+                                class="btn btn-light btn-sm"
+                                @click="$emit('on-show', data)"
+                                >Көру</a
+                            >
+                        </td>
                     </tr>
                 </tbody>
             </table>
@@ -110,7 +118,7 @@ import SearchForm from "./SearchForm.vue";
 import common from "@/mixins/common";
 
 export default {
-    name: "Table",
+    name: "TableNumbers",
     mixins: [common],
     props: {
         title: String,
