@@ -8,9 +8,9 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 class Subpartner extends Model
 {
     use HasFactory;
-    
+
     protected $fillable = [
-        'name', 'partner_id'
+        'name', 'partner_id', 'bin'
     ];
 
     public function partner()

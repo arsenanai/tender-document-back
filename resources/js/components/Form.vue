@@ -71,6 +71,7 @@
                                     'time',
                                     'range',
                                     'color',
+                                    'bin',
                                 ].includes(fillable.type)
                             "
                             class="form-control"

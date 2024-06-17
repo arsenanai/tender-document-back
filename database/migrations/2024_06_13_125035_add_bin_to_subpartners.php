@@ -13,8 +13,9 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::table('partners', function (Blueprint $table) {
+        Schema::table('subpartners', function (Blueprint $table) {
             $table->string('bin')->unique();
+            //
         });
     }
 
@@ -25,8 +26,9 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::table('partners', function (Blueprint $table) {
+        Schema::table('subpartners', function (Blueprint $table) {
             $table->dropColumn('bin');
+            //
         });
     }
 };

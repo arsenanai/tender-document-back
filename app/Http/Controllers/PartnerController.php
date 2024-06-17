@@ -12,21 +12,19 @@ class PartnerController extends Controller
 {
     private $byRules = [
         'name' => 'string|required',
-        'bin' => 'string|required|unique'
+        'bin' => 'string|required|unique:partners'
     ];
 
     public function index(Request $request)
     {
         $r = Partner::where('id', '>', -1);
-        try{
+        try {
             if ($request->has('search')) {
                 $s = $request->input('search');
                 $r->where('id', $s)
-                    ->orWhere('name', 'like', "%$s%")
-                    ;
+                    ->orWhere('name', 'like', "%$s%");
             }
-        } catch(\Throwable $t) {
-
+        } catch (\Throwable $t) {
         }
         return new AnyResource($r->orderBy('id', 'desc')->paginate(config('cnf.PAGINATION_SIZE')));
     }
