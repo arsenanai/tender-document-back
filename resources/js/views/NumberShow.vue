@@ -1,37 +1,34 @@
 <template>
-    <Form
+    <NumberForm
         :entity="entity"
         :submit="submit"
         :alert="alert"
         :loading="loading"
-        @onSubmit="onSubmit('Creation')"
+        @onSubmit="onSubmit('Updation')"
     />
 </template>
 
 <script>
-import Form from "@/components/Form.vue";
+import NumberForm from "@/components/NumberForm.vue";
 import common from "@/mixins/common";
 import forms from "@/mixins/forms";
 
 export default {
+    name: "NumberShow",
     components: {
-        Form,
+        NumberForm,
     },
-    name: "SubpartnerCreate",
     mixins: [common, forms],
     data() {
         return {
             entity: {
-                label: this.$t("Subpartner Create Form"),
-                route: "subpartners",
-                pad: parseInt(import.meta.env.VITE_PAD_SUBPARTNER_ID),
+                label: this.$t("Number Edit Form"),
+                route: "numbers",
                 fillables: [
                     {
-                        codename: "name",
-                        type: "text",
-                        title: this.$t("Name"),
+                        codename: "id",
+                        type: "hidden",
                         required: true,
-                        validationMessage: this.$t("This field is required"),
                     },
                     {
                         codename: "partner_id",
@@ -49,23 +46,29 @@ export default {
                         validationMessage: this.$t("This field is required"),
                     },
                     {
-                        codename: "bin",
+                        codename: "lotNumber",
                         type: "text",
-                        title: this.$t("BIN"),
+                        title: this.$t("Lot number"),
+                        required: true,
+                        validationMessage: this.$t("This field is required"),
+                    },
+                    {
+                        codename: "procurementNumber",
+                        type: "text",
+                        title: this.$t("Procurement number"),
                         required: true,
                         validationMessage: this.$t("This field is required"),
                     },
                 ],
                 // fillables here
-                name: null,
-                comments: null,
+                name: null, // must match the codename
                 partner_id: null,
                 partner: {
                     name: null,
                 },
                 // fillables end
             },
-            submit: this.$t("Create"),
+            submit: this.$t("Update"),
             loading: false,
             alert: {
                 type: null,
@@ -73,6 +76,9 @@ export default {
             },
             data: null,
         };
+    },
+    created() {
+        this.populateData(this.$route, this.entity, this.data);
     },
 };
 </script>

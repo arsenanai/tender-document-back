@@ -13,24 +13,24 @@ class SubpartnerController extends Controller
     private $byRules = [
         'name' => 'string|required',
         'partner_id' => 'required|exists:partners,id',
+        'bin' => 'string|required|unique:subpartners'
     ];
-    
+
     public function index(Request $request)
     {
         $r = Subpartner::with('partner');
-        try{
+        try {
             if ($request->has('search')) {
                 $s = $request->input('search');
                 $r->where('id', $s)
                     ->orWhere('name', 'like', "%$s%");
                 if (!$request->has('parent')) {
-                    $r->orWhereHas('partner', function($query) use($s){
+                    $r->orWhereHas('partner', function ($query) use ($s) {
                         $query->where('name', 'like', "%$s%");
                     });
                 }
             }
-        } catch(\Throwable $t) {
-
+        } catch (\Throwable $t) {
         }
         if ($request->has('parent')) {
             $p = $request->input('parent');
