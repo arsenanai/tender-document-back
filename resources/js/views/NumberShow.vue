@@ -1,5 +1,5 @@
 <template>
-    <NumberForm
+    <NumberDetail
         :entity="entity"
         :submit="submit"
         :alert="alert"
@@ -9,14 +9,14 @@
 </template>
 
 <script>
-import NumberForm from "@/components/NumberForm.vue";
+import NumberDetail from "@/components/NumberDetail.vue";
 import common from "@/mixins/common";
 import forms from "@/mixins/forms";
 
 export default {
     name: "NumberShow",
     components: {
-        NumberForm,
+        NumberDetail,
     },
     mixins: [common, forms],
     data() {

@@ -16,6 +16,7 @@ import Numbers from "@/views/Numbers.vue";
 import NumberCreate from "@/views/NumberCreate.vue";
 import NumberEdit from "@/views/NumberEdit.vue";
 import NumberShow from "@/views/NumberShow.vue";
+import NumberDetail from "@/components/NumberDetail.vue";
 import QRCodePage from "@/views/QRCodePage.vue";
 
 const router = createRouter({
@@ -72,9 +73,14 @@ const router = createRouter({
             component: NumberEdit,
             name: "number.edit",
         },
+        // {
+        //     path: "/numbers/show/:id",
+        //     component: NumberShow,
+        //     name: "number.show",
+        // },
         {
-            path: "/numbers/show/:id",
-            component: NumberShow,
+            path: "/numbers/show/:lotNumber",
+            component: NumberDetail,
             name: "number.show",
         },
         {
