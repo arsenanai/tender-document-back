@@ -27,9 +27,9 @@
                                     <td
                                         :class="{
                                             'table-success':
-                                                posts.comment === 'ok',
+                                                posts.isTextOk === true,
                                             'table-danger':
-                                                posts.comment !== 'ok',
+                                                posts.isTextOk === false,
                                         }"
                                     >
                                         {{ posts.isTextOk ? "Дұрыс" : "Қате" }}
@@ -40,9 +40,11 @@
                                     <td
                                         :class="{
                                             'table-success':
-                                                posts.comment === 'ok',
+                                                posts.isLabWorkAmountOk ===
+                                                true,
                                             'table-danger':
-                                                posts.comment !== 'ok',
+                                                posts.isLabWorkAmountOk ===
+                                                false,
                                         }"
                                     >
                                         {{
@@ -57,9 +59,11 @@
                                     <td
                                         :class="{
                                             'table-success':
-                                                posts.comment === 'ok',
+                                                posts.isProjectAmountOk ===
+                                                true,
                                             'table-danger':
-                                                posts.comment !== 'ok',
+                                                posts.isProjectAmountOk ===
+                                                false,
                                         }"
                                     >
                                         {{
@@ -96,6 +100,7 @@
                         </table>
                     </div>
                 </div>
+                <p v-else-if="noData">Мәліметтер енгізілмеген</p>
                 <p v-else>Loading...</p>
             </div>
         </div>
@@ -113,6 +118,7 @@ export default {
     data() {
         return {
             posts: null,
+            noData: false,
             url: import.meta.env.VITE_PARSER_URL,
         };
     },
@@ -127,18 +133,29 @@ export default {
             axios
                 .get(`${this.url}/announcement/verify-result/${lotNumb}`)
                 .then((response) => {
-                    this.posts = response.data;
+                    const announcement = response.data.result.announcement;
+                    const numberId = response.data.result.id;
+                    const e = 3;
+                    if (announcement !== 0 && announcement !== null) {
+                        response.data.result.formattedDate =
+                            this.formatDateTime(e);
+                        this.posts = response.data.result;
+                    } else {
+                        this.noData = true;
+                    }
                 })
                 .catch((error) => {
                     console.error("Error fetching posts:", error);
                 });
         },
-        formatDateTime(dateTime) {
-            const date = new Date(dateTime);
+
+        formatDateTime(dateTimee) {
+            const date = new Date(dateTimee);
             const formattedDate = date.toISOString().split("T")[0];
             const formattedTime = date.toTimeString().split(" ")[0].slice(0, 5);
             return `${formattedDate} ${formattedTime}`;
         },
+
         goBack() {
             this.$router.go(-1);
         },
