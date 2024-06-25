@@ -96,8 +96,8 @@
                                     typeof data.result[fillable.name] ===
                                     "boolean"
                                         ? data.result[fillable.name]
-                                            ? $t("дұрыс")
-                                            : $t("қате")
+                                            ? $t("true")
+                                            : $t("false")
                                         : data.result[fillable.name]
                                 }}
 

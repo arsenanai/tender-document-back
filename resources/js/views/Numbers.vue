@@ -39,7 +39,7 @@ export default {
                         name: "lotNumber",
                     },
                     {
-                        label: this.$t("Procurement number") + "hELLOde",
+                        label: this.$t("Procurement number"),
                         name: "procurementNumber",
                     },
                     {

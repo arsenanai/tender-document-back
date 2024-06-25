@@ -96,8 +96,8 @@ export default {
                 },
             })
                 .then((response) => {
-                    console.log(response.data.data[0].result);
-                    console.log("from loto", response.data.current_page);
+                    // console.log(response.data.data[0].result);
+                    // console.log("from loto", response.data.current_page);
                     this.entity.page = response.data;
                     this.currentPage = response.data.current_page;
                 })
