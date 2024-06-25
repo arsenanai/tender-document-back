@@ -6,12 +6,6 @@
         <div
             class="d-flex flex-column flex-md-row align-items-center justify-content-between gap-2 mb-2"
         >
-            <button
-                class="btn btn-sm btn-light"
-                @click="$emit('new-entity', entity.route)"
-            >
-                {{ $t("Add New") }}
-            </button>
             <search-form @on-search="onSearch" />
             <div
                 class="d-flex flex-row align-items-center gap-2"
@@ -49,8 +43,8 @@
             >
                 <thead>
                     <tr>
-                        <th scope="col" v-if="entity.withIndex">&#x2116;</th>
-                        <th scope="col" v-else>ID</th>
+                        <!-- <th scope="col" v-if="entity.withIndex">&#x2116;</th>
+                        <th scope="col" v-else>ID</th> -->
                         <th
                             scope="col"
                             v-for="(fillable, i) in entity.fillables"
@@ -65,9 +59,9 @@
                 </thead>
                 <tbody>
                     <tr v-for="(data, i) in entity.page.data" :key="i">
-                        <td class="fw-bold font-monospace">
+                        <!-- <td class="fw-bold font-monospace">
                             {{ getId(data, i) }}
-                        </td>
+                        </td> -->
                         <td
                             v-for="(fillable, j) in entity.fillables"
                             :key="j"
