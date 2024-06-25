@@ -26,7 +26,7 @@ export default {
         return {
             url: import.meta.env.VITE_PARSER_URL,
             entity: {
-                label: this.$t("Numbers"),
+                label: this.$t("ExecutedLot"),
                 route: "executedlot",
                 pad: parseInt(import.meta.env.VITE_PAD_PARTNER_ID),
                 fillables: [
@@ -36,11 +36,11 @@ export default {
 
                         raw: (data) => data.partnerName,
                     },
-                    {
-                        label: this.$t("Announcement"),
-                        name: "announcement",
-                        raw: (data) => data.result.announcement,
-                    },
+                    // {
+                    //     label: this.$t("Announcement"),
+                    //     name: "announcement",
+                    //     raw: (data) => data.result.announcement,
+                    // },
                     {
                         label: this.$t("Number"),
                         name: "number",
@@ -72,25 +72,25 @@ export default {
                         name: "isProjectAmountOk",
                         raw: (data) => data.result.isProjectAmountOk,
                     },
-                    {
-                        label: this.$t("Comment"),
-                        name: "comment",
-                        raw: (data) => data.result.comment,
-                    },
-                    {
-                        label: this.$t("Modified at"),
-                        name: "Modified at",
-                        data: "raw",
-                        raw: (data) =>
-                            data.modified.replaceAll("T", " ").substring(0, 16),
-                    },
+                    // {
+                    //     label: this.$t("Comment"),
+                    //     name: "comment",
+                    //     raw: (data) => data.result.comment,
+                    // },
+                    // {
+                    //     label: this.$t("Modified at"),
+                    //     name: "Modified at",
+                    //     data: "raw",
+                    //     raw: (data) =>
+                    //         data?.modified?.replaceAll("T", " ").substring(0, 16),
+                    // },
 
-                    {
-                        label: this.$t("Created at"),
-                        data: "raw",
-                        raw: (data) =>
-                            data.created.replaceAll("T", " ").substring(0, 16),
-                    },
+                    // {
+                    //     label: this.$t("Created at"),
+                    //     data: "raw",
+                    //     raw: (data) =>
+                    //         data?.created?.replaceAll("T", " ").substring(0, 16),
+                    // },
                 ],
                 page: null,
             },

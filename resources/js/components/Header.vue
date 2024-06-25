@@ -61,7 +61,7 @@
                             active-class="active"
                             to="/executedlot"
                         >
-                            {{ $t("Executed Lot") }}
+                            {{ $t("ExecutedLot") }}
                         </router-link>
                     </li>
                     <li class="nav-item" v-if="authenticated()">
