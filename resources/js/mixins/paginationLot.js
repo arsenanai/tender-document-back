@@ -16,11 +16,11 @@ export default {
             this.goTo(`/${this.entity.route}/create`);
         },
         onNext() {
-            this.currentPage =
-                this.currentPage >= this.entity.page.last_page
-                    ? this.entity.page.last_page - 1
-                    : this.currentPage;
+            this.currentPage = this.entity.page.current_page;
 
+            // console.log("currenpage:", this.currentPage);
+            // console.log("entityroute:", this.entity.route);
+            // console.log("entityroutededee:", this.entity);
             this.goTo({
                 path: `/${this.entity.route}`,
                 query: { page: (this.currentPage += 1) },
@@ -80,11 +80,12 @@ export default {
                     this.loading = false;
                 });
         },
+
         fetchPage() {
             this.loading = true;
             axios({
                 method: "GET",
-                url: `/api/${this.entity.route}`,
+                url: `${this.url}/announcement/verify-results`,
                 params: {
                     page: this.$route.query.page,
                     search: this.$route.query.search,
@@ -95,7 +96,8 @@ export default {
                 },
             })
                 .then((response) => {
-                    console.log(response.data);
+                    console.log(response.data.data[0].result);
+                    console.log("from loto", response.data.current_page);
                     this.entity.page = response.data;
                     this.currentPage = response.data.current_page;
                 })

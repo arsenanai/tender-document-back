@@ -18,6 +18,7 @@ import NumberEdit from "@/views/NumberEdit.vue";
 import NumberShow from "@/views/NumberShow.vue";
 import NumberDetail from "@/components/NumberDetail.vue";
 import QRCodePage from "@/views/QRCodePage.vue";
+import ExecutedLot from "@/views/ExecutedLot.vue";
 
 const router = createRouter({
     history: createWebHistory(),
@@ -82,6 +83,11 @@ const router = createRouter({
             path: "/numbers/show/:lotNumber",
             component: NumberDetail,
             name: "number.show",
+        },
+        {
+            path: "/executedlot",
+            component: ExecutedLot,
+            name: "ExecutedLot",
         },
         {
             path: "/partner-ids",
