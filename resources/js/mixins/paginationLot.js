@@ -21,6 +21,7 @@ export default {
             // console.log("currenpage:", this.currentPage);
             // console.log("entityroute:", this.entity.route);
             // console.log("entityroutededee:", this.entity);
+
             this.goTo({
                 path: `/${this.entity.route}`,
                 query: { page: (this.currentPage += 1) },
@@ -61,6 +62,35 @@ export default {
             axios({
                 method: "DELETE",
                 url: `/api/${this.entity.route}/${data.id}`,
+                withCredentials: true,
+                headers: {
+                    Authorization: `Bearer ${this.getUserToken()}`,
+                },
+            })
+                .then((response) => {
+                    this.fetchPage();
+                })
+                .catch((error) => {
+                    console.log(error);
+                    if (error.response.status === 401) {
+                        this.eraseUserData();
+                        this.goTo("/login");
+                    }
+                })
+                .then((_) => {
+                    this.loading = false;
+                });
+        },
+
+        onCloselot(data) {
+            this.sendCloseRequest(data);
+        },
+        sendCloseRequest(data) {
+            let lotNumb = data.result.lotNumber;
+            // console.log(data.result.lotNumber);
+            axios({
+                method: "GET",
+                url: `${this.url}/announcement/close-lot/${lotNumb}`,
                 withCredentials: true,
                 headers: {
                     Authorization: `Bearer ${this.getUserToken()}`,
