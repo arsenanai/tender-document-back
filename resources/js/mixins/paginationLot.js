@@ -17,18 +17,14 @@ export default {
         },
         onNext() {
             this.currentPage = this.entity.page.current_page;
-            this.goTo({
-                query: { 
-                    path: `/${this.entity.route}`,
-                    page: (this.currentPage += 1) ,
-                    search: this.entity.page.search
-                },
-            });
+            console.log('his.entity.route', this.entity.route)
+            console.log('this.entity.page.search', this.entity.page.search)
+            this.goTo(this.entity.page.next_page_url);
         },
         onPrev() {
             this.currentPage = this.currentPage <= 0 ? 2 : this.currentPage;
             this.goTo({
-                path: `/${this.entity.route}`,
+                path: this.entity.route,
                 query: { page: (this.currentPage -= 1) },
                 search: this.entity.page.search
             });
