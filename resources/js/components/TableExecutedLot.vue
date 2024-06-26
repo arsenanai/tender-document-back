@@ -43,8 +43,8 @@
             >
                 <thead>
                     <tr>
-                        <!-- <th scope="col" v-if="entity.withIndex">&#x2116;</th>
-                        <th scope="col" v-else>ID</th> -->
+                        <th scope="col" v-if="entity.withIndex">&#x2116;</th>
+                        <th scope="col" v-else>ID</th>
                         <th
                             scope="col"
                             v-for="(fillable, i) in entity.fillables"
@@ -59,9 +59,9 @@
                 </thead>
                 <tbody>
                     <tr v-for="(data, i) in entity.page.data" :key="i">
-                        <!-- <td class="fw-bold font-monospace">
-                            {{ getId(data, i) }}
-                        </td> -->
+                        <td class="fw-bold font-monospace">
+                            {{ getId(i) }}
+                        </td>
                         <td
                             v-for="(fillable, j) in entity.fillables"
                             :key="j"
@@ -140,11 +140,10 @@ export default {
         SearchForm,
     },
     methods: {
-        getId(data, i) {
-            const id = this.entity.withIndex
-                ? i + this.entity.page.from
-                : data.id;
-            return 0;
+        getId(index) {
+            return (this.entity.page.from + index)
+                .toString()
+                .padStart(this.entity.pad, "0");
         },
 
         goToDetail(lotNumber) {
