@@ -8,6 +8,7 @@
         @on-edit="onEdit"
         @on-show="onShow"
         @on-delete="onDelete"
+        @on-closelot="onCloselot"
         @on-search="onSearch"
     />
 </template>

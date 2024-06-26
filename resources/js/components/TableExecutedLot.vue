@@ -105,8 +105,8 @@
                         <td>
                             <a
                                 class="btn btn-light btn-sm"
-                                @click="$emit('on-edit', data)"
-                                >{{ $t("Completed") }}</a
+                                @click="onCloselot(data)"
+                                >{{ $t("Complete") }}</a
                             >
                         </td>
                     </tr>
@@ -173,6 +173,15 @@ export default {
                 )
             ) {
                 this.$emit("on-delete", data);
+            }
+        },
+        onCloselot(data) {
+            if (
+                confirm(
+                    `${this.$t("Are you sure you want to close this lot")}?`
+                )
+            ) {
+                this.$emit("on-closelot", data);
             }
         },
         getPagination() {
