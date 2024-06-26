@@ -17,14 +17,12 @@ export default {
         },
         onNext() {
             this.currentPage = this.entity.page.current_page;
-
-            // console.log("currenpage:", this.currentPage);
-            // console.log("entityroute:", this.entity.route);
-            // console.log("entityroutededee:", this.entity);
-
             this.goTo({
-                path: `/${this.entity.route}`,
-                query: { page: (this.currentPage += 1) },
+                query: { 
+                    path: `/${this.entity.route}`,
+                    page: (this.currentPage += 1) ,
+                    search: this.entity.page.search
+                },
             });
         },
         onPrev() {
@@ -32,6 +30,7 @@ export default {
             this.goTo({
                 path: `/${this.entity.route}`,
                 query: { page: (this.currentPage -= 1) },
+                search: this.entity.page.search
             });
         },
         onEdit(data) {
@@ -112,7 +111,11 @@ export default {
         },
 
         fetchPage() {
+            
             this.loading = true;
+            console.log('this.$route.query.page', this.$route.query.page);
+            console.log('this.$route.query.search', this.$route.query.search);
+
             axios({
                 method: "GET",
                 url: `${this.url}/announcement/verify-results`,
