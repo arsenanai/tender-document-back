@@ -73,11 +73,11 @@ export default {
                         name: "isProjectAmountOk",
                         raw: (data) => data.result.isProjectAmountOk,
                     },
-                    // {
-                    //     label: this.$t("Comment"),
-                    //     name: "comment",
-                    //     raw: (data) => data.result.comment,
-                    // },
+                    {
+                        label: this.$t("Comment"),
+                        name: "comment",
+                        raw: (data) => data.result.comment,
+                    },
                     // {
                     //     label: this.$t("Modified at"),
                     //     name: "Modified at",
