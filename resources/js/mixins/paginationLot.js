@@ -17,8 +17,8 @@ export default {
         },
         onNext() {
             this.currentPage = this.entity.page.current_page;
-            console.log('his.entity.route', this.entity.route)
-            console.log('this.entity.page.search', this.entity.page.search)
+            console.log("his.entity.route", this.entity.route);
+            console.log("this.entity.page.search", this.entity.page.search);
             this.goTo(this.entity.page.next_page_url);
         },
         onPrev() {
@@ -26,7 +26,7 @@ export default {
             this.goTo({
                 path: this.entity.route,
                 query: { page: (this.currentPage -= 1) },
-                search: this.entity.page.search
+                search: this.entity.page.search,
             });
         },
         onEdit(data) {
@@ -107,10 +107,9 @@ export default {
         },
 
         fetchPage() {
-            
             this.loading = true;
-            console.log('this.$route.query.page', this.$route.query.page);
-            console.log('this.$route.query.search', this.$route.query.search);
+            console.log("this.$route.query.page", this.$route.query.page);
+            console.log("this.$route.query.search", this.$route.query.search);
 
             axios({
                 method: "GET",

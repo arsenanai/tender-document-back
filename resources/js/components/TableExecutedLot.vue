@@ -67,9 +67,17 @@
                             :key="j"
                             :class="{
                                 'table-success':
-                                    data.result[fillable.name] === true,
+                                    data.result[fillable.name] === true ||
+                                    (fillable.name === 'comment' &&
+                                        data.result.comment
+                                            .toLowerCase()
+                                            .includes('ok')),
                                 'table-danger':
-                                    data.result[fillable.name] === false,
+                                    data.result[fillable.name] === false ||
+                                    (fillable.name === 'comment' &&
+                                        !data.result.comment
+                                            .toLowerCase()
+                                            .includes('ok')),
                             }"
                         >
                             <span
