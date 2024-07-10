@@ -16,13 +16,14 @@ export default {
             this.goTo(`/${this.entity.route}/create`);
         },
         onNext() {
+            const lastPage = this.entity.page.last_page;         
             this.currentPage = this.entity.page.current_page;
-            console.log("his.entity.route", this.entity.route);
-            console.log("this.entity.page.search", this.entity.page.search);
-            this.goTo(this.entity.page.next_page_url);
+            if(this.currentPage < lastPage) {
+                this.goTo(this.entity.page.next_page_url);
+            }
         },
         onPrev() {
-            this.currentPage = this.currentPage <= 0 ? 2 : this.currentPage;
+            this.currentPage = this.currentPage <= 1 ? 2 : this.currentPage;
             this.goTo({
                 path: this.entity.route,
                 query: { page: (this.currentPage -= 1) },
